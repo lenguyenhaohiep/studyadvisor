@@ -1,0 +1,77 @@
+<div id="globalContainer">
+	<div id="content" class="hasLeftCol">
+		<div id="contentCol" class="hasRightCol">
+		<div class="back-to-cms-class">
+			<a class="button mgt10" href="<?php echo BASE_URL;?>/classs/viewgradestudent/shedule_exam/<?php echo $this->shedule_exam_id;?>" > 
+			 Quay lại lớp học</a>
+		</div>
+		
+				<div class="name-page-cms">	Dữ liệu độ khó và độ phân cách tham khảo của đề thi: &nbsp;<?php echo $this->ObjTest['title']; ?>
+				</div>
+			<!-- CMS -->
+			<?php if (count($this->arrObjQuestion)>0)  { ?>
+				<div>
+				<table class="datatable">
+					<tr>
+						<th>STT</th>
+						<th>Xem câu hỏi</th>
+						<th>Tiêu đề câu hỏi</th>
+						<th>Độ khó</th>
+						<th>Độ phân cách</th>
+					</tr>
+					<?php foreach ($this->arrObjQuestion as $key=>$ObjQuestionItem){ ?>
+					<tr>
+						<td><?php echo ($key+1); ?></td>
+						<td>
+						<a class="view-icon" style="text-decoration: none;"  href="<?php echo BASE_URL; ?>/question/preview/id/<?php echo $ObjQuestionItem['id']; ?>" onclick="viewClick(this.href); return false;">Xem<img class="fugue fugue-eye" alt="" src="<?php echo BASE_URL; ?>/img/icons/space.gif"/></a>
+						</td>
+						<td style="width: 600px"><?php echo $ObjQuestionItem['question_title']; ?></td>
+						<td><?php 
+							$value = $ObjQuestionItem['level'];
+											if(0<=$value && $value<=0.1)
+												$tem = 10;
+											if(0.1<=$value && $value<0.2)
+												$tem = 9;
+											if(0.2<=$value && $value<0.3)
+												$tem = 8;
+											if(0.3<=$value && $value<0.4)
+												$tem = 7;
+											if(0.4<=$value && $value<0.5)
+												$tem = 6;
+											if(0.5<=$value && $value<0.6)
+												$tem = 5;
+											if(0.6<=$value && $value<0.7)
+												$tem = 4;
+											if(0.7<=$value && $value<0.8)
+												$tem = 3;
+											if(0.8<=$value && $value<0.9)
+												$tem = 2;
+											if(0.9<=$value && $value<1)
+												$tem = 1;						
+						echo $tem; ?>
+						</td>
+						<td><?php
+						$value =  $ObjQuestionItem['classification'] ;
+							if(0<=$value && $value<0.2)
+								$temclassification = "Kém";
+							else if(0.2<=$value && $value<0.3)
+								$temclassification  = "Trung bình";
+							else if(0.3<=$value && $value<0.4)
+								$temclassification  = "Khá tốt";
+							else if(0.4<=$value)
+								$temclassification  = "Rất tốt";	
+						
+						echo $temclassification; ?>
+						</td>
+					</tr>
+					<?php } ?>
+				</table>
+				</div>
+			<?php } ?>
+		<div class="back-to-cms-class">
+			<a class="button mgt10" href="<?php echo BASE_URL;?>/classs/viewgradestudent/shedule_exam/<?php echo $this->shedule_exam_id;?>" > 
+			 Quay lại lớp học</a>
+		</div>			
+		</div>
+	</div>
+</div>

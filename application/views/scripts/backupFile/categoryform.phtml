@@ -1,0 +1,62 @@
+<form name="form" action="<?php echo $this->baseUrl ?>/category/<?php 
+    echo $this->action; ?>" method="post">
+    <input name="hidID" type="hidden" id="hidID" value="<?php echo $this->escape($this->form->hidID); ?>" />
+<table width="100%" border="0" >
+  <tr>
+    <td width="10%"><div align="left">Tên nhóm</div></td>
+    <td><div align="left">
+      <input name="name" type="text" id="name" value="<?php echo $this->escape($this->form->name); ?>" size="60" maxlength="64"/>
+      <font color="red">*</font></div></td>
+  </tr>
+  <tr>
+    <td width="10%"><div align="left">Nhóm cha</div></td>
+    <td><div align="left">
+      <?php echo $this->sltCategory("parent_id",$this->form->parent_id,2);?>  
+      <font color="red">*</font></div></td>
+  </tr>
+  <tr>
+    <td width="10%"><div align="left">Thứ tự</div></td>
+    <td><div align="left">
+		<?php echo $this->sltNum("order",$this->form->order,1,10,1);?>
+		<font color="red">*</font></div></td>
+  </tr>
+   <tr>
+    <td width="10%"><div align="left">Hiển thị trang chủ</div></td>
+    <td>
+    	<select name="is_main_page">
+    		<option value="0" <?php if($this->form->is_main_page==0) echo "selected selected";?>>Không hiển thị</option>
+    		<option value="1" <?php if($this->form->is_main_page==1) echo "selected selected";?>>Hiển thị</option>
+    	</select>
+	</td>
+  </tr>
+
+   <tr>
+    <td width="10%"><div align="left">Là mục tin tức tiêu điểm</div></td>
+    <td>
+    	<select name="is_focus">
+    		<option value="0" <?php if($this->form->is_focus==0) echo "selected selected";?>>Không</option>
+    		<option value="1" <?php if($this->form->is_focus==1) echo "selected selected";?>>Có</option>
+    	</select>
+	</td>
+  </tr>
+
+   <tr>
+    <td width="10%"><div align="left">Show or hidden in menu of site</div></td>
+    <td>
+    	<select name="hidden">
+    		<option value="0" <?php if($this->form->hidden==0) echo "selected selected";?>>Hiển thị</option>
+    		<option value="1" <?php if($this->form->hidden==1) echo "selected selected";?>>Không hiển thị</option>
+    	</select>
+	</td>
+  </tr>
+
+  
+  <tr>
+	<td align="left" colspan="2"><input type="submit" id='Ok' name='Ok' value='      OK        ' /> &nbsp;&nbsp;&nbsp;&nbsp;
+	<input type="button" id='Cancel' name='Cancel' value='    Cancel    ' onclick="window.location='<?php echo  $this->baseUrl . '/category';  ?>'"/>
+	</td>
+  </tr>
+
+</table>
+</form>
+

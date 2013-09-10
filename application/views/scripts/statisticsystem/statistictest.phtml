@@ -1,0 +1,53 @@
+<div id="blueBar"></div>
+<div id="globalContainer">
+	<?php echo $this->render("navigation.phtml");?>
+	<div id="content" class="hasLeftCol">
+		<div id="contentCol" class="hasRightCol">
+			<div id="rightCol" >
+				<div class="name-page-cms">	Thống kê đề thi trên hệ thống
+				</div>
+			</div>
+			<div id="contentArea">
+				<div class="statistic-table">
+					<table class="table-test">
+						<tr>
+							<th colspan="2" style="text-align: left;">Ngày thống kê: <?php echo date("d-m-Y G:i")?> 
+							</th>
+						</tr>
+						<tr>
+							<th colspan="5" style="text-align: left;">Người thống kê: <?php
+									$auth = Zend_Auth::getInstance();
+									if ($auth->hasIdentity())
+							  			$userhaslogin = $auth->getStorage()->read();  		
+									echo $userhaslogin->firstname." ".$userhaslogin->lastname;	
+									?>
+							</th>
+						</tr>
+						<tr>
+							<th colspan="5" class="head-title-th">Có <?php echo $this->dataStatistic['total'];?> đề thi trên hệ thống
+							</th>
+						</tr>
+						<tr>
+							<td colspan="5"><hr/></td>
+						</tr>
+						<tr>
+							<th>Môn học</th>
+							<th>Số đề</th>
+						</tr>
+						<?php if(count($this->dataStatistic['OneSubject'])>0)
+								foreach($this->dataStatistic['OneSubject'] as $key=>$Item){
+									if($Item['AmountTest']>0){		
+						?>
+						<tr>
+							<td><?php echo $Item['ObjSubject']['full_name']; ?>
+							</td>
+							<td><?php echo $Item['AmountTest']; ?>
+							</td>
+						</tr>
+						<?php } } ?>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

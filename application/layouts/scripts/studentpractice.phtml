@@ -1,0 +1,92 @@
+<?php echo $this->doctype(); ?>
+<html>
+<head>
+	<?php  echo  $this->headMeta(); ?>
+	<?php  echo  $this->headTitle(); ?>
+	<?php  echo  $this->headLink(); ?>
+	<?php  echo  $this->jQuery(); ?>	
+</head>
+<body>
+<?php 
+		$auth = Zend_Auth::getInstance();
+		if ($auth->hasIdentity()){
+  			$userhaslogin = $auth->getStorage()->read();  	
+  			
+?>
+
+<input type="hidden" name="BASE_URL" id="BASE_URL" value="<?php echo BASE_URL;?>">
+
+<div style="width: 100%">
+<div class="divAdsLeft"></div>
+<div class="student_main_content">
+	<div class="student_head headerWrapper">
+		<div class="student_banner headerWrapper">
+			<p class="student-banner-right">
+				<?php echo $this->render("header.phtml");?>	
+			</p>			
+		</div>	
+<!--		<div class="student_head_nav">
+			<ul>
+				<li>
+					<a href="<?php /* echo BASE_URL;?>/pagestudent" class="<?php
+						if($this->controllerName ==  "pagestudent" && $this->actionName =="index") 
+							echo "linkNavActive";
+						else
+							echo "linkNav";
+						
+					 ?>">Trang chủ</a>
+				</li>				
+			
+				<li>
+					<a class="<?php
+						if($this->controllerName ==  "pagestudent" && $this->actionName =="editinfo") 
+							echo "linkNavActive";
+						else
+							echo "linkNav";
+						
+					 ?>" href="<?php echo BASE_URL;?>/pagestudent/editinfo/user_id/<?php echo $userhaslogin->id ?>" class="">Tài khoản</a>
+				</li>
+			<li>
+				<a class="<?php
+					if($this->controllerName ==  "comment" && $this->actionName =="index") 
+						echo "linkNavActive";
+					else
+						echo "linkNav";
+					
+				 ?>" href="<?php echo BASE_URL;?>/comment" class="">Trao đổi</a>
+			</li>				
+			<li>
+				<a class="<?php
+					if($this->controllerName ==  "index" && $this->actionName =="intro") 
+						echo "linkNavActive";
+					else
+						echo "linkNav";
+					
+				 ?>" href="<?php echo BASE_URL;?>/index/intro" class="">Giới thiệu</a>
+			</li>				
+								
+				<li>
+					<a class="linkNav" href="<?php echo BASE_URL;*/?>/auth/logout" class="">Đăng xuất</a>
+				</li>								
+			</ul>
+		</div>	-->
+		<div class="student_content">
+			<?php  echo  $this->layout()->content ?>
+		</div>
+	</div>
+</div>
+
+<?php
+	if($this->hasClock==true){
+ ?>
+<div class="divAdsRight">
+<?php   echo $this->countDownTimer($this->data['duration_test']);?>
+</div>
+<?php } ?>
+<?php }else{
+		header ("Location: ".BASE_URL."/auth/login");
+} ?>
+
+</div>
+</body>
+</html>

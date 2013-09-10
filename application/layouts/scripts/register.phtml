@@ -1,0 +1,61 @@
+<?php echo $this->doctype(); ?>
+<html>
+<head>
+	<?php  echo  $this->headMeta(); ?>
+	<?php  echo  $this->headTitle(); ?>
+	<?php  echo  $this->headLink(); ?>
+	<?php  echo  $this->jQuery(); ?>	
+</head>
+<body>
+
+<input type="hidden" name="BASE_URL" id="BASE_URL" value="<?php echo BASE_URL;?>">
+<div class="student_main_content">
+	<div class="student_head headerWrapper">
+		<div class="student_banner headerWrapper">
+			<p class="student-banner-right">
+				<?php echo $this->render("header.phtml");?>	
+			</p>	
+		</div>	
+		<div class="student_head_nav">
+			<ul>
+				<li>
+					<a class="<?php
+						if($this->controllerName ==  "register" && $this->actionName =="index") 
+							echo "linkNavActive";
+						else
+							echo "linkNav";
+						
+					 ?>" href="<?php echo BASE_URL;?>/register" class="">Đăng ký</a>
+				</li>				
+				<li>
+					<a class="<?php
+						if($this->controllerName ==  "comment" && $this->actionName =="index") 
+							echo "linkNavActive";
+						else
+							echo "linkNav";
+						
+					 ?>" href="<?php echo BASE_URL;?>/comment" class="">Trao đổi</a>
+				</li>				
+				<li>
+					<a class="<?php
+						if($this->controllerName ==  "index" && $this->actionName =="intro") 
+							echo "linkNavActive";
+						else
+							echo "linkNav";
+						
+					 ?>" href="<?php echo BASE_URL;?>/index/intro" class="">Giới thiệu</a>
+				</li>				
+				<li>
+					<a href="<?php echo BASE_URL;?>/auth/login" class="linkNav">Đăng nhập</a>
+				</li>
+												
+			</ul>
+		</div>
+			
+	</div>
+	<div class="student_wrapper">
+			<?php  echo  $this->layout()->content ?>
+	</div>	
+</div>
+</body>
+</html>

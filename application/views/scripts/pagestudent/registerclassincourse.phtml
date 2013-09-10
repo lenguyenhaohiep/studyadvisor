@@ -1,0 +1,61 @@
+<form action="<?php echo BASE_URL; ?>/pagestudent/registerclass/" method="POST" >
+<input type="hidden" name="course_id" value="<?php echo $this->courseObj['id']; ?>" >
+<?php if (count($this->arrError)>0){ echo $this->error($this->arrError); ?>		
+<!-- Begin reg-class-student -->
+<?php }elseif(!empty($this->courseObj['id'])){ ?>
+<div class="user-register-course-class">
+<br/><p style="text-align: center;"> <font style="color: #1484e6; font-size:18px; font-weight: bold;" >Khóa học: <?php echo $this->courseObj['full_name']; ?></font></p>
+<div class="table2">
+		<table class="datatable" >
+		  <tr>
+		    <th colspan="8">Danh sách các lớp được mở của khóa học: <span class="name-course"></span> </th>
+		  </tr>
+		   <tr>
+		    <th>Tên lớp</th>
+		    <th>Đăng ký bắt đầu</th>
+		    <th>Đăng ký kết thúc</th>
+		    <th>Tình trạng</th>
+		    <th>Thao tác</th>
+		  </tr>
+    		<?php if(count($this->arrClassObj)>0) 
+    		foreach($this->arrClassObj as $arrClassObjItem){ ?>
+		  <tr>
+			    <td class="name-course-width"><?php echo $arrClassObjItem['full_name'];?></td>
+			    <td><?php echo $arrClassObjItem['time_start_register'];?></td> 
+			    <td><?php echo $arrClassObjItem['time_end_register'];?></td>
+			    <?php if($arrClassObjItem['hidden']=="on"){ ?>
+				    <td>Mở</td>
+                                    <td><?php if(isset($arrClassObjItem['flagClassUserHasJoin']) &&  $arrClassObjItem['flagClassUserHasJoin']!=1){ 
+				    		if($arrClassObjItem['fullStudent']==1)
+				    			echo "Đã đủ sinh viên";
+				    		else { 
+				    			if($arrClassObjItem['block_register']==1)
+				    				echo "Hết hạn đăng ký";
+				    			else{
+				    	?>
+					    	<a href="<?php echo BASE_URL; ?>/pagestudent/processjoinclass/course_id/<?php echo $this->courseObj['id']; ?>/class_id/<?php echo $arrClassObjItem['id'];?>" onclick="confirmJoinClass(this.href); return false;" class="ui-state-hover ui-corner-all">Tham gia lớp học </a>
+					    <?php  } } }else
+					    	echo "Đã tham gia học";
+					    ?>
+				    </td>
+				<?php }else { ?>
+				    <td>Đóng</td>
+				    <td></td>
+				<?php } ?>
+		</tr>					 		
+    	<?php } ?>
+	</table>
+
+</div>
+</div><!-- End reg-class-student -->
+<?php } ?>
+</form>
+<script type="text/javascript">
+<!--
+  function confirmJoinClass(href){
+  	if(confirm("Bạn có chắc chắn muốn tham gia lớp học đã chọn không?")==true){
+  		window.location =href;
+  	}
+  }		
+//-->
+</script>

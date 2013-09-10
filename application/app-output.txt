@@ -1,0 +1,18 @@
+
+Notice: Use of undefined constant APPLICATION_PATH - assumed 'APPLICATION_PATH' in C:\xampp\htdocs\studyadvisor\application\controllers\RunInBackground.php on line 7
+
+Call Stack:
+    0.0010     123368   1. {main}() C:\xampp\htdocs\studyadvisor\application\controllers\RunInBackground.php:0
+
+
+Warning: require_once(APPLICATION_PATH/models/MatrixFactorization.php): failed to open stream: No such file or directory in C:\xampp\htdocs\studyadvisor\application\controllers\RunInBackground.php on line 7
+
+Call Stack:
+    0.0010     123368   1. {main}() C:\xampp\htdocs\studyadvisor\application\controllers\RunInBackground.php:0
+
+
+Fatal error: require_once(): Failed opening required 'APPLICATION_PATH/models/MatrixFactorization.php' (include_path='.;C:\xampp\php\PEAR') in C:\xampp\htdocs\studyadvisor\application\controllers\RunInBackground.php on line 7
+
+Call Stack:
+    0.0010     123368   1. {main}() C:\xampp\htdocs\studyadvisor\application\controllers\RunInBackground.php:0
+

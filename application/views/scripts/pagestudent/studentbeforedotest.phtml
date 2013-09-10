@@ -1,0 +1,59 @@
+<form action="<?php echo BASE_URL;?>/pagestudent/studentdotest" method="post" id="studentbeforedotest-form">
+<?php
+if (count($this->arrError)>0) echo $this->error($this->arrError); 
+else {
+	
+	// TÍNH TOÁN ĐỀ THI CÓ BAO NHIÊU TRANG
+			$list_questionID 	= $this->data['question_id'];// danh sách id của câu hỏi
+			//$list_score    		= $this->data['question_score'];// điểm làm bài của user
+			$questionPerPage	= $this->data['test_obj']["question_perpage"];
+			//$answer_of_user 	= $this->data['question']; // các câu trả lời của user
+			//$list_score_in_test_table	= $this->data["list_score_in_test_table"];// Điểm của câu hỏi được set trong bài test
+			$questionPerPage 	= $questionPerPage==0? 1:$questionPerPage;
+			$totalQuestion		= count($list_questionID);
+			$totalPage			= (int)($totalQuestion/$questionPerPage);
+			$totalPage			= $totalQuestion%$questionPerPage==0?$totalPage:($totalPage+1) ;
+	
+?>
+<div class="student_wait_before_dotest">
+<div  class="table-wait-before-dotest">
+	<table>
+	  <tr>
+	    <th>UIT-KHOA HỆ THỐNG THÔNG TIN</th>
+	    <th><?php echo $this->data['exam_obj']['full_name'] ?></th>
+	  </tr>
+	  <tr>
+	    <td>BÀI THI </td>
+	    <td> MÔN: <?php $modelsSubject = new Default_Models_Subject();
+						$modelsSubject->find("id",$this->data['test_obj']['subject_id']);
+						if($modelsSubject->getId())
+							echo $modelsSubject->getFull_name();
+				?>
+	     </td>
+	  </tr>
+	  <tr>
+	    <td>(Bài thi có: <?php echo $totalPage; ?> trang) </td>
+	    <td>Thời gian làm bài: <?php echo $this->data['test_obj']['duration_test']; ?> phút </td>
+	  </tr>
+	  <tr>
+	    <td colspan="2" class="tdEndTableWait">  <input type="button" class="start_practice" onclick="showTest(); return false;"> </td>
+	  </tr>
+	</table>
+</div>
+
+</div>
+<input type="hidden" value="<?php echo $this->data['test_id']; ?>" name="test_id">
+<input type="hidden" value="<?php echo $this->data['exam_id']; ?>" name="exam_id">
+<input type="hidden" value="<?php echo $this->data['class_id']; ?>" name="class_id">
+<input type="hidden" value="<?php echo $this->data['shedule_exam']; ?>" name="shedule_exam">
+</form>
+<?php } ?>
+<script type="text/javascript" language="javascript">
+$(document).ready(function(){
+	$(".divAdsRight").hide();
+});
+
+function showTest(){
+	$("#studentbeforedotest-form").submit();
+}
+</script>

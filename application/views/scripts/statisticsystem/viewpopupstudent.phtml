@@ -1,0 +1,31 @@
+<div id="globalContainer">
+	<div id="content" class="hasLeftCol">
+		<div id="contentCol" class="hasRightCol">
+				<div class="name-page-cms">	Danh sách tài khoản thuộc nhóm người dùng:<b> <?php echo $this->dataStatistic['ObjGroupUser']['group_name'];?></b>
+				</div>
+			<!-- CMS -->
+			<?php if (count($this->dataStatistic['ObjUser'])>0)  { ?>
+				<div>
+				<table class="datatable">
+					<tr>
+						<th>STT</th>
+						<th>Mã số</th>
+						<th>Họ tên</th>
+						<th>Khoa</th>
+						<th>Tham gia</th>
+					</tr>
+					<?php foreach ($this->dataStatistic['ObjUser'] as $key=>$StudentInClassItem){ ?>
+					<tr>
+						<td><?php echo ($key+1); ?></td>
+						<td><?php echo $StudentInClassItem['user_code']; ?></td>
+						<td><?php echo $StudentInClassItem['firstname']." ".$StudentInClassItem['lastname']; ?></td>
+						<td><?php echo $StudentInClassItem['department']; ?></td>
+						<td><?php echo Zend_View_Helper_FormatDate::convertYmdToMdyJustDate($StudentInClassItem['date_create']); ?></td>
+					</tr>
+					<?php } ?>
+				</table>
+				</div>
+			<?php } ?>
+		</div>
+	</div>
+</div>

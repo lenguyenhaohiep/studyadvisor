@@ -1,0 +1,572 @@
+<form action="<?php echo BASE_URL;?>/test/create" method="post">
+	<div id="tabs">
+		<ul>
+			<li><a href="#tabs-1">Thông tin cơ bản</a></li>
+			<li><a href="#tabs-2">Chỉnh sửa câu hỏi</a></li>
+		</ul>
+		<div id="tabs-1">
+			<div>			
+				<fieldset class="fieldset-setting-info-test">
+					<legend >Thông tin chung</legend>
+					<dl>
+						<ul class="list-setting-info-test">
+							<li>
+								<label>Tiêu đề</label>
+								<input type="text" name="title" value="<?php echo $this->test["title"];?>">
+							</li>
+							<li>
+								<label>Nội dung bài thi</label>
+								<br/>
+								<textarea rows="5" cols="80"><?php echo $this->test["content"]; ?></textarea>
+							</li>
+						</ul>
+					</dl>
+				</fieldset>
+				<fieldset class="fieldset-setting-info-test">
+					<legend >Thời gian</legend>
+					<dl>
+						<ul class="list-setting-info-test">
+							<li>
+								<label>Thời gian làm bài thi</label>
+								<input type="text" name="duration_test" value="<?php echo $this->test["duration_test"];?>">
+							</li>
+						</ul>
+					</dl>
+				</fieldset>					
+				<fieldset class="fieldset-setting-info-test">
+					<legend >Hiển thị</legend>
+					<dl>
+						<ul class="list-setting-info-test">
+							<li>
+								<label>Số câu hỏi mỗi trang</label>
+								<input type="text" name="question_perpage" size="3" value="<?php echo $this->test["question_perpage"];?>">
+							</li>
+							<li>
+								<label>Thay đổi vị trí câu hỏi</label>
+								<select name="shuffle_question">								
+									<option value="0" <?php  if($this->test["shuffle_question"]==0) echo 'selected = "selected" ';?> >Không</option>
+									<option value="1" <?php  if($this->test["shuffle_question"]==1) echo 'selected = "selected" ';?> >Có</option>
+								</select>
+							</li>
+						</ul>
+					</dl>
+				</fieldset>	
+				<fieldset class="fieldset-setting-info-test">
+					<legend >Số lần kiểm tra</legend>
+					<dl>
+						<ul class="list-setting-info-test">
+							<li>
+								<label>Số lần làm bài</label>
+								<input type="text" name="attempts_allowed" size="2" <?php echo $this->test["attempts_allowed"];?> >
+							</li>
+						</ul>
+					</dl>
+				</fieldset>					
+				<fieldset class="fieldset-setting-info-test">
+					<legend >Điểm số</legend>
+					<dl>
+						<ul class="list-setting-info-test">
+							<li>
+								<label>Cách tính điểm</label>
+								<select name="grade_method">								
+									<option value="1" <?php  if($this->test["grade_method"]==1) echo 'selected = "selected" ';?> >Lần cao nhất</option>
+									<option value="2" <?php  if($this->test["grade_method"]==2) echo 'selected = "selected" ';?> >Điểm trung bình</option>
+									<option value="3" <?php  if($this->test["grade_method"]==3) echo 'selected = "selected" ';?> >Lần đầu tiên</option>
+									<option value="4" <?php  if($this->test["grade_method"]==4) echo 'selected = "selected" ';?> >Lần cuối cùng</option>
+								</select>
+							</li>
+							<li>
+								<label>Số chữ số thập phân của điểm</label>
+								<input type="text" name="decimal_digits_in_grades" size="2" value="<?php echo $this->test["decimal_digits_in_grades"];?>">
+							</li>
+						</ul>
+					</dl>
+				</fieldset>	
+								
+				<fieldset class="fieldset-setting-info-test">
+					<legend>Tuỳ chọn xem lại</legend>
+					<dl>
+					<?php
+						$review_after_test			= $this->test["review_after_test"];
+						$review_while_test_open		= $this->test["review_while_test_open"];
+						$review_after_test_close	= $this->test["review_after_test_close"]; 
+					 ?>
+					<table class="table-setting-review-test">
+						<tr><td>
+							<ul class="list-setting-info-test">
+								<li>
+									<label>Ngay sau lần kiểm tra </label>
+								</li>
+								<li>
+									<ul>
+										<li>	
+											<table>
+												<tr>
+													<td>
+														<input type="checkbox" class="review_after_test" id="review_after_test_0"  <?php if($review_after_test[0]==1) echo 'checked="checked"'; ?> />												
+													</td>													
+													<td>
+														<label>Xem đáp án đúng</label>
+													</td>
+												</tr>
+											</table>																				
+										</li>
+										<li>
+											<table>
+												<tr>
+													<td>
+														<input type="checkbox" class="review_after_test" id="review_after_test_1" <?php if($review_after_test[1]==1) echo 'checked="checked"'; ?>/>
+													</td>
+													<td>
+														<label>Xem phản hồi chung </label> 
+													</td>
+												</tr>
+											</table>
+										</li>
+										<li>
+											<table>
+												<tr>
+													<td>
+														<input type="checkbox" class="review_after_test" id="review_after_test_2" <?php if($review_after_test[2]==1) echo 'checked="checked"'; ?>/>
+													</td>
+													<td>
+														<label>Xem phản hồi cho từng câu trả lời </label>			
+													</td>
+												</tr>
+											</table>
+										</li>
+										<li>
+											<table>
+												<tr>
+													<td>
+														<input type="checkbox" class="review_after_test" id="review_after_test_3" <?php if($review_after_test[3]==1) echo 'checked="checked"'; ?>/>												
+													</td>
+													<td>
+														<label>Xem điểm</label>			
+													</td>
+												</tr>
+											</table>
+										</li>
+									</ul>
+								</li>
+							</ul>
+							<input type="text" name="review_after_test" id="review_after_test" value="<?php echo $review_after_test;?>">
+						</td><td>
+							<ul class="list-setting-info-test">
+								<li>
+									<label>Sau này, khi đề thi chưa đóng </label>
+								</li>
+								<li>
+									<ul>
+										<li>
+											<table>
+												<tr>
+													<td>
+														<input type="checkbox" class="review_while_test_open" id="review_while_test_open_0"  <?php if($review_while_test_open[0]==1) echo 'checked="checked"'; ?>/>
+													</td>
+													<td>
+														<label>Xem đáp án đúng </label>
+													</td>
+												</tr>
+											</table>									
+										</li>
+										<li>
+											<table>
+												<tr>
+													<td>
+														<input type="checkbox" class="review_while_test_open" id="review_while_test_open_1"  <?php if($review_while_test_open[1]==1) echo 'checked="checked"'; ?>/>
+													</td>
+													<td>
+														<label>Xem phản hồi chung  </label>
+													</td>
+												</tr>
+											</table>									
+										</li>
+										<li>
+											<table>
+												<tr>
+													<td>
+														<input type="checkbox" class="review_while_test_open" id="review_while_test_open_2"  <?php if($review_while_test_open[2]==1) echo 'checked="checked"'; ?>/>
+													</td>
+													<td>
+														<label>Xem phản hồi cho từng câu trả lời </label>
+													</td>
+												</tr>
+											</table>																													 
+										</li>
+										<li>
+											<table>
+												<tr>
+													<td>
+														<input type="checkbox" class="review_while_test_open" id="review_while_test_open_3"  <?php if($review_while_test_open[3]==1) echo 'checked="checked"'; ?> />
+													</td>
+													<td>
+														<label>Xem điểm </label>
+													</td>
+												</tr>
+											</table>									
+										</li>
+									</ul>
+								</li>
+							</ul>
+						<input type="text" name="review_while_test_open" id="review_while_test_open" value="<?php echo $review_while_test_open;?>">
+						</td><td>
+							<ul class="list-setting-info-test">
+								<li>
+									<label>Sau khi đề thi đóng</label>
+								</li>
+								<li>
+									<ul>
+										<li>
+											<table>
+												<tr>
+													<td>
+														<input type="checkbox" class="review_after_test_close" id="review_after_test_close_0"  <?php if($review_after_test_close[0]==1) echo 'checked="checked"'; ?>/>
+													</td>
+													<td>
+														<label>Xem đáp án đúng</label>
+													</td>
+												</tr>
+											</table>									
+										</li>
+										<li>
+											<table>
+												<tr>
+													<td>
+														<input type="checkbox" class="review_after_test_close" id="review_after_test_close_1"  <?php if($review_after_test_close[1]==1) echo 'checked="checked"'; ?>/>
+													</td>
+													<td>
+														<label>Xem phản hồi chung  </label>
+													</td>
+												</tr>
+											</table>									
+										</li>
+										<li>
+											<table>
+												<tr>
+													<td>
+														<input type="checkbox" class="review_after_test_close" id="review_after_test_close_2"  <?php if($review_after_test_close[2]==1) echo 'checked="checked"'; ?>/>
+													</td>
+													<td>
+														<label>Xem phản hồi cho từng câu trả lời </label> 
+													</td>
+												</tr>
+											</table>									
+										</li>
+										<li>
+											<table>
+												<tr>
+													<td>
+														<input type="checkbox" class="review_after_test_close" id="review_after_test_close_3"  <?php if($review_after_test_close[3]==1) echo 'checked="checked"'; ?>/>
+													</td>
+													<td>
+														<label>Xem điểm </label> 
+													</td>
+												</tr>
+											</table>									
+										</li>
+									</ul>
+								</li>
+							</ul>
+						<input type="text" name="review_after_test_close" id="review_after_test_close" value="<?php echo $review_after_test_close;?>">
+						</td></tr>
+					</table>
+					</dl>
+				</fieldset>		
+			</div>			
+		</div>	
+		<div id="tabs-2">		
+				<table>
+					<tr>
+						<td style="width: 50%">
+						<div class="create-test">
+						<?php
+							$test = $this->test;
+							$list_questionID = explode(',',$test["list_question"]);
+							$list_score    = explode(',',$test["list_score"]);		
+						?>
+							<input type="hidden" name="id" value="<?php echo $test["id"];?>">
+							<table class="table-test-list-question">
+							<?php
+								foreach($list_questionID as $key=>$list_questionIDItem){ 
+							 ?>
+								<tr>
+									<td>
+										<a href="#" class="up-arrow"   onclick="fnUpArrow(this)">Up</a>
+									</td>
+									<td>
+										<a href="#" class="down-arrow" onclick="fnDownArrow(this)">Down</a>
+									</td>
+									<td><span class="indexQuestion"><?php echo $key+1; ?></span></td>
+									<td>
+										<span class="test-has-question-<?php echo $list_questionIDItem;?>">
+											<?php
+												$models_question = new Default_Models_Question();
+												$models_question->find("id",$list_questionIDItem);
+												echo $models_question->getQuestion_title();					
+											?>
+										</span>
+									</td>
+									<td>
+										<input type="hidden" class="questionIDofTest" name="list_question[]" value="<?php echo $list_questionIDItem;?>"/>
+										<input type="text" size="3" class="scoreOneQuestion" name="list_score[]"  value="<?php echo $list_score[$key];?>"/>
+									</td>
+									<td>
+										<a class="view-icon"   href="<?php echo BASE_URL;?>/question/preview/id/<?php echo $list_questionIDItem;?>" onclick="viewClick(this.href); return false;"><img class="fugue fugue-eye" alt="Xem trước" src="<?php echo BASE_URL;?>/img/icons/space.gif"/></a>
+										<a class="edit-icon-popup"   href="<?php echo BASE_URL;?>/question/edit/id/<?php echo $list_questionIDItem;?>" onclick="editPopup(this.href); return false;"><img class="fugue fugue-pencil" alt="Chỉnh sửa" src="<?php echo BASE_URL;?>/img/icons/space.gif"/></a>
+										<a class="remove-icon" href="#" onclick="removeQuestionFromTest(this); return false;"><img class="fugue fugue-control-double"  alt="Xóa"       src="<?php echo BASE_URL;?>/img/icons/space.gif"/></a> 				
+									</td>
+								</tr>
+							<?php } ?>
+								<tr>
+									<td colspan="4">
+										Tổng số câu hỏi <span class="sumQuestionOfTest">0</span>
+									</td>
+									<td colspan="2">
+										Tổng số điểm  <span class="sumScoreOfTest"></span>  
+									</td>
+									
+								</tr>
+								<tr>
+									<td colspan="6">
+										Điểm cao nhất  
+										<input type="text" name="TestMaxScore" value="1010">
+									</td>
+								</tr>
+								<tr>
+									<td colspan="6">
+										<input type="submit" value="Lưu lại">
+									</td>
+								</tr>
+								
+							</table>
+						</div>
+						</td>
+						<td style="width: 50%">		
+							<div class="question-cms">
+								<input type="hidden" id="CMS_SERVERSIDE" value="<?php echo BASE_URL;?>/question/serversidecreatetest">
+								<?php if (count($this->arrError)>0) echo $this->error($this->arrError); ?>
+								<?php echo $this->table("table_question",$this->cols_view_title,"question");?>
+								<!-- CMS -->
+								<!-- Dialog Add new question -->
+								<div id="add-question-dialog-container" class="ui-corner-all ui-state-default">
+									<h3>Chọn loại câu hỏi</h3>
+									<div class="add-question-dialog-container-content ui-widget-content">
+										<ul>
+											<li><button value="<?php echo BASE_URL;?>/question/addmultichoice">Câu hỏi dạng : nhiều lựa chọn</button></li>
+											<li><button value="<?php echo BASE_URL;?>/question/addtruefalse">Câu hỏi dạng : đúng sai</button></li>
+											<li><button value="<?php echo BASE_URL;?>/question/addmatching">Câu hỏi dạng : ghép cặp</button></li>
+											<li><button value="<?php echo BASE_URL;?>/question/addcompletion">Câu hỏi dạng : điền khuyết</button></li>
+											<li><button value="<?php echo BASE_URL;?>/question/addessaytest">Câu hỏi dạng : tự luận</button></li>
+											<li><button value="<?php echo BASE_URL;?>/question/addshortanswer">Câu hỏi dạng : trả lời ngắn</button></li>
+										</ul>			
+									</div>
+									<div class="footer">
+										<input type="button" value="Ðóng" id="btnCloseDialogAddNewQuestion">
+									</div>
+								</div>							
+							</div>
+						</td>
+					</tr>
+				</table>					
+		</div>
+	</div>	
+	<input type="submit" value="submit" >					
+</form>
+<script type="text/javascript" language="javascript">	
+	$(document).ready(function(){
+		repairUpDownArrow();
+		UpdateSumScoreOfTest();
+		UpdateSumQuestionOfTest();
+		$("#tabs").tabs();	
+		$(".review_after_test").click(function(){
+			var id    			  = $(this).attr("id")+ "";
+			var index 			  = id.replace("review_after_test_", "")*1;
+			var review_after_test = $("#review_after_test").val();
+			if($(this).attr("checked"))
+				review_after_test = review_after_test.substr(0,index) + "1" + review_after_test.substr(index+1);
+			else
+				review_after_test = review_after_test.substr(0,index) + "0" + review_after_test.substr(index+1);
+			$("#review_after_test").val(review_after_test);
+		});	
+		
+		
+		$(".review_after_test_close").click(function(){
+			var id    			  = $(this).attr("id")+ "";
+			var index 			  = id.replace("review_after_test_close_", "")*1;
+			var review_after_test_close = $("#review_after_test_close").val();
+			if($(this).attr("checked"))
+				review_after_test_close = review_after_test_close.substr(0,index) + "1" + review_after_test_close.substr(index+1);
+			else
+				review_after_test_close = review_after_test_close.substr(0,index) + "0" + review_after_test_close.substr(index+1);
+			$("#review_after_test_close").val(review_after_test_close);
+		});
+		
+		$(".review_while_test_open").click(function(){
+			var id    			  = $(this).attr("id")+ "";
+			var index 			  = id.replace("review_while_test_open_", "")*1;
+			var review_while_test_open = $("#review_while_test_open").val();
+			if($(this).attr("checked"))
+				review_while_test_open = review_while_test_open.substr(0,index) + "1" + review_while_test_open.substr(index+1);
+			else
+				review_while_test_open = review_while_test_open.substr(0,index) + "0" + review_while_test_open.substr(index+1);
+			$("#review_while_test_open").val(review_while_test_open);
+		});	
+			
+		
+	});
+	
+	// hàm cập nhật các question được edit khi ta soạn test
+	function fnUpdateQuestion(question_id){
+		alert(question_id);
+		//$(".create-test").css("border","1px solid red");
+		    			$.ajax({
+    					   type: "POST",
+    					   url: $("#BASE_URL").val()+"/question/getonequestion",
+    					   data: "id="+question_id,
+    					   dataType: "json",
+    					   success: function(data){
+    						 if(data['success']==true){
+    						 	var textTemp = "test-has-question-"+question_id; 
+    						 	$("span.test-has-question-"+question_id).html("asdasdhajksdh");
+								UpdateSumScoreOfTest(); // Cập nhật lại tổng điểm của bài test trên giao diện --- không save vào database
+								UpdateSumQuestionOfTest();	// Cập nhật lại tổng số câu hỏi của bài test trên giao diện --- không save vào database
+    						 }
+    						 else
+    							 alert("co loi "+data['error']); 
+    					   }
+    					 });
+	}
+	
+	//  hàm di chuyển vị trí (lên xuống)của question trên bài test, sau khi di chuyển xong thì cập nhật lại số thứ tự của question
+	function fnDownArrow(this_){
+			var this_tr = $(this_).parent("td").parent("tr");
+			var next_tr = this_tr.next();
+			next_tr.after(this_tr);
+			repairUpDownArrow();
+			repairIndexQuestion();
+			return false;	
+	}
+	//  hàm di chuyển vị trí (lên xuống)của question trên bài test, sau khi di chuyển xong thì cập nhật lại số thứ tự của question
+	function fnUpArrow(this_){
+		// this_tr: tìm cái <tr> hiện tại
+		var this_tr = $(this_).parent("td").parent("tr");
+		var prev_tr = this_tr.prev();
+		// Chèn cái <tr> prev_tr lên trước cái this_tr
+		prev_tr.before(this_tr);
+		repairUpDownArrow();
+		repairIndexQuestion();
+		return false;			
+	}
+	
+	// Hàm khi add câu hỏi từ ngân hàng qua bài test, ta thêm 1 <tr> sang table test
+	function addToTest(question_id){
+		if (validateQuesIDBeforeAddToTest(question_id))
+		{
+    				$.ajax({
+    					   type: "POST",
+    					   url: $("#BASE_URL").val()+"/question/getonequestion",
+    					   data: "id="+question_id,
+    					   dataType: "json",
+    					   success: function(data){
+    						 if(data['success']==true){
+    						 	var html_tr = '';
+									html_tr += '<tr>';
+									html_tr += '<td>';
+											html_tr += '<a href="#" class="up-arrow"   onclick="fnUpArrow(this)">Up</a>';
+										html_tr += '</td>';
+										html_tr += '<td>';
+											html_tr += '<a href="#" class="down-arrow" onclick="fnDownArrow(this)">Down</a>';
+										html_tr += '</td>';
+										html_tr += '<td><span class="indexQuestion"></span></td>';
+										html_tr += '<td><span class="test-has-question-'+question_id+'">';
+										html_tr += data["data"]["question_title"];
+										html_tr += '</span></td>';
+										html_tr += '<td>';
+											html_tr += '<input type="hidden"  class="questionIDofTest" name="list_question[]" value="'+question_id+'"/>';
+											html_tr += '<input type="text" size="3" class="scoreOneQuestion" name="list_score[]"  value="'+data["data"]["question_score"]+'"/>';
+										html_tr += '</td>';
+										html_tr += '<td>';
+											html_tr += '<a class="view-icon"   href="'+$("#BASE_URL").val()+'/question/preview/id/'+question_id+'" onclick="viewClick(this.href); return false;"><img class="fugue fugue-eye" alt="" src="'+$("#BASE_URL").val()+'/img/icons/space.gif"/></a>';
+											html_tr += '<a class="edit-icon-popup"   href="'+$("#BASE_URL").val()+'/question/edit/id/'+question_id+'" onclick="editPopup(this.href); return false;"><img class="fugue fugue-pencil" alt="Chỉnh sửa" src="'+$("#BASE_URL").val()+'/img/icons/space.gif"/></a>';
+											html_tr += '<a class="remove-icon" href="#" onclick="removeQuestionFromTest(this); return false;" ><img class="fugue fugue-control-double"  alt="Xóa"       src="'+$("#BASE_URL").val()+'/img/icons/space.gif"/></a>'; 				
+										html_tr += '</td>';
+									html_tr += '</tr>';		
+    								$(".table-test-list-question").prepend(html_tr); 
+									repairUpDownArrow(); // Cập nhật lại vị trí 2 nút UP DOWN của câu hỏi
+									repairIndexQuestion(); // Cập nhật lại số thứ tự của câu hỏi   	
+									UpdateSumScoreOfTest(); // Cập nhật lại tổng điểm của bài test trên giao diện --- không save vào database
+									UpdateSumQuestionOfTest();	// Cập nhật lại tổng số câu hỏi của bài test trên giao diện --- không save vào database
+    						 }
+    						 else
+    							 alert("co loi "+data['error']); 
+    					   }
+    					 });
+    	}
+	}
+	
+	// xóa một câu hỏi từ bên test
+	function removeQuestionFromTest(this_){
+		var this_tr = $(this_).parent("td").parent("tr");
+		// xóa cái <tr> hiện tại
+		this_tr.remove();
+		repairUpDownArrow();
+		repairIndexQuestion();
+		UpdateSumScoreOfTest();
+	}
+	
+	// Chỉnh sửa lại 2 dòng đầu và cuối của bài test 
+	function repairUpDownArrow(){
+		$(".up-arrow").show();
+		$(".down-arrow").show();
+		$(".up-arrow:first").hide();
+		$(".down-arrow:last").hide();
+	}
+	// Chỉnh sửa lại số thứ tự câu hỏi trên bài test
+	function repairIndexQuestion(){
+		var count = 0;
+		var sumScore = 0;
+		$(".indexQuestion").each(function(){
+			count++;
+			$(this).html(count+"");
+		});
+	}
+	
+	// Cập nhật lại tổng số điểm của bài test tương ứng với những câu hỏi hiện có của bài test
+	function UpdateSumScoreOfTest(){
+		var sumScore = 0;
+		var html="";
+		$(".scoreOneQuestion").each(function(){
+			sumScore +=  ($(this).val()*1);
+		});
+		html +='<span class="sumScoreOfTest">'+ sumScore +'</span>  '; 
+		$(".sumScoreOfTest").html(html);
+	}
+	
+	// Cập nhật lại tổng số câu hỏi của bài test trên giao diện 
+	function UpdateSumQuestionOfTest(){
+		var sum = 0;
+		var html="";
+		$(".indexQuestion").each(function(){
+			sum+=1;
+		});
+		html +='<span class="sumQuestionOfTest">'+ sum +'</span>  '; 
+		$(".sumQuestionOfTest").html(html);
+	}
+	
+	// Kiểm tra id của câu hỏi khi add từ bên ngân hàng qua bên test, nếu có rồi thì không add vào nữa
+	function validateQuesIDBeforeAddToTest(question_id_in_bank){
+		var flag = 0;
+		$(".questionIDofTest").each(function(){
+				if (question_id_in_bank == ($(this).val()*1)){
+					flag = 1; 
+					return false; // to break each(function) 
+				}
+		});
+		if (flag == 1) return false ; // return of validateQuesIDBeforeAddToTest
+		return true;
+	}
+	
+	
+</script>
+

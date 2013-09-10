@@ -1,0 +1,128 @@
+<div class="content last ui-widget-content">
+	<div class="content-full">
+		<div style="width: 98%;padding-left: 5px;">
+			<?php if (count($this->arrError)>0) echo $this->error($this->arrError); ?>
+			<div class="cms_table">
+				<?php if ($this->Obj['isupdate'] == 0){?>
+						<h2>Thêm mới phân công giảng dạy</h2>
+						<?php }?>
+				<?php if ($this->Obj['isupdate'] == 1){?>
+						<h2>Chỉnh sửa phân công giảng dạy</h2>
+						<?php }?>
+				<form action="<?php echo BASE_URL; ?>/teachassignment/<?php echo $this->action;?>"	method="POST" name="quiz-form" id="">
+					<input type="hidden" name="id" value="<?php echo $this->Obj['id'] ;?>">		
+					<input type="hidden" name="isupdate" value="<?php echo $this->Obj['isupdate'];?>"/>			
+					<table cellpadding="0" cellspacing="0">
+						<tr><td class="label">
+								Mã số giảng viên dạy
+								</td><td class="field_container"> 
+								<input type="text" name="user_code" id="user_code"  onchange="validateUsercode(); return false;" style="width: 300px " value="<?php  echo $this->Obj['user_code']; ?>" >
+								<input type="hidden" name="user_id" id="user_id" value="<?php  echo $this->Obj['user_id']; ?>">
+						</td></tr>
+						<tr><td class="label">
+								</td><td class="field_container">
+								<span class="info-teacher">
+								</span>
+						</td></tr>
+						
+						<tr><td class="label">
+								Chọn môn học
+								</td><td class="field_container"> 
+								<?php echo $this->SltSubject("subject_id", $this->Obj['subject_id']); ?>
+						</td></tr>
+						<tr><td class="label">
+								Lớp học: 
+								</td><td class="field_container">
+								<span class="class_id">
+									<?php echo $this->SltClassSubject("class_id", $this->Obj['class_id'], $this->Obj['subject_id']); ?>
+								</span>
+						</td></tr>
+
+						<tr><td colspan="5"  style="font-size: 12px; color: white; font-family: tahoma;"  >
+								<p align="center">
+									<input  type="submit" value="Đồng ý" style="font-size: 15px;" class="add-answer-icon ui-state-default ui-corner-all">&nbsp;&nbsp;&nbsp;&nbsp;
+									<input  type="button" value="Hủy bỏ" onclick="window.location='<?php echo  BASE_URL.'/teachassignment';  ?>'" style="font-size: 15px;" class="add-answer-icon ui-state-default ui-corner-all">
+								</p>
+						</td></tr>
+						
+					</table>		
+				</form>
+				<!--  -->
+			</div>
+		</div>
+	</div>
+</div>
+
+<script type="text/javascript" language="javascript">	
+
+$(document).ready(function(){
+	$("#subject_id").change(function(){
+            $(".cms_table").block({
+                    message: '<span><b>Đang xử lý...</b></span>',                 
+            overlayCSS:  {  
+                '-webkit-border-radius': '3px', 
+                '-moz-border-radius':    '3px',	
+                'padding-bottom': '3px',
+                backgroundColor: '#fff'
+            }
+            });   
+
+            $.ajax({
+                type: "POST",
+                url: $("#BASE_URL").val()+"/exam/getsubjectofclass"+"/token/"+fnGenToken(),
+                data: "subject_id="+$("#subject_id").val(),
+                dataType: "json",
+                success: function(data){
+                       
+                        if(data['success']==true){
+                                        $(".class_id").html(data['slt_class_subject']);
+                        }else
+                                alert("Có lỗi "+data['error']); 
+                            $(".cms_table").unblock();	
+                }
+                });					
+		
+	});
+});
+
+function validateUsercode(){
+	 var usercode = $("#user_code").val();
+	 var html = '';
+            if($.trim(usercode)=='') return;
+            $(".cms_table").block({
+                    message: '<span><b>Đang xử lý...</b></span>',                 
+            overlayCSS:  {  
+                '-webkit-border-radius': '3px', 
+                '-moz-border-radius':    '3px',	
+                'padding-bottom': '3px',
+                backgroundColor: '#fff'
+            }
+            });      
+            
+        $.ajax({
+           type: "POST",
+           url: $("#BASE_URL").val()+"/teachassignment/validateusercode",
+           data: "user_code="+usercode,
+           dataType: "json",
+           success: function(data){
+                 if(data['success']==true){
+                                html+='<div style="border: 1px solid orange; padding: 8px;">';
+                                html+='<p style="display: block;font-weight:600; font-size:13px; color:#00ADEF;" > Giảng viên hợp lệ </p> ';
+                                        html+='<p style="display: block;font-weight:600; font-size:13px; color:#00ADEF;" > Họ tên giảng viên: '+data["data_user"]["firstname"]+ ' ' + data["data_user"]["lastname"]+' </p>';
+                                        html+='</div>';
+                                        $("#user_id").val(data["data_user"]["id"]);
+
+                        }else{
+                                html+='<div style="border: 1px solid orange; padding: 8px;">';
+                        html+='<p style="display: block;font-weight:600; font-style:italic; font-size:13px; color:#FF0000;" > Mã số giảng viên không đúng</p> ';
+                        html+='</div>';
+                        $("#user_id").val("");
+                 }
+
+                $(".info-teacher").html(html);
+                 $(".cms_table").unblock();	
+           }
+         }); 
+}
+</script>
+	

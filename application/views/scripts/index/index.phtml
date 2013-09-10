@@ -1,0 +1,89 @@
+<form id="form" name="form" method="post" action="<?php echo BASE_URL ?>/auth/login">
+<?php 
+		$auth = Zend_Auth::getInstance();
+		if ($auth->hasIdentity()){
+  		$userhaslogin = $auth->getStorage()->read();  		
+	?>
+			<div class="box_r1">
+				<div class="homeside_mid1">
+				<fieldset>
+				<legend> Thông tin tài khoản</legend>
+						<table class="table-td-user-info">
+							<tr>
+								<td>Họ Tên: </td>
+								<td><?php echo $userhaslogin->firstname." ".$userhaslogin->lastname;?></td>
+							</tr>
+							<tr>
+								<td>Thuộc nhóm: </td>
+								<td><?php 
+									$models_group = new Default_Models_GroupUser();
+									$models_group->find("id",$userhaslogin->group_id);
+									if($models_group->getId())
+										echo $models_group->getGroup_name();  
+									?></td>
+							</tr>
+							<tr>
+								<td align="center" colspan="2">
+									<a href="<?php echo BASE_URL;?>/auth/changepw" class="changepass">Đổi mật khẩu</a>
+									&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+									<a href="<?php echo BASE_URL;?>/pagestudent/editinfo/user_id/<?php echo $userhaslogin->id ?>" class="">Tài khoản</a>
+								</td>
+							</tr>
+						</table>
+					</fieldset>
+				</div>
+				<div class="homeside_bot1"></div>
+			</div>              
+
+	<?php } ?>
+	<div class="index-document-ref">
+		<fieldset>
+			<legend> Tài liệu lý thuyết môn cơ sở dữ liệu</legend>
+			<ul>
+				<li>
+					<a href="http://studyonline.com.vn/doc/_buoi1.ppt"> Các khái niệm của một hệ CSDL</a>
+				</li>
+				<li>
+					<a href="http://studyonline.com.vn/doc/_buoi2.ppt">Các mô hình CSDL</a>
+				</li>
+				<li>
+					<a href="http://studyonline.com.vn/doc/_buoi3-4.ppt">Ngôn ngữ đại số quan hệ</a>
+				</li>
+				<li>
+					<a href="http://studyonline.com.vn/doc/_buoi5-6.ppt">Ngôn ngữ SQL</a>
+				</li>
+				<li>
+					<a href="http://studyonline.com.vn/doc/_buoi7.ppt">Ngôn ngữ tân từ</a>
+				</li>
+				<li>
+					<a href="http://studyonline.com.vn/doc/_buoi8-9.ppt">Ràng buộc toàn vẹn trong một CSDL</a>
+				</li>
+				<li>
+					<a href="http://studyonline.com.vn/doc/_buoi10.ppt">Tối ưu hóa câu hỏi bằng đại số quan hệ</a>
+				</li>
+			</ul>
+		</fieldset>
+	</div>
+
+	
+	
+</form>
+		<p align="center">
+			<img src="<?php echo BASE_URL;?>/media/images/backgrounds/logo_is.jpg" width="400" height="400">
+		</p>	
+
+	<div id="obJAdDivLeft"></div> 
+<script type="text/javascript">
+$(document).ready(function(){
+	$("#tabs").tabs({
+			select: function(event, ui) {
+					if(ui.tab.title)
+						location.href= ui.tab.title;
+			        return true;
+			    }			
+	});
+});
+
+
+
+</script>

@@ -1,0 +1,181 @@
+<form action="<?php echo BASE_URL;?>/pagestudent/dogradestudenttest" method="post" id="studentdotest-form">
+<input type="hidden" name="test_id" value="<?php echo $this->data['test_obj']['id'];  ?>">
+<input type="hidden" name="last_insert_history_test_id" id="last_insert_history_test_id" value="<?php echo  $this->data['last_insert_history_test_id'];  ?>">
+<input type="hidden" name="scoretemp" value="<?php echo $this->scoretemp;  ?>">
+<?php
+if (count($this->arrError)>0) echo $this->error($this->arrError); 
+else {
+// Lấy các thông số cần thiết để view được bài test
+			$list_questionID 	= $this->data['question_id'];// danh sách id của câu hỏi
+			$list_score    		= isset($this->data['question_score'])?$this->data['question_score']:array();// điểm làm bài của user
+			$questionPerPage	= $this->data["question_perpage"];
+			$answer_of_user 	= $this->data['question']; // các câu trả lời của user
+			$list_score_in_test_table	= $this->data["list_score_in_test_table"];// Điểm của câu hỏi được set trong bài test
+			$questionPerPage 	= $questionPerPage==0? 1:$questionPerPage;
+			$totalQuestion		= count($list_questionID);
+			$totalPage			= (int)($totalQuestion/$questionPerPage);
+			$totalPage			= $totalQuestion%$questionPerPage==0?$totalPage:($totalPage+1) ;
+?>
+<div class="title_test_theme-1">
+	<p class="title_test_theme">
+		<?php echo  $this->data['test_obj']['title'];?>
+	</p>
+<table class="table-student-reviewtest-statistic">
+	<tr>
+		<td class="left">Sinh viên:
+		</td>
+		<td class="right"><?php echo $this->UserObj['firstname']." ".$this->UserObj['lastname']; ?> 
+		</td>
+	</tr>
+	<tr>
+		<td class="left">Mã số:
+		</td>
+		<td class="right"><?php echo $this->UserObj['user_code']; ?> 
+		</td>
+	</tr>
+
+	<tr>
+		<td class="left">Bài thi có:
+		</td>
+		<td class="right"><?php echo $totalPage." trang"; ?> 
+		</td>
+	</tr>
+	<tr>
+		<td class="left" colspan="2">
+			Câu hỏi dạng tự luận sẽ được giảng viên chấm điểm sau khi bạn nộp bài.
+		</td>
+	</tr>
+</table>	
+	
+</div>
+<div class="student_star_todo_practice">
+<font style="color:#00AEEF; font-size: 15px; font-weight: 600; ">Hệ thống tự động lưu bài làm của bạn lên máy chủ sau 1 phút</font>
+
+<?php					
+			$link = "<div class='page_review_test'><font style='font-size: 16px; font-weight: bold; '>Trang: </font> ";
+			for($i=0;$i<$totalPage;$i++)
+				$link .= "&nbsp;<a href='#' onclick='showPage($i,$questionPerPage); return false;'><span class='focus-page-test-1'> ".($i+1)."</span></a> &nbsp;&nbsp;";
+			$link .="</div>";
+			echo $link;
+			if(!empty($list_questionID[0])){		
+					foreach($list_questionID as $key=>$list_questionIDItem){ 
+                                                    $list_score_temp = isset($list_score[$key])?$list_score[$key]:1;
+                                                    $answer_of_user_temp = isset($answer_of_user[$list_questionIDItem])?$answer_of_user[$list_questionIDItem]:"";
+                                                    $list_score_in_test_table[$key] = isset($list_score_in_test_table[$key])?$list_score_in_test_table[$key]:1;
+							// Begin Lấy đường dẫn tuyệt đối cho hình ảnh
+							$HTML = $this->viewQuestionDoTestAgain($this->data["test_id"],
+                                                                trim($list_questionIDItem),
+                                                                "Câu ".($key+1)." : ",
+                                                                $answer_of_user_temp,
+                                                                $this->review_test,
+                                                                $this->view_corect,
+                                                                $this->view_feedback,
+                                                                $this->view_send_result,
+                                                                $list_score_temp,
+                                                                $list_score_in_test_table[$key]);
+							$HTML = Zend_View_Helper_FormatDate::_tinyMce_get_absolute_path_image("../../../media/images/tinymce","http://".$_SERVER['SERVER_NAME'].BASE_URL."/media/images/tinymce" ,$HTML);
+							// End lấy đường dẫn tuyệt đối cho hình ảnh
+							echo  $HTML;
+						
+							echo "<span class='separator-question-test'><hr/></span>";
+					}
+			
+			$link = "<div class='page_review_test'><font style='font-size: 16px; font-weight: bold; '>Trang: </font> ";
+				for($i=0;$i<$totalPage;$i++)
+					$link .= "&nbsp;<a href='#' onclick='showPage($i,$questionPerPage); return false;'><span class='focus-page-test-2'> ".($i+1)."</span></a> &nbsp;&nbsp;";			
+			$link .="</div>";
+			echo $link;
+			}
+?>			
+<p align="center">
+			<input name="question_perpage" type="hidden" class="question_per_page" value="<?php echo $questionPerPage; ?>">
+		<a  class="all-bt-do-test" href="#" onclick="endTestConfirm(); return false;">Nộp bài </a>&nbsp;&nbsp;&nbsp;&nbsp;
+	 	<a  class="all-bt-do-test" href="#" onclick="fnAutoSaveBtnClick();return false;">Lưu bài lên máy chủ </a>
+		 	
+</p>
+</form>
+<hr/>
+</div>
+<?php } ?>
+
+<script type="text/javascript" language="javascript">
+<!--
+$(document).ready(function(){
+	setTimeout("fnAutoSave()",10000);
+	$("#time-countdown").countdown('resume');
+	$(".question-container-div").hide();
+	$(".separator-question-test").hide();
+	var question_per_page = $(".question_per_page").val();
+	showPage(0,question_per_page);
+	$(".focus-page-test").eq(0).addClass("focus-page-test-active");
+});
+
+function fnAutoSave(){
+		/*For a standard form submission , it's handled by TinyMCE . 
+			For an Ajax form submission, you have to do it manually, by calling (before the form is submitted):
+		*/
+		tinyMCE.triggerSave();
+  				$.ajax({
+    					   type: "POST",
+    					   url: $("#BASE_URL").val()+"/pagestudent/autosavetest"+"/token/"+fnGenToken(),
+    					   data: $("#studentdotest-form").serialize(),
+    					   dataType: "json",
+    					   success: function(data){
+    						 if(data['success']==true){
+							}else{
+									
+    						 }
+    					   }
+    					 }); 
+			setTimeout("fnAutoSave()",60000);			
+}
+
+function fnAutoSaveBtnClick(){
+			tinyMCE.triggerSave();
+  				$.ajax({
+    					   type: "POST",
+    					   url: $("#BASE_URL").val()+"/pagestudent/autosavetest"+"/token/"+fnGenToken(),
+    					   data: $("#studentdotest-form").serialize(),
+    					   dataType: "json",
+    					   success: function(data){
+    						 if(data['success']==true){
+									alert("Lưu bài thành công!");
+							}else{
+									
+    						 }
+    					   }
+    					 }); 
+			/* setTimeout("fnAutoSave()",60000); */			
+}
+
+
+function focusPage(up_or_down,currentPage){
+	page_obj  = $(".focus-page-test-"+up_or_down);
+	page_obj.removeClass("focus-page-test-active");
+	page_obj.eq(currentPage).addClass("focus-page-test-active");
+}
+
+function endTestConfirm() {
+	if(confirm("Bạn chắc chắn muốn nộp bài?")==true)
+		$("#studentdotest-form").submit();
+}
+
+function endTest() {
+	$("#studentdotest-form").submit();
+}
+
+function showPage(currentPage, questionPerpage)
+{
+	focusPage(1,currentPage);
+	focusPage(2,currentPage);
+	$(".question-container-div").hide()
+	$(".separator-question-test").hide()
+	var start  	= currentPage*questionPerpage;
+	var end		= start+questionPerpage;
+	for(i=start; i< end; i++){
+		$(".separator-question-test").eq(i).show();
+		$(".question-container-div").eq(i).show();
+	}
+}
+//-->
+</script>

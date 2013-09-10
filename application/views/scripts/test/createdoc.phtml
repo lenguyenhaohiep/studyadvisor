@@ -1,0 +1,11 @@
+<?php
+	header("Content-type: application/vnd.ms-word");
+		//header("Content-type: application/vnd.ms-excel");
+	header("Content-Disposition: attachment;Filename=Dethitracnghiem_.doc");
+		//header("Content-Disposition: attachment;Filename=Bangdiem_.xls");
+	header("Pragma: no-cache");
+?>
+<?php
+	echo $this->data['html_submit'];
+	
+?>

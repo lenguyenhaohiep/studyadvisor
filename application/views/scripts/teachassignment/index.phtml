@@ -1,0 +1,41 @@
+<div id="blueBar"></div>
+<div id="globalContainer">
+	<?php echo $this->render("navigation.phtml");?>
+	<div id="content" class="hasLeftCol">
+		<div id="leftCol">			
+		</div>
+		<div id="contentCol" class="hasRightCol">
+			<div id="rightCol" >
+				<div class="name-page-cms">	Quản lý phân công giảng dạy
+				</div>
+			</div>
+			<div id="contentArea">
+			<!-- CMS -->
+			<input type="hidden" id="CMS_SERVERSIDE" value="<?php echo BASE_URL;?>/teachassignment/serverside">
+			<?php if (count($this->arrError)>0) echo $this->error($this->arrError); ?>
+			<?php echo $this->table("table_teachassignment",$this->cols_view_title,"teachassignment", $this->cols_view,
+					array(
+						"class_id"=>$this->SltClass("inline-search-2",null)
+						));
+			?>
+			<script language="javascript">
+				$(document).ready(function(){
+					InitJqueryDataTable("#table_teachassignment","");
+					$(".search-on-table").find("input[type='text']:eq(1)").hide();
+					$("#inline-search-2").change(function(){
+						oTable.fnFilter( this.value,$(this).attr("name").replace("inline-search-","")*1); 
+					});
+					
+				});				
+			</script>
+			
+			<div id="view-container" class="ui-corner-all ui-widget-content">
+			</div>
+			
+			<!-- CMS -->
+			<!-- Dialog Add new  -->
+			<!-- Dialog Add new  -->			
+			</div>
+		</div>
+	</div>
+</div>

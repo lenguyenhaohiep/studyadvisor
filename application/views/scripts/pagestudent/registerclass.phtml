@@ -1,0 +1,126 @@
+<form action="<?php echo BASE_URL; ?>/pagestudent/registerclass/" method="POST" >
+<input type="hidden" name="" value="" >
+<?php if (count($this->arrError)>0){ echo $this->error($this->arrError); ?>		
+<!-- Begin reg-class-student -->
+<?php }else{ ?>
+<div class="user-register-course-class">
+<div class="table1">
+<table>
+<tr>
+	<th class="">Những khóa học mà bạn chưa tham gia. Hãy chọn 1 khóa học bên dưới</th>
+</tr>
+<tr>
+	<td>
+<?php
+		$auth = Zend_Auth::getInstance();
+		if ($auth->hasIdentity()){
+	  		$userhaslogin = $auth->getStorage()->read();
+		  		$modelsUser = new Default_Models_User();
+		  		$modelsUser->find("id",$userhaslogin->id);
+		  		if($modelsUser->getId()){
+		  			// Tìm ra những khóa học sinh viên đó đã tham gia và không hiện lên giao diện nữa
+		  			$arrListCourseId = explode(',', $modelsUser->getList_course_join());
+		  		}
+	  		echo $this->SltCourse("course_id", $this->Obj['course_id'],1,$arrListCourseId);
+		}  	
+?>
+</td></tr>
+<tr>
+	<td><input type="submit" value="Tham gia khóa học này">
+	</td>
+</tr>
+</table>
+</div>
+<div class="table2">
+</div>
+</div><!-- End reg-class-student -->
+<?php } ?>
+</form>
+
+<script type="text/javascript" language="javascript">	
+			$("#course_id").change(function(){			
+			var course_id = $("#course_id").val();
+   				$.ajax({
+    					   type: "POST",
+    					   url: $("#BASE_URL").val()+"/course/getlistclass"+"/token/"+fnGenToken(),
+    					   data: "course_id="+course_id,
+    					   dataType: "json",
+    					   async: false, // giải quyết cơ chế bất đồng bộ, ajax không phải đợi success trả về mà vẫn thực hiện đoạn if bên dưới
+    					   success: function(data){
+    						 if(data['success']==true){
+    						 	if(data['data']==null){
+									var html_table = '';
+									html_table += '<table class="datatable" >';
+										html_table += '  <tr>';
+										html_table += '    <th colspan="8">Danh sách các lớp được mở của khóa học: <span class="name-course"></span> </th>';
+										html_table += '  </tr>';
+										html_table += '   <tr>';
+										html_table += '    <th>Tên lớp</th>';
+										html_table += '    <th>Ngày bắt đầu</th>';
+										html_table += '    <th>Ngày kết thúc</th>';
+										html_table += '    <th>Tình trạng</th>';
+										html_table += '    <th>Thao tác</th>';
+										html_table += '  </tr>';
+										html_table += '  <tr>';
+										html_table += '  <td colspan="8">Không có dữ liệu ';
+										html_table += '  </td>';
+										html_table += '  </tr>';
+										html_table += '</table>';    						 	
+    						 	}
+    						 	else
+    						 	{
+									var html_table = '';
+									html_table += '<table class="datatable" >';
+										html_table += '  <tr>';
+										html_table += '    <th colspan="8">Danh sách các lớp được mở của khóa học: <span class="name-course"></span> </th>';
+										html_table += '  </tr>';
+										html_table += '   <tr>';
+										html_table += '    <th>Tên lớp</th>';
+										html_table += '    <th>Ngày bắt đầu</th>';
+										html_table += '    <th>Ngày kết thúc</th>';
+										html_table += '    <th>Tình trạng</th>';
+										html_table += '    <th>Thao tác</th>';
+										html_table += '  </tr>';
+    						 		for(i=0;i<data['data'].length;i++){
+										html_table += '  <tr>';
+										html_table += '    <td>'+data['data'][i]['full_name']+'</td>';
+										html_table += '    <td>'+data['data'][i]['time_start']+'</td>'; 
+										html_table += '    <td>'+data['data'][i]['time_end']+'</td>';
+										if(data['data'][i]['hidden']=="on"){
+											html_table += '    <td>Mở</td>';
+											if(data['getmore'][i]==1)
+												html_table += '    <td><a href="'+$("#BASE_URL").val()+'/pagestudent/processjoinclass/course_id/'+data['data'][i]['course_id']+'/class_id/'+data['data'][i]['id']+'" onclick="confirmJoinClass(this.href); return false;" class="ui-state-hover ui-corner-all">Tham gia lớp học </a></td>';
+											else
+												html_table += '    <td>Lớp học đã đủ sinh viên</td>';
+										}else {
+											html_table += '    <td>Đóng</td>';
+											html_table += '    <td></td>';
+										}
+										html_table += '  </tr>';					 		
+    						 		}
+									html_table += '</table>';
+    						 	}
+    						 	$(".table2").html(html_table);
+    						 }
+    						 else
+    							 alert("Có lỗi "+data['error']); 
+    					   }
+    					 });		
+    					 
+			var str = "";
+			$("#course_id option:selected").each(function () {
+                str += $(this).text() + " ";
+              });    
+              if(course_id==0)					 	
+				$(".name-course").html('');
+			  else
+			  	$(".name-course").html(str);
+			
+		});	
+		
+  function confirmJoinClass(href){
+  	if(confirm("Bạn có chắc chắn muốn tham gia lớp học đã chọn không?")==true){
+  		window.location =href;
+  	}
+  }		
+</script>
