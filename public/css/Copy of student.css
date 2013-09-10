@@ -1,0 +1,479 @@
+.student_main_content{
+	width: 960px;	
+	height: auto;	
+	margin: 0pt auto;
+}
+.student_main_content .student_head{
+	width: inherit;
+	border: 1px solid #CCCCCC;
+	-moz-border-radius: 5px; 
+	-webkit-border-radius: 5px; 
+	border-radius: 5px;  
+}
+.student_main_content .student_head .student_banner{
+	height: 40px;
+	width: inherit;
+	text-align: right;
+	background: url("../media/images/backgrounds/bg-header-home.jpg") repeat-x scroll left bottom transparent;
+}
+.student_main_content .student_head .student_head_nav{
+	height: 30px;
+	width: inherit;
+	text-align: right;
+	margin: 0px;
+	padding: 0px;
+	/*background: url("../media/images/backgrounds/bg-menu-repeat-x.jpg") repeat-x scroll left top transparent;*/
+	background:#353535 none repeat scroll 0 0;
+	border-bottom:4px solid #00AEEF;
+}
+.student_main_content .student_head .student_head_nav ul{
+	list-style: none;
+	margin: 0px;
+	margin-top: 5px;
+	padding: 0px;
+	float: right;
+}
+.student_main_content .student_head .student_head_nav ul li{
+	float: left;
+	position: relative;
+	margin-right: 5px;
+	/*border: 1px solid red;*/
+}
+/*
+.student_main_content .student_head .student_head_nav ul li .linkNav{
+	text-decoration: none;
+	color: white;
+	font-weight: bold;
+	background-color:#5C636B;
+	display:block;
+	height:28px;
+	line-height:25px;
+	padding-left:8px;
+	padding-right:8px;
+	text-transform:uppercase;	
+}
+.student_main_content .student_head .student_head_nav ul li .linkNav:HOVER{
+	background-color:#00ADEF;
+	height:32px;
+	line-height:30px;
+	text-transform:uppercase;	
+}
+*/
+.student_main_content .student_wrapper{
+	width: 100%;
+}
+.student_main_content .student_wrapper .student_left{
+	float: left;
+	width: 165px;
+	min-height: 600px;
+	background-color: #00ADEF;
+}
+.student_main_content .student_wrapper .student_left .student_NavItem{
+	list-style: none;
+	margin: 0px;
+	padding: 0px;
+}
+.student_main_content .student_wrapper .student_left .student_NavSubItem{
+	list-style: none;
+	margin:0px;
+}
+.student_main_content .student_wrapper .student_left .student_NavItem li{
+	margin-top: 8px;
+	position: relative;	
+}
+
+.student_main_content .student_wrapper .student_left .student_NavItem li span a{
+    border-bottom: 1px solid #FFFFFF;
+    color: #FFFFFF;
+    display: block;
+    line-height: 13px;
+    padding: 3px 8px 4px 5px;
+    position: relative;
+    text-decoration: none;
+    background-color: #D8DFEA;
+    font-size: 13px;
+    font-weight: bold;
+}
+
+.student_main_content .student_wrapper .student_left .student_NavSubItem li{
+	margin-top: 2px;
+	position: relative;	
+}
+/*
+.student_main_content .student_wrapper .student_left .student_NavSubItem a{
+    color: #333333;
+    display: block;
+    line-height: 13px;
+    padding: 3px 8px 4px 12px;
+    position: relative;
+    text-decoration: none;
+    background-color: #D8DFEA;
+    font-size: 12px;
+    font-weight: normal;
+}
+*/
+.student_main_content .student_wrapper .student_left .student_NavSubItem .subMenuLeft{
+    color: #333333;
+    display: block;
+    line-height: 13px;
+    padding: 3px 8px 4px 12px;
+    position: relative;
+    text-decoration: none;
+    background-color: #D8DFEA;
+    font-size: 12px;
+    font-weight: normal;
+}
+
+.student_main_content .student_wrapper .student_left .student_NavSubItem .subMenuLeft:HOVER{
+  	color: #888888
+}
+.subMenuLeftActive{
+  	color: #888888
+    display: block;
+    line-height: 13px;
+    padding: 3px 8px 4px 12px;
+    position: relative;
+    text-decoration: none;
+    background-color: #D8DFEA;
+    font-size: 12px;
+    font-weight: normal;
+  	       
+}
+
+.student_main_content .student_wrapper .student_left .student_NavSubItem a:HOVER{
+	background-color:#888888;
+}
+
+.student_main_content .student_wrapper .student_content{
+	margin-left: 168px;
+	height: auto;
+	min-height: 600px;
+}
+.info-student-detail{
+	text-align: right;
+	padding-right: 10px;
+	height: 30px;
+	width: 150px;
+	font-size: 14px;
+}
+.edit-info-student-detail{
+	height: 30px;
+	font-size: 14px;
+}
+
+.student-practice-gentest{
+	height: 30px;
+	font-size: 14px;
+}
+.student-click-gen-test{
+	border: 1px solid #DDDDDD;
+    float: right;
+    padding-left: 5px;
+    padding-right: 5px;
+    text-decoration: none;
+}
+.student-click-gen-test:HOVER {
+	background-color: gray;
+}
+
+.register_box{
+	background: url("../media/images/backgrounds/bg_login.gif") repeat-x scroll center top #FFFFFF;
+    margin: auto;
+    padding: 10px 10px 30px;
+    width: 540px;
+}
+.register_box h2{
+	border-bottom: 1px solid #C8C9CB;
+    display: block;
+    font-family: Arial,Helvetica,sans-serif;
+    font-size: 20px;
+    margin-bottom: 5px;
+    padding-bottom: 5px;
+    text-align: left;
+    width: 100%;
+}
+
+.register_box h3{
+	color: #00AEEF;
+    font-size: 14px;
+    font-weight: 700;
+    margin-top: 10px;
+    padding: 10px 0;
+}
+
+.register_box table{
+ 	background: none repeat scroll 0 0 #EEEEEE;
+    border: 0 none;
+    padding: 10px 0;
+    width: 540px;
+}
+
+.register_box table tr td{
+	 padding: 3px 0;
+}
+.register_box table tr td.field_container{
+	padding-left: 10px;
+}
+
+.register_box table tr td.field_container p{
+	line-height: 23px;
+}
+.register_box table tr td.label{
+	color: #000000;
+    font-weight: bold;
+    text-align: right;
+    width: 150px;
+}	
+
+.register_box table tr td.label_left{
+	color: #000000;
+    font-weight: bold;
+    text-align: right;
+    font-size: 18px;
+    width: 200px;
+}
+.register_box table tr td.label_right{
+	color: #000000;
+    text-align: left;
+    font-size: 16px;
+    padding-left: 20px;
+}	
+.register_box input{
+    background: none repeat scroll 0 0 #FFFFFF;
+    border: 1px solid #C7C7C7;
+    height: 22px;
+    /*-moz-border-radius: 6px 6px 6px 6px;*/
+    -moz-border-radius:6px 6px 6px 6px;
+    -webkit-border-radius:6px 6px 6px 6px;
+    border-radius:6px 6px 6px 6px;
+}
+
+.register_box input.w250{
+	width: 250px;
+}
+
+.register_box .submit_reg{
+    background: none repeat scroll 0 0 #FFFFFF;
+    color: #00AEEF;
+    font-weight: 700;
+    margin: 20px 0 20px;
+    padding: 0;
+    width: 100%;
+}
+
+.register_box .submit_reg td{
+	padding-left: 325px;
+	padding-bottom: 30px;  
+	border-bottom: 1px solid #C8C9CB;
+}
+
+
+.register_box a.button{
+    background: url("../media/images/backgrounds/bg_button.gif") repeat-x scroll center bottom #43C1F9;
+    border: 1px solid #007EBF;
+    -moz-border-radius: 6px 6px 6px 6px;   
+}
+.register_box a.button span{
+    border-bottom: 1px solid #0091DC;
+    border-top: 1px solid #A1E6FF;
+    color: #FFFFFF;
+    /*float: left;*/
+    font-family: Arial;
+    font-weight: bold;
+    line-height: 17px;
+    padding: 2px 10px;
+    text-align: center;
+}
+.register_box a.button span:HOVER{
+	color: blue;
+}
+.mgt10{
+	margin-top: 10px;
+}
+.fl{
+	float: left;
+}
+.errorMgStyle {
+    color: #FF0000;
+    font-size: 11px;
+    font-style: italic;
+    padding: 0px;
+}
+.okMgStyle{
+	color: #00ADEF;
+    font-size: 11px;
+}
+.start_practice{
+	background: url("../media/images/backgrounds/start_todo_practice.gif") repeat scroll 0 0 transparent;
+    border-width: 0;
+    cursor: pointer;
+    font-weight: bold;
+    height: 66px;
+    width: 223px;
+}
+.student_wait_before_practice{
+	text-align: center;
+}
+.UsecaseTitleView{
+    font-weight: bold;
+    font-size: 20px;
+    color: #00AEEF;
+    margin-top: 10px;
+    padding: 10px 0;
+    padding-left: 50px; 
+}
+.divAdsLeft{
+    background-color: Transparent;
+    background-position: right top;
+    background-repeat: no-repeat;
+    height: auto;
+    left: 0;
+    overflow: hidden;
+    padding: 0;
+    position: fixed;
+    text-align: right;
+    top: 0;
+    width: 180px;	
+}
+.divAdsRight{
+    height: auto;
+  /*  left: 1150px; */
+    overflow: hidden;
+    padding: 0;
+    position: fixed;
+    right: 0;
+    text-align: left;
+    top: 0;
+    width: 180px;
+}
+.user-register-course-class{
+	padding: 0;
+	margin: 0;
+}
+
+.user-register-course-class .table1 table th{
+ 	color: #00AEEF;
+    font-size: 15px;
+    font-weight: 700;
+}
+.user-register-course-class .table1 table td{
+	padding: 8px; 
+}
+
+.user-register-course-class .table2{
+	padding-top:45px; 
+}
+.user-register-course-class .table2 table td{
+	text-align: center;
+}
+.wrapperStudentManageCourse .tableStudentCourse td{
+	text-align: center;
+} 
+.wrapperStudentManageCourse .messageSaveSuccess{
+	padding-top: 30px;
+}
+.wrapperStudentManageCourse .messageSaveSuccess ul{
+	padding-left:200px;
+}
+.wrapperStudentManageCourse .messageSaveSuccess ul li{
+	width: 250px; 
+	text-align:center;
+	background-color: #f1fbe5;
+	-moz-border-radius:6px 6px 6px 6px;
+    -webkit-border-radius:6px 6px 6px 6px;
+    border-radius:6px 6px 6px 6px;
+}
+.wrapperStudentManageCourse .StudentManageCourse-submit{
+	padding-left: 250px;
+}
+.student-hower-button{
+	background-color: #AED0EA;
+	padding: 3px;
+	cursor: pointer;	
+}
+
+.student-hower-button:HOVER{
+	background-color: #1484e6;
+	padding: 6px;
+}
+.title_test_theme{
+	background:transparent url("../media/images/backgrounds/icon_quizname.gif") no-repeat ;
+	color:#D3040A;
+	font-size:15px;
+	font-weight:bold;
+	padding-left:45px;
+	height: 40px;
+}
+.title_test_theme-1{
+	padding: 20px;
+}
+.page_review_test{
+	padding: 20px;
+}
+.info-student-class{
+	width: 600px;
+	padding:10px 10px 30px;
+}
+.info-student-class table tr td{
+	font-weight: bold;
+	font-size: 15px;
+	
+}
+.info-student-class table .right{
+	color: #2293f7;	
+	padding-left: 20px;
+}
+.info-student-class table .left{
+	width: 185px;
+	text-align: right;
+}
+#tabs-2 .table-list-of-class{
+	padding-top: 30px;
+}
+#tabs-4 .table-list-of-class{
+	padding-top: 30px;
+}
+
+.table-student-reviewtest-statistic{
+	padding-top: 30px;
+	padding-left:50px;
+	width: 500px;
+}
+.table-student-reviewtest-statistic th{
+	color: #2293f7;
+	font-weight: bold;
+	text-align: center;
+	font-size: 24px
+}
+.table-student-reviewtest-statistic td{
+	padding: 4px 0;
+	font-weight: bold;
+	font-size: 13px
+}
+.table-student-reviewtest-statistic .right{
+		color: #2293f7;
+}
+.table-wait-before-dotest{
+	padding: 30px 0 0 180px;
+	width: 600px;	
+}
+.table-wait-before-dotest table th{
+	color:#DF0101;
+	font-size: 18px;
+	font-weight: bold;
+	padding: 3px;
+}
+
+.table-wait-before-dotest table tr td{
+	font-size: 15px;
+	font-weight: bold;
+	padding: 5px 0;
+}
+
+.table-wait-before-dotest .tdEndTableWait{
+	text-align:center;
+	padding: 50px 0;
+}
+.name-course-width{
+	width: 230px;
+}
