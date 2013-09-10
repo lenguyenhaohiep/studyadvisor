@@ -1,0 +1,28 @@
+<div class="time-remain ui-widget-content">
+	<input type="hidden" id="time-end"	value="<?php echo $this->endtime; ?>" /> 
+	<input type="hidden" id="server-time" value="<?php echo $this->url(array('controller' => 'index', 'action' => 'time')); ?>" />
+	<div id="div-countdown" class="ui-state-focus">
+	<table>
+		<tr>
+			<td colspan="2"
+				style="text-align: center; border-bottom: 1px solid #D6DDE6;"><b>Thời gian còn<br />
+			</b></td>
+		</tr>
+		<tr>
+			<td
+				style="vertical-align: middle; padding: 0px; padding-top: 5px; padding-right: 2px;"><img
+				src="<?php echo BASE_URL;?>/img/icons/space.gif"
+				alt="Đồng hồ đếm giờ" class="fugue-alarm-clock" /></td>
+			<td style="vertical-align: middle; padding: 0px;">
+				<span id="time-countdown" style="padding:5px;">00:00:00</span>
+			</td>
+		</tr>
+		<tr>
+			<td colspan="2"
+				style="text-align: center; border-top: 1px solid #D6DDE6;">
+			<button class="finish-test">Nộp Bài</button>
+			</td>
+		</tr>
+	</table>
+	</div>
+</div>

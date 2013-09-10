@@ -1,0 +1,23 @@
+			<!-- CMS -->
+			<input type="hidden" id="CMS_SERVERSIDE" value="<?php echo BASE_URL;?>/question/serversidecreatetest">
+			<?php if (count($this->arrError)>0) echo $this->error($this->arrError); ?>
+			<?php echo $this->table("table_question",$this->cols_view_title,"question");?>
+			<!-- CMS -->
+			<!-- Dialog Add new question -->
+			<div id="add-question-dialog-container" class="ui-corner-all ui-state-default">
+				<h3>Chọn loại câu hỏi</h3>
+				<div class="add-question-dialog-container-content ui-widget-content">
+					<ul>
+						<li><button value="<?php echo BASE_URL;?>/question/addmultichoice">Câu hỏi dạng : nhiều lựa chọn</button></li>
+						<li><button value="<?php echo BASE_URL;?>/question/addtruefalse">Câu hỏi dạng : đúng sai</button></li>
+						<li><button value="<?php echo BASE_URL;?>/question/addmatching">Câu hỏi dạng : ghép cặp</button></li>
+						<li><button value="<?php echo BASE_URL;?>/question/addcompletion">Câu hỏi dạng : điền khuyết</button></li>
+						<li><button value="<?php echo BASE_URL;?>/question/addessaytest">Câu hỏi dạng : tự luận</button></li>
+						<li><button value="<?php echo BASE_URL;?>/question/addshortanswer">Câu hỏi dạng : trả lời ngắn</button></li>
+					</ul>			
+				</div>
+				<div class="footer">
+					<input type="button" value="Ðóng" id="btnCloseDialogAddNewQuestion">
+				</div>
+			</div>
+			<!-- Dialog Add new question -->			

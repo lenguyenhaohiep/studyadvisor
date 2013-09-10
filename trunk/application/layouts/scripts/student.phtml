@@ -1,0 +1,136 @@
+<?php echo $this->doctype(); ?>
+<html>
+<head>
+	<?php  echo  $this->headMeta(); ?>
+	<?php  echo  $this->headTitle(); ?>
+	<?php  echo  $this->headLink(); ?>
+	<?php  echo  $this->jQuery(); ?>	
+</head>
+<body>
+<?php 
+		$auth = Zend_Auth::getInstance();
+		if ($auth->hasIdentity()){
+  			$userhaslogin = $auth->getStorage()->read();  	
+//					$modelsUser = new Default_Models_User();
+//					$modelsUser->find("id",$userhaslogin->id);
+//					$list_course_joinTemp = $modelsUser->getList_course_join();
+//					if(empty($list_course_joinTemp))
+//						$this->view->arrClassId = array();
+//					else
+//					{
+//						// Mỗi lần đăng nhập sinh viên chỉ thao tác với các lớp học ở 1 khóa học default mà sinh viên chọn
+//						$arrListCourseId = explode(',',$list_course_joinTemp);
+//						$models_classhasstudent = new Default_Models_ClassHasStudent();
+//						//Lấy tất cả các lớp học mà sinh viên tham gia
+//						$where = "`user_id`=".$userhaslogin->id;
+//						$result = $models_classhasstudent->groupBySql($where);
+//						$arrClassId = array();
+//						$arrCourseObj = array();
+//						if(count($result)>0)
+//						foreach ( $result as $key=>$resultItem){
+//							 $modelsClass = new Default_Models_Classs();
+//							 $modelsClass->find("id",$resultItem->class_id);
+//							 if(trim($arrListCourseId[0])==trim($modelsClass->getCourse_id()))
+//							 	$arrClassId[] = $resultItem->class_id;
+//						}
+//						
+//						$modelsCourse = new Default_Models_Course();
+//						$modelsCourse->find("id",$arrListCourseId[0]);
+//						if($modelsCourse->getId())
+//							$arrObjCourse = $modelsCourse->toArray();
+////						$this->view->CourseObj = $arrObjCourse;
+//					}  			
+  			
+?>
+
+<input type="hidden" name="BASE_URL" id="BASE_URL" value="<?php echo BASE_URL;?>">
+<div class="student_main_content">
+	<div class="student_head headerWrapper">
+		
+                <div class="student_banner headerWrapper">
+			<p class="student-banner-right">
+				<?php echo $this->render("header.phtml");?>	
+			</p>			
+		</div>	
+		<div class="student_head_nav">
+			<ul>
+				<li>
+					<a href="<?php echo BASE_URL;?>/pagestudent" class="<?php
+						if($this->controllerName ==  "pagestudent" && $this->actionName =="index") 
+							echo "linkNavActive";
+						else
+							echo "linkNav";
+						
+					 ?>">Trang chủ</a>
+				</li>				
+			
+				<li>
+					<a class="<?php
+						if($this->controllerName ==  "pagestudent" && $this->actionName =="editinfo") 
+							echo "linkNavActive";
+						else
+							echo "linkNav";
+						
+					 ?>" href="<?php echo BASE_URL;?>/pagestudent/editinfo/user_id/<?php echo $userhaslogin->id ?>" class="">Tài khoản</a>
+				</li>
+			<li>
+				<a class="<?php
+					if($this->controllerName ==  "comment" && $this->actionName =="index") 
+						echo "linkNavActive";
+					else
+						echo "linkNav";
+					
+				 ?>" href="<?php echo BASE_URL;?>/comment" class="">Trao đổi</a>
+			</li>				
+			<li>
+				<a class="<?php
+					if($this->controllerName ==  "index" && $this->actionName =="intro") 
+						echo "linkNavActive";
+					else
+						echo "linkNav";
+					
+				 ?>" href="<?php echo BASE_URL;?>/index/intro" class="">Giới thiệu</a>
+			</li>				
+				<li>
+					<a class="linkNav" href="<?php echo BASE_URL;?>/auth/logout" class="">Đăng xuất</a>
+				</li>								
+			</ul>
+		</div>	
+	</div>
+	<div class="student_wrapper">
+		
+		<div class="student_content">
+			<?php  echo  $this->layout()->content ?>
+			
+		</div>
+		
+	</div>
+	<?php echo $this->render("footer.phtml");?>	
+</div>
+<?php }else{
+		header ("Location: ".BASE_URL."/auth/login");
+} ?>
+	
+
+</body>
+</html>
+	<script>
+	$(function() {
+		var icons = {
+			header: "ui-icon-circle-arrow-e",
+			headerSelected: "ui-icon-circle-arrow-s"
+		};
+		$( "#accordion" ).accordion({
+			autoHeight: false,
+			navigation: true,
+			//collapsible: false,
+			
+			icons: icons
+		});
+		$( "#toggle" ).button().toggle(function() {
+			$( "#accordion" ).accordion( "option", "icons", false );
+		}, function() {
+			$( "#accordion" ).accordion( "option", "icons", icons );
+		});
+	});
+	</script>

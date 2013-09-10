@@ -1,0 +1,152 @@
+<form action="<?php echo BASE_URL;?>/register" method="post" id="register-form">
+<input type="hidden" name="subject_id" value="6">
+<div class="register_box">
+<h2>Đăng ký</h2>
+<span>Tài khoản để truy cập vào hệ thống để thực hành và thi trắc nghiệm</span>
+<h3>Chọn tên đăng nhập và mật khẩu </h3>
+<?php if (count($this->arrError)>0) echo $this->error($this->arrError); ?>
+<table cellpadding="0" cellspacing="0">
+	<tr>
+		<td class="label">Tên tài khoản:
+		</td>
+		<td class="field_container">
+			<input id="username" name="username" onchange="validateUsername(); return false;" value="<?php echo $this->Obj['username']; ?>" class="w250" maxlength="25">
+			<div id="validateUserName" style="display: block;" class="errorMgStyle"></div>
+			<p> Tên tài khoản bằng chữ cái, độ dài 5 - 21 ký tự</p>
+		</td>		
+	</tr>
+	<tr>
+		<td class="label">Mật khẩu:
+		</td>
+		<td class="field_container"><input name="txtPassword" value="" type="password" class="w250" maxlength="25">
+			<p> Mật khẩu có độ dài 5 - 21 ký tự</p>
+		</td>		
+	</tr>
+	<tr>
+		<td class="label">Nhập lại mật khẩu:
+		</td>
+		<td class="field_container"><input name="txtRePassword" value="" type="password" class="w250" maxlength="25">
+		</td>		
+	</tr>	
+</table>
+
+<h3>Chọn khóa học bạn tham gia </h3>
+<table cellpadding="0" cellspacing="0">
+	<tr>
+		<td class="label">Khóa học:
+		</td>
+		<td class="field_container">
+			<?php echo $this->SltCourse("course_id", $this->Obj['course_id'],1); ?>
+			<p>Trong một khóa học bao gồm nhiều lớp học được mở ra. </p>
+		</td>		
+	</tr>
+</table>
+
+<h3>Điền thông tin cá nhân</h3>
+<table cellpadding="0">
+	<tr>
+		<td class="label">Mã số sinh viên:
+		</td>
+		<td class="field_container">
+			<input id="user_code"  onchange="validateUserCode(); return false;" name="user_code" value="<?php echo $this->Obj['user_code']; ?>" class="w250" maxlength="100">
+			<div id="validateUserCode" style="display: block;" class="errorMgStyle"></div>
+			<p>Bạn phải cung cấp mã số sinh viên của bạn, để tiện cho giảng viên theo dõi</p>
+		</td>		
+	</tr>
+	<tr>
+		<td class="label">Họ và tên đệm:
+		</td>
+		<td class="field_container">
+			<input id="firstname" name="firstname" value="<?php echo $this->Obj['firstname']; ?>" class="w250" maxlength="100">
+		</td>		
+	</tr>
+	<tr>
+		<td class="label">Tên:
+		</td>
+		<td class="field_container">
+			<input id="lastname" name="lastname" value="<?php echo $this->Obj['lastname']; ?>" class="w250" maxlength="100">
+		</td>		
+	</tr>
+	<tr>
+		<td class="label">Email:
+		</td>
+		<td class="field_container">
+			<input id="email" name="email" value="<?php echo $this->Obj['email']; ?>" class="w250" maxlength="100">
+		</td>		
+	</tr>
+	<tr>
+		<td class="label">Học khoa:
+		</td>
+		<td class="field_container">
+			<input id="department" name="department" value="<?php echo $this->Obj['department']; ?>" class="w250" maxlength="100">
+		</td>		
+	</tr>
+</table>
+<table class="submit_reg" cellpadding="0" cellspacing="0">
+<tr>	
+	<td  style="">
+		<a href="#" class="button mgt10" onclick="submitRegister(); return false">
+			<span>Đăng ký</span>
+		</a>
+	</td>
+</tr>
+</table>
+</div>
+</form>
+
+<script type="text/javascript" language="javascript">	
+function submitRegister(){
+	$("#register-form").submit();
+	return false;
+}
+
+function validateUsername(){
+	 var username = $("#username").val();
+	 var html = '';
+	  if(username.length==0 || username.length<3){
+	  	html = '<div id="validateUserName" style="display: block;" class="errorMgStyle">Tên tài khoản không hợp lệ. </div>';
+	  	$("#validateUserName").html(html);
+	  }else{
+  				$.ajax({
+    					   type: "POST",
+    					   url: $("#BASE_URL").val()+"/register/validateusername",
+    					   data: "username="+username,
+    					   dataType: "json",
+    					   success: function(data){
+    						 if(data['success']==true)
+    							 html='<div id="validateUserName" style="display: block;" class="okMgStyle">'+data["messageShow"]+'</div>';
+    						 else
+    							 html='<div id="validateUserName" style="display: block;" class="errorMgStyle">'+data["messageShow"]+'</div>';
+    							
+    						$("#validateUserName").html(html);
+    					   }
+    					 }); 
+    	}
+}
+
+function validateUserCode(){
+	 var user_code = $("#user_code").val();
+	 var html = '';
+	  if(user_code.length==0 || user_code.length<5){
+	  	html = '<div id="validateUserCode" style="display: block;" class="errorMgStyle">Mã số phải từ 5 ký tự trở lên. </div>';
+	  	$("#validateUserCode").html(html);
+	  }else{
+  				$.ajax({
+    					   type: "POST",
+    					   url: $("#BASE_URL").val()+"/register/validateusercode",
+    					   data: "user_code="+user_code,
+    					   dataType: "json",
+    					   success: function(data){
+    						 if(data['success']==true)
+    							 html='<div id="validateUserCode" style="display: block;" class="okMgStyle">'+data["messageShow"]+'</div>';
+    						 else
+    							html='<div id="validateUserCode" style="display: block;" class="errorMgStyle">'+data["messageShow"]+'</div>';
+    							
+    						$("#validateUserCode").html(html);
+    					   }
+    					 }); 
+    	}
+
+}
+
+</script>

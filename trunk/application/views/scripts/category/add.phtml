@@ -1,0 +1,17 @@
+<div class="content last ui-widget-content">
+	<div class="content-full">
+		<div style="width: 98%;padding-left: 5px;">
+			<?php if (count($this->arrError)>0) echo $this->error($this->arrError); ?>
+			<div class="cms_table">
+				<?php if ($this->Obj['isupdate'] == 0){?>
+						<h2>Thêm mới danh mục</h2>
+						<?php }?>
+				<?php if ($this->Obj['isupdate'] == 1){?>
+						<h2>Chỉnh sửa thông tin danh mục</h2>
+						<?php }?>
+				<?php echo $this->render('category/form.phtml'); ?>
+				<!--  -->
+			</div>
+		</div>
+	</div>
+</div>

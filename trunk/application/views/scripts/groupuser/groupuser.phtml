@@ -1,0 +1,85 @@
+<center>
+	<div style="text-align:left;width:800px;" class="table-groupuser-cms">
+	<?php if (count($this->arrError)>0) echo $this->error($this->arrError); ?>
+	<?php if($this->msgSuccess=="success")  echo $this->success(); ?>
+	
+				<?php if ($this->Obj['isupdate'] == 0){?>
+						<h2 class="name-page-cms"> Thêm mới nhóm người dùng</h2>
+						<?php }?>
+				<?php if ($this->Obj['isupdate'] == 1){?>
+						<h2 class="name-page-cms"> Chỉnh sửa thông tin nhóm người dùng</h2>
+						<?php }?>
+	
+	<form action="<?php echo BASE_URL;?>/groupuser/edit" method="POST">
+		<input type="hidden" name="group_id" value="<?php echo $this->Obj["id"]; ?>">
+		<label for="group_name" style="font-weight: bold;">Tên nhóm người dùng:</label>
+		<input type="text" name="group_name" id="group_name" value="<?php echo $this->Obj["group_name"];?>">
+		<br/><br/>
+<?php
+	$mapAppSelectArr	  = array();
+	$showMenu 			  = array();
+	if(count($this->group_detail)>0){
+		// sap xep theo truong controller gom nhom
+		$controller_arr   = array();
+		foreach($this->group_detail as $group_detailItem){								
+			if(!in_array($group_detailItem->getController(),$controller_arr))
+				$controller_arr[] = $group_detailItem->getController();																							
+		}
+		if(count($controller_arr)>0){
+			foreach($controller_arr as $controller_arrItem){				
+				$tmp = array();
+				$tmp1 = array();
+				foreach($this->group_detail as $group_detailItem)
+					if($group_detailItem->getController()==$controller_arrItem){
+						$tmp[$group_detailItem->getAction()]  = $group_detailItem->getValue();
+						$tmp1[$group_detailItem->getAction()] = $group_detailItem->getShow_menu();		
+					}
+				$mapAppSelectArr[$controller_arrItem] = $tmp; 
+				$showMenu[$controller_arrItem] = $tmp1;
+			}
+		}
+	}
+	/*
+	$mapAppSelectArr  = array(  "user"=>array("add"=>1,"edit"=>-1,"delete"=>0),
+								"test"=>array("add"=>1,"edit"=>-1,"delete"=>0)							
+							  );
+	$showMenu  = array("user"=>array("add"=>1,"edit"=>-1,"delete"=>0),
+								"test"=>array("add"=>1,"edit"=>-1,"delete"=>0)							
+							  );
+	2 mang giong het nhau gia tri showmenu 0,1
+	 */
+	
+?>		
+		<?php echo $this->MapPermission("permission",$mapAppSelectArr,$showMenu);?>
+		<table >
+			<tr>
+				<td style="text-align:right; padding-top:20px;">
+					<input type="submit" value="Lưu lại" class="ui-state-default ui-corner-all" style="font-size: 15px; cursor: pointer;"> &nbsp;&nbsp;&nbsp;&nbsp;
+				</td>
+				<td style="text-align:left; padding-top:20px;">
+					<input  type="button" value="Thoát" style="font-size: 15px; cursor: pointer;" onclick="window.location='<?php echo  BASE_URL.'/groupuser';  ?>'" class=" ui-state-default ui-corner-all">				
+				</td>
+			</tr>
+		</table>
+	</form>
+	</div>	
+</center>
+<script type="text/javascript">
+	function UpdateChildren(orderCol,RowDependence){
+	/* Cập nhật các action con của action cha. khi mà action cha check ở đâu thì thằng 
+	  con check theo luôn */
+		if($('.dependence-'+RowDependence).size()>0){
+			node  = $('.dependence-'+RowDependence);
+			node.find('input[type="radio"]:eq('+orderCol+')').attr("checked",true);
+		}
+	}
+	$(document).ready(function(){		
+		$(".table_permission").find("input[type='radio']").click(function(){
+			$(this).parent("td").parent("tr").children("td").each(function(){
+				$(this).css("background-color","white");
+			});
+			$(this).parent("td").css("background-color","#4e8edf");
+		});
+	});
+</script>
+		

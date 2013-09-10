@@ -1,0 +1,244 @@
+	<form>
+	<div class="title-intro-write-comment">
+	<p>
+		Với mong muốn ngày càng hoàn thiện chương trình hơn, nhóm phát triển mong nhận
+		<br/>
+		được những ý kiến góp ý, đánh giá về sản phẩm của mọi người.
+		<br>
+	</p>
+	</div>
+	
+	<div class="wrapper-comment">
+	<?php
+	$auth = Zend_Auth::getInstance();
+			if ($auth->hasIdentity()){
+	?>
+	<div class="user-post-comment">
+		<p id="p-temp">
+			<textarea name="content"  rows="1" cols="" id="textarea-user-post-comment" class="textarea-user-post-comment">Viết bình luận đánh giá của bạn về hệ thống này.</textarea>
+		</p>	
+	</div>
+	<?php } ?>
+	
+	<div class="all-comment">
+	<?php if(count($this->data)>0)
+		foreach ($this->data as $key=>$allCommentItem){
+			$modelUser = new Default_Models_User();
+			$modelUser->find("id",$allCommentItem['user_id']);
+			if($modelUser->getId())
+				$fullnameAuthor = $modelUser->getFirstname()." ".$modelUser->getLastname();
+			$time	 =  Zend_View_Helper_FormatDate::timeBetweenNotGetSecond($allCommentItem['time_create'], date("U"));
+			$auth = Zend_Auth::getInstance();
+			if ($auth->hasIdentity())
+				$userhaslogin = $auth->getStorage()->read();
+	?>
+		<ul>
+			<li> 
+				<?php 
+				if (isset($userhaslogin))
+				if($userhaslogin->id == $allCommentItem['user_id'] || $userhaslogin->group_id==5){ ?>
+					<div class="delete-comment">
+				  		<a name="user-remove-comment-<?php echo $allCommentItem['id']; ?>" class="user-remove-comment" href="#" onclick="fnRemoveUlComment(this); return false;" title="Xóa">
+						  	 <img class="fugue fugue-cross" alt="Xóa" title="Xóa" src="<?php echo BASE_URL;?>/img/icons/space.gif"/>
+						 </a>				
+					</div>
+				<?php } ?>
+					<div class="metaData-comment">
+						<font class="author"><?php echo $fullnameAuthor; ?> </font> &nbsp;&nbsp;&nbsp;  <span class="time"><?php echo $time; ?> trước </span>
+					</div>
+					<div class="content-comment">
+						<p><?php echo $allCommentItem['content']; ?> </p>
+					</div>
+			</li>
+		</ul>
+	<?php } ?>	
+	</div>
+	<input id="page"      type="hidden" value="0">
+	<input id="showmore"  type="hidden" value="1">
+	<?php if(count($this->data)>=$this->itemFirstPage){ 	// Vì mặc định mình load 15 comment ra nên khi số comment bé hơn 15 thì ko load phần xem thêm  
+	?>
+	<div class="see-more">
+		<p> 
+			 <span id="ajax-getmore-loading" style="display: none;	">
+			 	<img src="<?php echo BASE_URL;?>/media/images/backgrounds/ajax-loader.gif" alt="Loading..." title="Loading...">
+			 </span>
+			<a class="more" href="#" onclick="getMoreComment(); return false;" alt="Xem thêm" title="Xem thêm" >
+					<img class="fugue fugue-lightning--pencil" alt="Xem thêm" title="Xem thêm" src="<?php echo BASE_URL;?>/img/icons/space.gif"/>
+					Xem thêm
+			 </a>
+		</p>
+	</div>
+	<?php } ?>
+	</div>
+	<!--  <input type="button" class="ajax-post-comment button " id="ajax-post-comment" value="Bình luận"> -->
+	<script type="text/javascript">
+		$(document).ready(function(){
+
+/*
+ * Document   : Comment
+ * Created on : March 8, 2011, 9:30:18 PM
+ * Author     : Nguyen Tien Dung
+ * Description: User comment system.
+ */
+			$("#textarea-user-post-comment").keyup( function () {
+				$('#textarea-user-post-comment').addClass("user-has-write-text");
+			});
+		
+			$("#textarea-user-post-comment").click(function(){
+				var count = 0;
+				// Biến dùng để kiểm tra xem user có gõ text vào chưa, nếu gõ rồi thì giữ text đó lại, chưa gõ thì xóa đoạn gợi ý default bên trong đi
+				$(".user-has-write-text").each(function(){
+				 	count++;
+				 });
+				if(count==0){
+					$("#textarea-user-post-comment").val("");
+					$("#textarea-user-post-comment").removeClass("user-has-write-text");
+				}
+				$(".user-post-comment").css({'height' : '155px'});
+				$("#textarea-user-post-comment").css({'height': '100px', 'color' : '#353535'});
+				count = 0;
+				 $(".ajax-post-comment").each(function(){
+				 	count++;
+				 });
+				if( count==0){
+					var input = '<p class="over-input"><input type="button" class="ajax-post-comment button" id="ajax-post-comment" value="Bình luận" onclick="fnSubmitCommentUser(); return false;"></p>';
+					$(".user-post-comment").append(input)	;		
+				}
+			});
+			
+			// Khi mà user click chuột ra ngoài textarea thì xử lý cho nó như lúc đầu
+			$('#textarea-user-post-comment').blur(function() {
+				if($('#textarea-user-post-comment').val().length==0){
+					$("#textarea-user-post-comment").removeClass("user-has-write-text");
+					var html = 'Viết bình luận đánh giá của bạn về hệ thống này.';
+					$("#textarea-user-post-comment").css({'height': '41px', 'color' : '#5C636B'});
+					$(".user-post-comment").css({'height' : '100px'});
+					$('#textarea-user-post-comment').val(html);
+					$(".over-input").each(function(){
+						$(this).remove();
+					});
+				}else
+				{
+					$('#textarea-user-post-comment').addClass("user-has-write-text");
+				}
+				
+			});	
+		});	
+		
+		function fnSubmitCommentUser(){
+		 var content = $("#textarea-user-post-comment").val();
+		 content = $.trim(content);
+		 if(content.length!=0){
+					$.ajax({
+	    				type: "POST",
+	    				url: $("#BASE_URL").val()+"/comment/add"+"/token/"+fnGenToken(),
+	    				data: "content="+content,
+	    				dataType: "json",
+	    				success: function(data){
+		    				if(data['success']==true){
+		    					//alert(data['user']['content']);
+		    					var html = '';
+								html +='<ul>';
+								html +='	<li>'; 
+								html +='	<div class="delete-comment">';
+								html +='		<a class="user-remove-comment" name="user-remove-comment-'+data['data']['id']+'" href="#" onclick="fnRemoveUlComment(this); return false;" title="Xóa">';
+								html +='		<img class="fugue fugue-cross" alt="Xóa" title="Xóa" src="'+$("#BASE_URL").val()+'/img/icons/space.gif"/>';
+								html +='		</a>';				
+								html +='	</div>';
+								
+								html +='	<div class="metaData-comment">';
+								html +='		<font class="author">'+ data['user']['firstname'] + ' ' + data['user']['lastname']+ ' </font> &nbsp;&nbsp;&nbsp;  <span class="time">'+data['time']+'trước </span>';
+								html +='	</div>';
+								html +='	<div class="content-comment">';
+								html +='		<p>'+data['data']['content']+'</p>';
+								html +='	</div>';
+								html +='	</li>';
+								html +='</ul>';
+		    					$(".all-comment").prepend(html);
+		    					
+		    				}else
+		    					alert("Có lỗi "+data['error']); 
+	    				}
+					});
+			}		
+			$("#textarea-user-post-comment").removeClass("user-has-write-text");
+			var html = 'Viết bình luận đánh giá của bạn về hệ thống này.';
+			$("#textarea-user-post-comment").css({'height': '41px', 'color' : '#5C636B'});
+			$(".user-post-comment").css({'height' : '100px'});
+			$('#textarea-user-post-comment').val(html);
+			$(".over-input").each(function(){
+				$(this).remove();
+			});
+			
+						
+		}
+		
+		function fnRemoveUlComment(_this){
+		 var id = $(_this).attr("name").replace("user-remove-comment-","")*1;
+			if(confirm("Bạn chắc chắn muốn xóa bình luận của bạn không?")==true){
+					$.ajax({
+	    				type: "POST",
+	    				url: $("#BASE_URL").val()+"/comment/delete"+"/token/"+fnGenToken(),
+	    				data: "id="+id,
+	    				dataType: "json",
+	    				success: function(data){
+		    				if(data['success']==true){
+			    				$(_this).parent("div").parent("li").parent("ul").remove();
+		    				}else
+		    					alert("Có lỗi "+data['error']); 
+	    				}
+					});
+			}
+			
+		}
+		
+		function getMoreComment(){
+			var page = $("#page").val();
+			$("#ajax-getmore-loading").show();
+					$.ajax({
+	    				type: "POST",
+	    				url: $("#BASE_URL").val()+"/comment/getmorecomment"+"/token/"+fnGenToken(),
+	    				data: "page="+page,
+	    				dataType: "json",
+	    				success: function(data){
+		    				if(data['success']==true){
+		    					var listComment = data['data'];
+		    					var html = '';
+		    					for(i=0;i<listComment.length;i++){
+								html +='<ul>';
+									html +='<li> ';
+										if(listComment[i]['hasDelete']== 1 ){
+											html +='<div class="delete-comment">';
+										  		html +='<a name="user-remove-comment-'+listComment[i]['id']+'" class="user-remove-comment" href="#" onclick="fnRemoveUlComment(this); return false;" title="Xóa">';
+												  	 html +='<img class="fugue fugue-cross" alt="Xóa" title="Xóa" src="'+$("#BASE_URL").val()+'/img/icons/space.gif"/>';
+												 html +='</a>';				
+											html +='</div>';
+										}
+											html +='<div class="metaData-comment">';
+												html +='<font class="author">'+listComment[i]['user_id']+'  </font> &nbsp;&nbsp;&nbsp;  <span class="time">'+listComment[i]['time_create']+' trước </span>';
+											html +='</div>';
+											html +='<div class="content-comment">';
+												html +='<p>'+listComment[i]['content']+' </p>';
+											html +='</div>';
+									html +='</li>';
+								html +='</ul>';
+		    					
+		    					}
+		    					$(".all-comment").append(html);
+		    					if(data['page']==999 || data['notGetMore']==1)
+		    						$(".more").remove();
+		    					else
+		    						$("#page").val(data['page']);
+		    						
+		    				}else
+		    					alert("Có lỗi "+data['error']);
+		    				$("#ajax-getmore-loading").hide(); 
+	    				}
+					});
+					
+		}
+		
+	</script>
+	
+	</form>
+	

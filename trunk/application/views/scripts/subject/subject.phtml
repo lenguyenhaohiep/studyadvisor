@@ -1,0 +1,54 @@
+<div class="content last ui-widget-content">
+	<div class="content-full">
+		<div style="width: 98%;padding-left: 5px;">
+			<?php if (count($this->arrError)>0) echo $this->error($this->arrError); ?>
+			<div class="cms_table">
+				<?php if ($this->Obj['isupdate'] == 0){?>
+						<h2>Thêm mới môn học</h2>
+						<?php }?>
+				<?php if ($this->Obj['isupdate'] == 1){?>
+						<h2>Chỉnh sửa thông tin môn học</h2>
+						<?php }?>
+				<form action="<?php echo BASE_URL; ?>/subject/<?php echo $this->action;?>"	method="POST" name="quiz-form" id="">
+					<input type="hidden" name="id" value="<?php echo $this->Obj['id'] ;?>">		
+					<input type="hidden" name="isupdate" value="<?php echo $this->Obj['isupdate'];?>"/>			
+					<table cellpadding="0" cellspacing="0">
+						<tr><td class="label">
+								Tên đầy đủ: 
+								</td><td class="field_container"> <input type="text" name="full_name" style="width: 300px " value="<?php  echo $this->Obj['full_name']; ?>" >
+						</td></tr>
+						<tr><td class="label">
+								Tên viết tắt:
+								</td><td class="field_container"> <input type="text" name="short_name" value="<?php  echo $this->Obj['short_name']; ?>" >
+						</td></tr>
+						<tr><td colspan="2">
+									<label>Mô tả cho môn học</label>
+									<textarea class="subject_editor" name="summary" rows="3" cols="20"><?php  echo $this->Obj['summary']; ?></textarea>
+						</td></tr>
+						<tr><td colspan="5"  style="font-size: 12px; color: white; font-family: tahoma;"  >
+								<p align="center">
+									<input  type="submit" value="Đồng ý" style="font-size: 15px;" class="add-answer-icon ui-state-default ui-corner-all">&nbsp;&nbsp;&nbsp;&nbsp;
+									<input  type="button" value="Hủy bỏ" onclick="window.location='<?php echo  BASE_URL.'/subject';  ?>'" style="font-size: 15px;" class="add-answer-icon ui-state-default ui-corner-all">
+								</p>
+						</td></tr>
+						
+					</table>		
+				</form>
+				<!--  -->
+			</div>
+		</div>
+	</div>
+</div>
+
+<script type="text/javascript">
+
+$(document).ready(function() {
+	/*$(".content").css({'width' : '100%'});*/
+	max_width = 300	;
+	subject_editor = "subject_editor";
+	initEditorByClassShotcut(subject_editor,max_width,false,true);
+});	
+	
+//-->
+</script>
+	

@@ -1,0 +1,155 @@
+<div class="btn-save-dograde-byhand">
+	<div class="inside-btn-save-dograde-byhand">
+		<button class="btLogin positive" style="height: 30px;" onclick="SaveDoGradeByHand();">
+			<img src="<?php echo BASE_URL;?>/img/icons/space.gif" 	class='fugue-arrow-curve-000-double'>
+			<b> Lưu điểm lại</b>
+			<img src="<?php echo BASE_URL;?>/img/icons/space.gif" 	class='fugue fugue-disk--plus'>
+		</button>
+	</div>
+</div>
+
+<div style="padding-left: 200px; width: 986px;">
+	<?php if($this->successGradeByhand=="successGradeByhand"){ ?>
+		<div class="name-page-cms">	
+			Chấm điểm thành công <br/>
+			<h2>Trở lại <a href="<?php echo BASE_URL;?>/classs/viewgradestudent/shedule_exam/<?php echo $this->shedule_exam_id;?>" > lớp học </a> </h2>
+		</div>	
+	<?php } else{ ?>
+	<div class="name-page-cms">	
+		Chấm điểm thủ công bài thi của lớp: <?php echo $this->class_obj['full_name']; ?>
+		<br>
+		Hệ thống tự động lưu điểm chấm bài của bạn sau 1 phút
+	</div>	
+		<div style="border: 5px solid red">
+		<?php if($this->flagNotHaveEssayInTest!=1){ ?>
+		<form action="<?php echo BASE_URL;?>/historyofusertest/dogradebyhand" id="grade-byhand-form" method="post" >
+		<input type="hidden" name="class_id" value="<?php echo $this->class_obj['id']; ?>">
+		<input type="hidden" name="shedule_exam_id" value="<?php echo $this->shedule_exam_id; ?>">
+		<table class="table-student-reviewtest-statistic">
+			<tr>
+				<th style="text-align: center; font-size: 15px; border-right: 1px solid blue;">
+					Sinh viên
+				</th>
+				<th style="text-align: center; font-size: 15px;border-right: 1px solid blue;">
+					Câu hỏi
+				</th>
+				<th style="text-align: right; padding-right: 80px; font-size: 15px; width: 150px;">
+					Chấm điểm
+				</th>
+				
+			</tr>
+			<?php if(count($this->StudentInClass)>0)
+					foreach($this->StudentInClass as $key=>$OneTestStudent){
+					if(!empty($OneTestStudent['hist_test_obj']['essay_list_question_id'])){
+			?>
+			<tr><td style="background-color: blue;" colspan="5"></td> </tr>
+			<tr>
+				<td style="font-size:18px;font-weight600; width: 60px; vertical-align: middle;">
+					<?php echo $key+1; ?>
+				</td>
+				<td colspan="2" style="">
+					<table style="border: 1px solid #5C636B;">
+				<?php 
+					$list_question_id = Zend_Json::decode($OneTestStudent['hist_test_obj']['essay_list_question_id']);
+					$list__score_of_question = Zend_Json::decode($OneTestStudent['hist_test_obj']['essay_list_score_of_question']);
+					$list_answer_of_user = Zend_Json::decode($OneTestStudent['hist_test_obj']['essay_list_answer_of_user']);
+					$list_score_table_test = Zend_Json::decode($OneTestStudent['hist_test_obj']['essay_list_score_table_test']);
+					$iii = 0 ;
+					foreach($list_question_id as $key_ques_id=>$OneIdQuestion){
+				?>
+						<tr>
+							<td class="grade-byhand-title-order-question"> <?php echo "<b>Câu ".($key_ques_id+1).": </b> ".$list_score_table_test[$key_ques_id]." điểm"; ?>
+							</td>
+							<td  class="grade-byhand-righ-padding"> Chấm điểm
+							</td>
+						</tr>	
+						<tr>
+							<td style="border-bottom: 1px solid #5C636B;">
+								<table style="padding-left: 30px;">
+									<tr>
+										<td class="grade-byhand-head-title">Nội dung câu hỏi:</td>
+									</tr>
+									<tr>
+										<td><p style="font-size: 13px;"> <?php echo $this->ViewQuestionEssay(null,$OneIdQuestion,null);  ?></p>
+										</td>
+									</tr>
+									<tr>
+										<td class="grade-byhand-head-title">Nội dung câu trả lời của sinh viên:</td>
+									</tr>
+									<tr>
+										<td> <?php  echo $list_answer_of_user[$key_ques_id][0]; ?>	
+										</td>
+									</tr>
+								</table>
+							</td>
+							<td style="border-bottom: 1px solid #5C636B;" class="grade-byhand-righ-padding">
+								<input type="text" name="listscore[<?php echo $OneTestStudent['hist_test_obj']['id'];?>][<?php echo $OneIdQuestion;?>][]" onchange="validateNum(this); return false;" value="<?php  echo $list__score_of_question[$iii]; ?>" maxlength="5">  
+							</td>
+						</tr>
+				<?php $iii++; } ?>
+					</table>
+				</td>
+			</tr>
+			<?php } } ?>
+		</table>
+			<div class="back-to-cms-class" style="text-align: right; padding: 20px; padding-right: 200px;	">
+				<a class="button mgt10" onclick="fnSubmitGradeByhand(); return false;" >Hoàn tất chấm điểm</a>
+			</div>
+		
+		</form>
+		<?php  }else{
+				echo "<h2 style='text-align: center;' > Không có câu hỏi chấm thủ công cho bài thi này.</h2><br/>";
+				echo '<h2>Trở lại <a href="'.BASE_URL.'/classs/viewgradestudent/shedule_exam/'.$this->shedule_exam_id.'" > lớp học </a> </h2>';
+			}
+		?>
+		</div>
+		<?php }  ?>
+		
+</div>
+
+<script type="text/javascript" language="javascript">
+
+	$(document).ready(function(){
+		setTimeout("AutoSaveDoGradeByHand()",5000);
+	});
+	
+	function fnSubmitGradeByhand(){
+		if(confirm("Bạn có chắc chắn hoàn tất chấm điểm cho bài thi?")==true){
+	 		$("#grade-byhand-form").submit();
+	 	}
+	}
+	
+	function SaveDoGradeByHand(){
+  				$.ajax({
+    					   type: "POST",
+    					   url: $("#BASE_URL").val()+"/historyofusertest/autosavegradebyhand"+"/token/"+fnGenToken(),
+    					   data: $("#grade-byhand-form").serialize(),
+    					   dataType: "json",
+    					   success: function(data){
+    						 if(data['success']==true){
+    						 	alert("Lưu điểm thành công");
+							}else{
+								alert("Lỗi: "+data['error']+" Lưu điểm thất bại.");	
+    						 }
+    					   }
+   					 }); 
+			/* setTimeout("AutoSaveDoGradeByHand()",60000); */			
+	}
+
+	function AutoSaveDoGradeByHand(){
+  				$.ajax({
+    					   type: "POST",
+    					   url: $("#BASE_URL").val()+"/historyofusertest/autosavegradebyhand"+"/token/"+fnGenToken(),
+    					   data: $("#grade-byhand-form").serialize(),
+    					   dataType: "json",
+    					   success: function(data){
+    						 if(data['success']==true){
+							}else{
+								alert("Lỗi: "+data['error']+" Lưu điểm thất bại.");	
+    						 }
+    					   }
+   					 }); 
+			setTimeout("AutoSaveDoGradeByHand()",60000);			
+	}
+	
+</script>

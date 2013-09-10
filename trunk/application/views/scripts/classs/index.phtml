@@ -1,0 +1,88 @@
+<div id="blueBar"></div>
+<div id="globalContainer">
+	<div id="content" class="hasLeftCol">
+		<div id="leftCol">			
+		</div>
+		<div id="contentCol" class="hasRightCol">
+			<div id="rightCol" >
+				<div class="name-page-cms">	Quản lý lớp học
+				</div>
+			</div>
+		<?php
+		// xử lý giảng viên dạy lớp nào thì cho show lớp đó lên thôi.
+		$auth = Zend_Auth::getInstance();
+		if ($auth->hasIdentity()){
+			$userhaslogin = $auth->getStorage()->read();
+			$roleUser = $userhaslogin->group_id;
+			if($roleUser==3 ){
+				$modelTeachAssign = new Default_Models_Teachassignment();
+				$resultTeach =  $modelTeachAssign->fetchAll("`user_id`='".$userhaslogin->id."'");
+				$where = "";
+				if(count($resultTeach)>0)
+				foreach ($resultTeach as $keyTeach=>$resultTeachItem){
+					$temp = $resultTeachItem->getClass_id();
+					if(!empty($temp)){
+					//$resultTeachItem = new Default_Models_Teachassignment();
+						if($keyTeach==0)
+							$where .= "`id`=".$resultTeachItem->getClass_id()."";
+						else
+							$where .= " OR `id`=".$resultTeachItem->getClass_id()."";
+					}
+				}
+			}
+		}?>
+		
+		<?php if($roleUser==3 && empty($where)){?>
+				<div class="name-page-cms">	Bạn chưa được phân công giảng dạy vui lòng liên hệ giáo vụ khoa
+				</div>
+			
+		<?php }else { ?>
+			<div id="contentArea" class="contentArea">
+					<!-- CMS -->
+					<input type="hidden" id="CMS_SERVERSIDE" value="<?php echo BASE_URL;?>/classs/serverside">
+					<?php if (count($this->arrError)>0) echo $this->error($this->arrError); ?>
+					<?php
+						/* Giải thích đoạn: array("subject_id"=>$this->SltSubject("inline-search-3"))
+						 * cái selection ở inline search ứng với cột subject_id -> trên table sau khi view ra nó ở cột 3 tính từ 0
+						 * từ inline-search là bắt buộc 
+						 */
+						echo $this->table("table_classs",$this->cols_view_title,"classs", $this->cols_view,
+							array(
+								"subject_id"=>$this->SltSubject("inline-search-3",null),
+								"course_id"=>$this->SltCourse("inline-search-4",null)
+								));				
+					?>
+					<script language="javascript">
+					<?php 
+						$auth = Zend_Auth::getInstance();
+						if ($auth->hasIdentity()){
+							$userhaslogin = $auth->getStorage()->read();
+						}
+					?>
+						$(document).ready(function(){
+							InitJqueryDataTable("#table_classs",[
+															{
+																"name" : "where_class_id",
+																"value" : "<?php if(!empty($where)) echo $where;?>"
+															}																																									
+														  ]
+							,<?php echo $userhaslogin->group_id; ?>);
+							
+							$(".search-on-table").find("input[type='text']:eq(2)").hide();
+							$("#inline-search-3").change(function(){
+								oTable.fnFilter( this.value,$(this).attr("name").replace("inline-search-","")*1); 
+							});
+							$("#inline-search-4").change(function(){
+								oTable.fnFilter( this.value,$(this).attr("name").replace("inline-search-","")*1); 
+							});
+							
+						});				
+					</script>
+					<div id="view-container" class="ui-corner-all ui-widget-content">
+					</div>
+					<!-- CMS -->
+			</div>
+			<?php } ?>
+		</div>
+	</div>
+</div>

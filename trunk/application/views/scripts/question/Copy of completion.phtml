@@ -1,0 +1,123 @@
+<div class="content last ui-widget-content">
+	<div class="content-full">
+		<div style="width: 98%;padding-left: 5px;">
+			<?php if (count($this->arrError)>0) echo $this->error($this->arrError); ?>
+			<div id="create-question">
+				<div class="cms_table">
+					<h2>Loại câu hỏi : chọn nhiều đáp án</h2>
+					<form action="<?php echo BASE_URL; ?>/question/<?php echo $this->action;?>"	method="POST" name="question-form" id="question-form">
+						<input type="hidden" name="type" id="type" value="<?php echo $this->ObjQuestion['type'];?>">
+						<input type="hidden" name="id" value="<?php echo $this->ObjQuestion['id'] ;?>">		
+						<input type="hidden" name="isupdate" value="<?php echo $this->ObjQuestion['isupdate'];?>"/>			
+						<table cellpadding="0">
+							<tr><td class="label">
+									Chọn môn học: 
+									</td><td class="field_container"><?php echo $this->SltSubject("subject_id", $this->ObjQuestion['subject_id']); ?>
+							</td></tr>
+							<tr><td class="label">
+									Chọn chương môn học:
+									</td><td class="field_container"><?php echo $this->SltChapterSubject("chapter_id", $this->ObjQuestion['chapter_id']); ?>
+							</td></tr>
+							<tr><td class="label">
+										Tiêu đề:
+										</td><td class="field_container"><input type="text" name="question_title" style="width: 300px " value="<?php  echo $this->ObjQuestion['question_title']; ?>" >
+							</td></tr>
+							<tr><td class="label">
+										Độ khó:
+										</td><td class="field_container"> <input type="text" name="level" value="<?php  echo $this->ObjQuestion['level']; ?>" >
+							</td></tr>
+							<tr><td class="label">
+										Độ phân cách:
+										</td><td class="field_container"> <input type="text" name="classification" value="<?php  echo $this->ObjQuestion['classification']; ?>" >
+							</td></tr>
+							<tr><td class="label">
+										Điểm mặc định cho câu hỏi:
+										</td><td class="field_container"> <input type="text" name="score" value="<?php  echo $this->ObjQuestion['score']; ?>" >
+							</td></tr>
+							<tr><td colspan="10">
+									<p>
+										<label>Nội dung phản hồi chung:</label><br />
+										<textarea id="generalfeedback" name="generalfeedback" rows="3" cols="20"><?php echo $this->ObjQuestion['generalfeedback'];?></textarea>
+									</p>
+							</td></tr>
+							<tr><td class="label">
+										Khóa câu hỏi này :
+										</td><td class="field_container"> <input type="checkbox" name="hidden" <?php if($this->ObjQuestion['hidden']=='on') echo "checked"; ?> >
+							</td></tr>
+							<?php if( $this->ObjQuestion['isupdate'] == 1){ ?>
+							<tr><td class="label">
+										Ngày tạo:
+										</td><td class="field_container"> <input type="text" name="timecreated" size="40" readonly="readonly" value="<?php  echo Zend_View_Helper_FormatDate::convertYmdToMdy($this->ObjQuestion['timecreated']); ?>" >
+							</td></tr>
+							<tr><td class="label">
+										Ngày chỉnh sửa gần nhất:
+										</td><td class="field_container"> <input type="text" name="timemodified" size="40" readonly="readonly" value="<?php  echo Zend_View_Helper_FormatDate::convertYmdToMdy($this->ObjQuestion['timemodified']); ?>" >
+							</td></tr>
+							<?php } ?>						
+	
+							
+							<tr><td colspan="5"  style="background-color: green; font-size: 15px; color: white; font-family: tahoma;"  >
+									<p align="center">
+										<label>ĐIỀN THÔNG TIN CHO CÂU HỎI ĐIỀN KHUYẾT&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+										</label>  
+									</p>
+							</td></tr>
+							<tr>
+								<td colspan="7">
+									<p>
+										<textarea id="question-editor" class="question-editor" name="content" rows="8" cols="20"><?php echo $this->ObjQuestion['content']; ?></textarea>					
+									</p>
+									<p style="text-align: center;">
+										<input type="button" value="Chọn/Bỏ điền khuyết" id="SelectOrNonSelectCompletion" class="button">
+									</p>							
+								</td>
+							</tr>
+							</table>	
+							<div id="ans_result" style="display: none;">							
+							</div>
+							
+							<table style="width: 200px;margin: auto;">
+								<tr>
+									<td style="vertical-align: top;text-align: left;">
+										<a href="#" class="button ui-state-default" onclick="before_submit();">Đồng ý</a>
+									</td>
+									<?php if($this->ObjQuestion['isupdate']==1){ ?>
+									<td style="vertical-align: top;text-align: left;">
+										<input type="button" onclick="window.close()" value="Hủy bỏ" class="button ui-state-default"> 
+									</td>
+									<?php } else { ?>
+									<td style="vertical-align: top;text-align: left;">
+										<input  type="button" value="Hủy bỏ" onclick="window.location='<?php echo  BASE_URL.'/question';  ?>'" style="font-size: 15px;" class="add-answer-icon ui-state-default ui-corner-all"> 
+									</td>
+									<?php }  ?>
+								</tr>
+							</table>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script type="text/javascript">			
+			$("#SltSubject").change(function(){			
+			var subject_id = $("#SltSubject").val();
+			alert(subject_id);
+			 $.ajax({
+			   type: "POST",
+			   url: $("#BASE_URL").val()+"/chaptersubject/ajaxgetchaptersubject",
+			   data: "subject_id="+subject_id,
+			   dataType: "json",
+			   success: function(data){
+					if(data['success']==true){
+					
+								//$("#resultAjax").html(msg);
+    						 }
+    						 else
+    							 alert("Có lỗi: "+data['error']); 
+    				}			      
+			 });
+		});	
+</script>
+
+

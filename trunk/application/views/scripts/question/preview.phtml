@@ -1,0 +1,11 @@
+<h3>Xem trước câu hỏi</h3>
+<div class="">
+<?php 
+	if (count($this->arrError)>0)   echo $this->error($this->arrError);
+	else
+		echo  $this->viewQuestion(null,$this->question_id,"" ,$this->answer_of_user,$this->review_test,$this->view_corect,$this->view_feedback,$this->view_send_result,$this->question_score, $this->score_of_question);
+?>
+		<p align="center">
+			<input type="button" value="Đóng lại" onclick="window.close()">
+		</p>
+</div>

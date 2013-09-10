@@ -1,0 +1,86 @@
+<div id="blueBar"></div>
+<div id="globalContainer">
+	<?php echo $this->render("navigation.phtml");?>
+	<div id="content" class="hasLeftCol">
+		<div id="contentCol" class="hasRightCol">
+			<div id="rightCol" >
+				<div class="name-page-cms">	Thống kê tài khoản người dùng hệ thống
+				</div>
+			</div>
+			<div id="contentArea">
+				<div class="statistic-table">
+					<table class="table-test">
+						<tr>
+							<th colspan="2" style="text-align: left;">Ngày thống kê: <?php echo date("d-m-Y G:i")?> 
+							</th>
+							<th colspan="2" style="text-align: right;"><a href="<?php echo BASE_URL;?>/statisticsystem/exportwordstatisticuser"><img class="fugue fugue-printer--pencil" alt="" src="<?php echo BASE_URL;?>/img/icons/space.gif"/>&nbsp;&nbsp;Xuất ra word </a> 
+							</th>
+						</tr>
+						<tr>
+							<th colspan="5" style="text-align: left;">Người thống kê: <?php
+									$auth = Zend_Auth::getInstance();
+									if ($auth->hasIdentity())
+							  			$userhaslogin = $auth->getStorage()->read();  		
+									echo $userhaslogin->firstname." ".$userhaslogin->lastname;	
+									?>
+							</th>
+						</tr>
+						<tr>
+							<th colspan="5" class="head-title-th">Có <?php echo $this->dataStatistic['totalUser'];?> tài khoản thuộc <?php echo $this->dataStatistic['total'];?> nhóm người dùng hệ thống
+							</th>
+						</tr>
+						<tr>
+							<td colspan="5"><hr/></td>
+						</tr>
+						<tr>
+							<td colspan="5">	
+								<ul>
+									<?php if (count($this->dataStatistic['GroupUser'])>0)
+										foreach($this->dataStatistic['GroupUser'] as $keyGroup=>$groupUserItem){		
+									?>
+									<li><?php echo ($keyGroup+1).". Nhóm <b>".$groupUserItem['ObjOneGroupUser']['group_name']."</b>"; ?> </li>
+									<?php } ?>
+								</ul>
+							</td>
+						</tr>
+						<tr>
+							<td colspan="5"><hr/></td>
+						</tr>
+						<?php if (count($this->dataStatistic['GroupUser'])>0){ ?>
+						<tr>
+							<th>Nhóm người dùng</th>
+							<th>Số tài khoản</th>
+							<th style="text-align: center;">Thao tác</th>
+						</tr>
+						<?php foreach($this->dataStatistic['GroupUser'] as $keyGroup1=>$groupUserItem1){ ?>		
+						<tr>
+							<td>
+								Người dùng <?php echo $groupUserItem1['ObjOneGroupUser']['group_name'];?>:
+							</td>
+							<td>
+								<?php echo $groupUserItem1['CountOneGroupUser'];?> tài khoản
+							</td>
+							<td>
+								<a href="<?php echo BASE_URL;?>/statisticsystem/viewpopupstudent/groupid/<?php echo $groupUserItem1['ObjOneGroupUser']['id']; ?>" onclick="popupViewGroupUser(this); return false;" >
+									<img class="fugue fugue-book-open" alt="" src="<?php echo BASE_URL;?>/img/icons/space.gif"/>&nbsp;&nbsp;Xem </a>&nbsp;&nbsp;&nbsp;&nbsp;
+								<a href="<?php echo BASE_URL;?>/statisticsystem/exportwordgroupuser/groupid/<?php echo $groupUserItem1['ObjOneGroupUser']['id']; ?>">
+									<img class="fugue fugue-printer--pencil" alt="" src="<?php echo BASE_URL;?>/img/icons/space.gif"/>&nbsp;&nbsp;Xuất danh sách ra word </a>							
+							</td>
+						</tr>
+						<?php } } ?>
+
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+<script language="javascript">
+			function popupViewGroupUser(_this){
+				var href = $(_this).attr('href');
+				newwindow=window.open(href,'PopupPractice','scrollbars=yes,resizable=yes,height=540,width=700', 0);
+				if (window.focus) {newwindow.focus()}
+			}
+</script>
