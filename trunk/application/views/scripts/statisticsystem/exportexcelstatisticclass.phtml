@@ -1,0 +1,93 @@
+<?php
+	//header("Content-type: application/vnd.ms-word");
+	header("Content-type: application/vnd.ms-excel");
+	//header("Content-Disposition: attachment;Filename=Diemthi_.doc");
+	header("Content-Disposition: attachment;Filename=ThongKeLopHoc_.xls");
+		//header("Content-Disposition: attachment;Filename=Bangdiem_.xls");
+	header("Pragma: no-cache");
+?>
+<div id="blueBar"></div>
+<div id="globalContainer">
+	<?php echo $this->render("navigation.phtml");?>
+	<div id="content" class="hasLeftCol">
+		<div id="contentCol" class="hasRightCol">
+			<div id="rightCol" >
+				<div class="name-page-cms"><p style="text-align: center;font-weight: 600;font-size: 18px;">TRƯỜNG ĐẠI HỌC CÔNG NGHỆ THÔNG TIN</p><br/>
+					<p style="text-align: center;font-weight: 600;font-size: 18px;">KHOA HỆ THỐNG THÔNG TIN </p>
+				</div>
+				<div class="name-page-cms"><p style="text-align: center;font-size: 16px;"><b>Thống kê lớp học trên hệ thống</b> </p>
+				</div>
+			</div>
+			<div id="contentArea">
+				<div class="statistic-table">
+					<table class="table-test">
+						<tr>
+							<th colspan="2" style="text-align: left;">Ngày thống kê: <?php echo date("d-m-Y G:i")?> 
+							</th>
+						</tr>
+						<tr>
+							<th colspan="2" style="text-align: left;">Người thống kê: <?php
+									$auth = Zend_Auth::getInstance();
+									if ($auth->hasIdentity())
+							  			$userhaslogin = $auth->getStorage()->read();  		
+									echo $userhaslogin->firstname." ".$userhaslogin->lastname;	
+									?>
+							</th>
+						</tr>
+						<tr>
+							<th colspan="5" class="head-title-th">Có <?php echo $this->dataStatistic['total'];?> lớp học trên hệ thống và <?php echo $this->dataStatistic['totalStudentJoin'];?> sinh viên tham gia học 
+							</th>
+						</tr>
+						<tr>
+							<td colspan="5"><hr/></td>
+						</tr>
+						<tr>
+							<td style="color: blue; font-size: 18px; font-weight: 600;">Lớp học đang mở có: <?php echo $this->dataStatistic['OnClass']['totalClassOn'];?> lớp
+							</td>
+							<td style="color: blue; font-size: 18px;font-weight: 600;">Số sinh viên tham gia: <?php echo $this->dataStatistic['OnClass']['amountStudentInClassOn'];?> sinh viên
+							</td>
+						</tr>
+						<tr>
+							<td colspan="5">
+								<table>
+									<?php if(count($this->dataStatistic['OnClass']['BigObjClassOn'])>0)
+										foreach($this->dataStatistic['OnClass']['BigObjClassOn'] as $keyOn=>$objClassOn){
+									?>
+									<tr>
+										<td> Lớp <?php echo $objClassOn['ObjClassOn']['full_name']; ?>
+										</td>
+										<td> Có <?php echo $objClassOn['AmountStudent']; ?> lượt sinh viên tham gia
+										</td>
+									</tr>
+									<?php } ?>
+								</table>
+							</td>
+						</tr>
+						<tr>
+							<td style="color: blue; font-size: 18px;font-weight: 600;">Lớp học đã đóng có: <?php echo $this->dataStatistic['OffClass']['totalClassOff'];?> lớp
+							</td>
+							<td style="color: blue; font-size: 18px;font-weight: 600;">Số sinh viên tham gia: <?php echo $this->dataStatistic['OffClass']['amountStudentInClassOff'];?> sinh viên
+							</td>
+						</tr>
+						<tr>
+							<td colspan="5">
+								<table>
+									<?php if(count($this->dataStatistic['OffClass']['BigObjClassOff'])>0)
+										foreach($this->dataStatistic['OffClass']['BigObjClassOff'] as $keyOn=>$objClassOn){
+									?>
+									<tr>
+										<td> Lớp <?php echo $objClassOn['ObjClassOff']['full_name']; ?>
+										</td>
+										<td> Có <?php echo $objClassOn['AmountStudent']; ?> lượt sinh viên tham gia
+										</td>
+									</tr>
+									<?php } ?>
+								</table>
+							</td>
+						</tr>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

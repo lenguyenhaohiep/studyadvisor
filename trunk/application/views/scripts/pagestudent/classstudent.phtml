@@ -1,0 +1,688 @@
+<form action="<?php echo BASE_URL; ?>/pagestudent/" method="post" id="student-generatetest-form">
+    <input type="hidden" id="subject_id"  name="subject_id" value="<?php echo $this->class_obj['subject_id'] ?>" >
+    <input type="hidden" id="class_id"  name="class_id" value="<?php echo $this->class_obj['id'] ?>" >
+    <?php
+    if (count($this->arrError) > 0)
+        echo $this->error($this->arrError);
+    else {
+        ?>
+
+        <?php
+        /*
+          $modelsClass = new Default_Models_Classs();
+          $modelsClass->find("id",$this->class_id);
+          if($modelsClass->getId()){
+          $modelsCourse = new Default_Models_Course();
+          $modelsCourse->find("id",$modelsClass->getCourse_id());
+          if($modelsCourse->getId())
+          $modelsClass->getHidden()=='on';
+          }
+         */
+        ?>
+
+        <div id="dialog-luyentap" title="Basic dialog" style="display: none">
+            <fieldset class="fieldset-setting-info-test ui-corner-all">
+                <legend>Thời gian làm bài</legend>
+                <dl>
+                    <table>
+                        <td class="student-practice-gentest"> 
+                                                <label class="test-setting-option-label-top">Số câu hỏi:</label>
+                                            </td>
+                                            <td> 
+                                                <input id="num" class="sys-suggest-amount-question" value="1" type="text" name="sys-suggest-amount-question" onchange="validateNum(this); return false">
+                                            </td>
+                                        </tr>					
+                        <tr>
+                            <td class="student-practice-gentest">
+                                <label class="test-setting-option-label-top">Thời gian làm bài (phút):</label>							
+                            </td>
+                            <td>
+                                <input type="text" class="student-duration_test" id="time" name="duration_test" value="<?php echo $this->test["duration_test"]; ?>" onchange="validateNum(this); return false">							
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="student-practice-gentest">
+                                <label class="test-setting-option-label-top"> Số câu hỏi mỗi trang:</label>							
+                            </td>
+                            <td>
+                                <select id="paging">
+                                    <option value="10">10</option>
+                                    <option value="20">20</option>
+                                    <option value="30">30</option>
+                                    <option value="40">40</option>
+                                    <option value="50">50</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="student-practice-gentest">
+                                <label class="test-setting-option-label-top"> Mức độ:</label>                         
+                            </td>
+                            <td>
+
+                                <select id="level2" name="level2">
+                                    <option value="0">Dễ đến khó</option>
+                                    <option value="1">Khó đến dễ</option>
+                                </select>
+                            </td>
+                        </tr>
+                    </table>
+                </dl>
+            </fieldset>	
+        </div>
+
+        <div id="dialog" title="Basic dialog" style="display: none">
+            <div id="pdf">It appears you don't have Adobe Reader or PDF support in this web browser. <a href="">Click here to download the PDF</a></div>
+        </div>
+        <div class="demo">
+            <div>
+                <br/>
+                <h3 style="color: #1484e6; font-weight: bold; padding-left: 20px;" >Môn học - <?php echo $this->class_obj['full_name']; ?></h3>
+            </div>
+            <div id="tabs">
+                <ul style="height: 30px;">
+                    <!--<li><a href="#tabs-1">Thông tin chung</a></li>-->
+                    <li><a href="#tabs-6">Lý thuyết</a></li>
+                    <li><a href="#tabs-2">Thi</a></li>
+                    <li><a href="#tabs-3">Luyện tập</a></li>
+                    <li><a href="#tabs-4">Xem lại bài thi</a></li>
+                    <li><a href="#tabs-5">Làm lại bài thi</a></li>
+                </ul>
+                <div id="tabs-6">
+                    <div class="table-list-of-class">
+                        <table class="datatable">
+                            <tr>
+                                <th colspan="4">Danh sách các bài học lý thuyết</th>
+                            </tr>
+                            <tr>
+                                <th>Số thứ tự</th>
+                                <th>Tên bài học</th>
+                                <th>Thao tác</th>
+                            </tr>
+                            <?php
+                            $i = 1;
+                            foreach ($this->arrSubjects as $subject) {
+                                ?>
+                                <tr>
+                                    <td><?php
+                        echo $i;
+                        $i++;
+                        ?></td>
+                                    <td><?php echo $subject['name']; ?></td>
+                                    <td>
+                                        <a style="color:#FF0084" href="#" onclick="ViewPDF('<?php echo $subject['path']; ?>'); return false;" class="button-in-row">Xem nội dung</a>
+                                        |
+                                        <a style="color:#1484E6" href="#" onclick="Practice('<?php echo $subject['id']; ?>','<?php echo $subject['name']; ?>'); return false;" class="button-in-row">Luyện tập</a>
+                                    </td>
+                                </tr>
+                                <?php
+                            }
+                            ?>
+                        </table>
+
+                    </div>
+
+                </div>
+                <!--                <div id="tabs-1">
+                                    <fieldset class="ui-corner-all">
+                                        <legend>Thông tin lớp học</legend>
+                                        <dl>
+                                            <div class="info-student-class">
+                                                <table>
+                                                    <tr>
+                                                        <td class="left">
+                                                            Bạn đang tham gia lớp:
+                                                        </td>
+                                                        <td class="right">
+                <?php /* echo $this->class_obj['full_name']; ?>
+                  </td>
+                  </tr>
+                  <tr>
+                  <td class="left">
+                  Tình trạng lớp học:
+                  </td>
+                  <td class="right">
+                  <?php if ($this->class_obj['hidden'] == 'on') echo "Mở"; else echo "Đóng"; ?>
+                  </td>
+                  </tr>
+                  <tr>
+                  <td class="left">
+                  Khóa học:
+                  </td>
+                  <td class="right">
+                  <?php echo $this->course_obj['full_name']; */ ?>  
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                            </div>
+                                        </dl>
+                                    </fieldset>
+                                </div>-->
+                <div id="tabs-2">
+                    <div class="table-list-of-class">
+    <?php if (count($this->tableData) > 0) { ?>
+                            <table class="datatable" >
+                                <tr>
+                                    <th colspan="8">Các đề thi của lớp học </th>
+                                </tr>
+                                <tr>
+                                    <th>Kỳ thi</th>
+                                    <th>Lớp thi</th>
+                                    <!-- <th>Kết thúc thi</th> -->
+                                    <th>Tình trạng</th>
+                                    <!-- <th>Thời gian còn</th>  -->
+                                    <th>Thao tác</th>
+                                </tr>
+                                <?php
+                                foreach ($this->tableData as $tableDataItem) {
+                                    ?>
+                                    <tr>
+                                        <td class="name-course-width"><?php echo $tableDataItem['exam']['full_name']; ?></td>
+                                        <td><?php echo $this->class_obj['full_name']; ?></td> 
+                                        <!--  <td><?php //echo $tableDataItem['shedule_exam']['time_end']; ?></td>  -->
+                                        <?php if ($tableDataItem['shedule_exam']['hidden'] == "on") { ?>
+                                            <td>Mở</td>
+                <?php if (empty($tableDataItem['testId'])) { ?>
+                                                <td>
+                                                    Chưa có đề thi
+                                                </td>
+                <?php } else { ?>
+                                                <td>
+                                                    <a href="<?php echo BASE_URL; ?>/pagestudent/studentbeforedotest/test_id/<?php echo $tableDataItem['testId']; ?>/exam_id/<?php echo $tableDataItem['exam']['id']; ?>/class_id/<?php echo $this->class_obj['id']; ?>/shedule_exam/<?php echo $tableDataItem['shedule_exam']['id']; ?>" onclick="confirmDoTest(this.href); return false;" class="button-in-row" style="color:#1484E6">Vào thi</a>
+                                                </td>
+                                            <?php } ?>    
+                                        <?php } else { ?>
+                                            <td>Đóng</td>
+                                    <?php } ?>
+                                    </tr>
+        <?php } ?>
+                            </table>  
+
+    <?php } else { ?>
+                            <table class="datatable" >
+                                <tr>
+                                    <th>Chưa có lịch thi nào cho lớp này.</th>
+                                </tr>		
+                            </table>		
+    <?php } ?>
+                    </div>		
+
+                </div>
+                <div id="tabs-3">
+
+                    <div id="sub-tabs">
+                        <ul  style="height: 30px;">
+                            <li><a href="#sub-tabs-2">Bài tập gợi ý</a></li>
+                            <li><a href="#sub-tabs-3">Bài tập tùy chỉnh</a></li>
+                        </ul>
+
+
+                        <div id="sub-tabs-2">
+                            <p>Bạn hãy điền các thông tin bên dưới và chọn làm bài.</p>
+                            <p>Bài tập gợi ý giúp bạn luyện tập những chủ đề bạn còn yếu của môn học này.</p>
+                            <fieldset class="fieldset-setting-info-test ui-corner-all">
+                                <legend>Thời gian làm bài</legend>
+                                <dl>
+                                    <table>
+                                        <tr>
+                                            <td class="student-practice-gentest"> 
+                                                <label class="test-setting-option-label-top">Số câu hỏi:</label>
+                                            </td>
+                                            <td> 
+                                                <input class="sys-suggest-amount-question" value="1" type="text" name="sys-suggest-amount-question" onchange="validateNum(this); return false">
+                                            </td>
+                                        </tr>					
+                                        <tr>
+                                            <td class="student-practice-gentest">
+                                                <label class="test-setting-option-label-top">Thời gian làm bài (phút):</label>							
+                                            </td>
+                                            <td>
+                                                <input type="text" class="sys-suggest-duration_test" name="sys-suggest-duration_test" value="<?php echo $this->test["duration_test"]; ?>" onchange="validateNum(this); return false">							
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="student-practice-gentest">
+                                                <label class="test-setting-option-label-top"> Mức độ:</label>                         
+                                            </td>
+                                            <td>
+                                                <select name="level1" id="level1">
+                                                    <option value="0">Dễ đến khó</option>
+                                                    <option value="1">Khó đến dễ</option>
+                                                </select>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="student-practice-gentest">
+                                                <label class="test-setting-option-label-top"> Số câu hỏi mỗi trang:</label>							
+                                            </td>
+                                            <td>
+    <?php echo $this->SltTestPagination("sys-suggest-question_perpage", $this->test["question_perpage"]); ?>							
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </dl>
+                            </fieldset>		
+                            <div class="tab-practice-second">
+                                <a href="#" class="ui-corner-all">Làm bài</a>
+                            </div><!-- End demo -->
+
+                        </div>
+                        <div id="sub-tabs-3">
+                            <fieldset class="fieldset-setting-info-test ui-corner-all">
+                                <legend>Thời gian làm bài</legend>
+                                <dl>
+                                    <table>
+                                        <tr>
+                                            <td class="student-practice-gentest">
+                                                <label class="test-setting-option-label-top">Thời gian làm bài (phút):</label>							
+                                            </td>
+                                            <td>
+                                                <input type="text" class="student-duration_test" name="duration_test" value="<?php echo $this->test["duration_test"]; ?>" onchange="validateNum(this); return false">							
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="student-practice-gentest">
+                                                <label class="test-setting-option-label-top"> Số câu hỏi mỗi trang:</label>							
+                                            </td>
+                                            <td>
+    <?php echo $this->SltTestPagination("question_perpage", $this->test["question_perpage"]); ?>							
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="student-practice-gentest">
+                                                <label class="test-setting-option-label-top"> Mức độ:</label>                         
+                                            </td>
+                                            <td>
+
+                                                <select name="level2">
+                                                    <option value="0">Dễ đến khó</option>
+                                                    <option value="1">Khó đến dễ</option>
+                                                </select>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </dl>
+                            </fieldset>			
+
+                            <div class="container_expression">
+                                <fieldset class="expression_gen_test ui-corner-all">
+                                    <legend>Miền điều kiện </legend>
+                                    <dl>		
+                                        <span class="b-button" onclick="deleteExpression(this);"> 
+                                            Xóa miền điều kiện
+                                            <img class="fugue fugue-cross-circle" alt=""	src="<?php echo BASE_URL; ?>/img/icons/space.gif" />
+                                        </span>
+                                        <table>
+                                            <tr>
+                                                <td class="student-practice-gentest"> Câu hỏi trong chủ đề:</td>
+                                                <td class="student-practice-gentest"> 
+    <?php echo $this->SltChapterSubject("chapter_subject_id[]", "", 6); ?>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="student-practice-gentest"> Loại câu hỏi:</td>
+                                                <td class="student-practice-gentest"> 
+    <?php echo $this->SltTypeQuestion("SltTypeQuestion", $this->SltTypeQuestion); ?>
+                                                </td>
+                                            </tr>					
+
+
+                                            <tr>
+                                                <td class="student-practice-gentest"> Số câu hỏi:</td>
+                                                <td> 
+                                                    <input class="gen-amount-question" value="1" type="text" name="amount_question[]" onchange="validateNum(this); fnUpdateSumQuestionLabel(); return false">
+                                                </td>
+                                            </tr>					
+                                        </table>
+                                    </dl>
+                                </fieldset>
+                                <br/>
+                                <p align="left" style="margin-left: 20px;">
+                                    <span class="b-button" onclick="addNewExpression();">Thêm điều kiện
+                                        <img class="fugue fugue-plus-circle" alt=""	src="<?php echo BASE_URL; ?>/img/icons/space.gif" /> 
+                                    </span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                </p>
+                                <p align="center">
+                                    <span class="b-button" onclick="genTest();"> Làm bài</span>
+                                </p>
+                            </div>
+
+                            <!--                            <fieldset>
+                                                            <legend>Kết quả phát sinh bài thực hành</legend>
+                                                            <dl class="result_gen_test">
+                                                            </dl>		
+                                                        </fieldset>	-->
+                        </div>
+                    </div>
+
+                </div>
+
+
+                <div id="tabs-4">
+                    <div class="table-list-of-class">
+    <?php if (count($this->arrHisTestObj) > 0) { ?> 
+                            <table class="datatable " >
+                                <tr>
+                                    <th colspan="8">Các bài thi bạn đã làm </th>
+                                </tr>
+                                <tr>
+                                    <th>Kỳ thi</th>
+                                    <th>Lớp thi</th>
+                                    <th>Bắt đầu thi</th>
+                                    <th>Kết thúc bài làm</th>
+                                    <th>Thao tác</th>
+                                </tr>
+                                <?php
+                                foreach ($this->arrHisTestObj as $key => $arrHisTestObjItem) {
+                                    ?>
+                                    <tr>
+                                        <td class="name-course-width"><?php echo $arrHisTestObjItem['examObj']['full_name']; ?></td>
+                                        <td><?php echo $this->class_obj['full_name']; ?></td> 
+                                        <td><?php echo Zend_View_Helper_FormatDate::convertSecondToDateTimeHasHour($arrHisTestObjItem['hisTestObj']['time_start']); ?></td>
+                                        <td><?php echo Zend_View_Helper_FormatDate::convertSecondToDateTimeHasHour($arrHisTestObjItem['hisTestObj']['time_finished']); ?></td>
+                                        <td>
+                                            <a href="<?php echo BASE_URL; ?>/pagestudent/studentreviewtest/his_test_id/<?php echo $arrHisTestObjItem['hisTestObj']['id']; ?>" class="button-in-row" style="color:#1484E6">Xem lại</a>
+                                        </td>					    
+                                    </tr>					 		
+                            <?php } ?>
+                            </table>
+    <?php } else { ?> 
+                            <table class="datatable" >	
+                                <tr>
+                                    <th>Chưa có dữ liệu.</th>
+                                </tr>
+                            </table>
+    <?php } ?>
+                    </div>
+                </div>
+                <div id="tabs-5">
+
+                    <div class="table-list-of-class">
+    <?php if (count($this->arrHisTestObj) > 0 && count($this->RE_TEST_COUNT) > 0) { ?> 
+                            <table class="datatable " >
+                                <tr>
+                                    <th colspan="8">Làm lại bài thi</th>
+                                </tr>
+                                <tr>
+                                    <th>Kỳ thi</th>
+                                    <th>Lớp thi</th>
+                                    <th>Bắt đầu thi</th>
+                                    <th>Kết thúc bài làm</th>
+                                    <th>Thao tác</th>
+                                </tr>
+                                <?php
+                                foreach ($this->arrHisTestObj as $key => $arrHisTestObjItem) {
+                                    if ($arrHisTestObjItem['hisTestObj']['do_test_again'] == 1) {
+                                        ?>
+                                        <tr>
+                                            <td class="name-course-width"><?php echo $arrHisTestObjItem['examObj']['full_name']; ?></td>
+                                            <td><?php echo $this->class_obj['full_name']; ?></td> 
+                                            <td><?php echo Zend_View_Helper_FormatDate::convertSecondToDateTimeHasHour($arrHisTestObjItem['hisTestObj']['time_start']); ?></td>
+                                            <td><?php echo Zend_View_Helper_FormatDate::convertSecondToDateTimeHasHour($arrHisTestObjItem['hisTestObj']['time_finished']); ?></td>
+                                            <td>
+                                                <a href="<?php echo BASE_URL; ?>/pagestudent/studentredotestagain/his_test_id/<?php echo $arrHisTestObjItem['hisTestObj']['id']; ?>" onclick="confirmDoTestAgain(this.href); return false;" class="ui-state-hover ui-corner-all">Làm lại bài</a>
+                                            </td>					    
+                                        </tr>					 		
+                                    <?php
+                                    }
+                                }
+                                ?>
+                            </table>
+    <?php } else { ?> 
+                            <table class="datatable" >	
+                                <tr>
+                                    <th>Chưa có dữ liệu.</th>
+                                </tr>
+                            </table>
+    <?php } ?>
+                    </div>
+
+                </div>
+
+
+            </div>
+        </div>
+<?php } ?>
+</form>
+
+<script type="text/javascript">
+    $(document).ready(function(){
+        subject_editor = "short-editor";
+        initEditorByClassShotcut(subject_editor,300,false,true);
+			
+        indexFieldsetExpression();
+        $("#tabs").tabs();
+        $("#tabs").tabs("select",0);
+        $("#sub-tabs").tabs();
+				
+        $( "button, input:submit, a", ".tab-practice, .tab-practice-second" ).button();
+				
+        $( "a", ".tab-practice" ).click(function() { 
+            //var url = $("#BASE_URL").val()+"/pagestudent/systemrandomtest?sys_random_amount="+$(".sys-random-amount-question").val()+"?sys_random_duration="+$(".sys-random-duration_test").val()+"?sys_random_itemperpage="+$("#sys-random-question_perpage").val()+"?token="+fnGenToken();
+            var url = $("#BASE_URL").val()+"/pagestudent/systemrandomtest/sys_random_amount/"+$(".sys-random-amount-question").val()+"/sys_random_duration/"+$(".sys-random-duration_test").val()+"/sys-random-itemperpage/"+$("#sys-random-question_perpage").val()+"/token/"+fnGenToken()+"/level/"+$("#level1").val();
+            newwindow=window.open(url,'name','scrollbars=yes,resizable=yes,height=700,width=968', 0);
+            if (window.focus) {newwindow.focus()}
+            return false; 
+        });
+				
+        $( "a", ".tab-practice-second" ).click(function() {
+            var url = $("#BASE_URL").val()+"/pagestudent/systemsuggesttest/class_id/"+$("#class_id").val()+"/sys_suggest_amount_question/"+$(".sys-suggest-amount-question").val()+"/sys_suggest_duration_test/"+$(".sys-suggest-duration_test").val()+"/sys_suggest_question_perpage/"+$("#sys-suggest-question_perpage").val()+"/token/"+fnGenToken()+"/level/"+$("#level1").val();
+            newwindow=window.open(url,'name','scrollbars=yes,resizable=yes,height=700,width=968', 0);
+            if (window.focus) {newwindow.focus()}
+            return false; 
+        });
+				
+				
+<?php /* if($this->selectedTab =="infoClassGeneral") echo  '$("#tabs").tabs("select", 0);'; ?>
+  <?php if($this->selectedTab =="doExam") 	 echo '$("#tabs").tabs("select", 1);'; ?>
+  <?php if($this->selectedTab =="doPractice") echo '$("#tabs").tabs("select", 2);'; ?>
+  <?php if($this->selectedTab =="reviewTest") echo '$("#tabs").tabs("select", 3);'; ?>
+  <?php if($this->selectedTab =="sendMessageToTeacher") echo '$("#tabs").tabs("select", 4);'; */ ?>
+				
+      });
+			
+      function fnSaveTest(listQuestionSubmit,listScoreSubmit,direction_tab){
+          data = $("#student-generatetest-form").serializeArray();
+          for(i=0;i<listQuestionSubmit.length;i++){
+              data.push({	"name":"list_question[]",
+                  "value":listQuestionSubmit[i]
+              });
+              data.push({	"name":"list_score[]",
+                  "value":listScoreSubmit[i]
+              });
+          }
+          data.push({	"name":"is_update",
+              "value":0
+          });
+          $.ajax({
+              type: "POST",
+              url: $("#BASE_URL").val()+"/test/create"+"/token/"+fnGenToken(),
+              data: data,
+              dataType: "json",
+              success: function(data){
+                  if(data['success']==true){
+                      location.href=$("#BASE_URL").val()+ "/test/create/testID/" + data["id_last_insert_test"] + "/selectedTab/"+direction_tab; 
+                  }else
+                      alert("Có lỗi "+data['error']); 
+              }
+          });					
+      }
+			
+			
+      function genTest(){
+          $.ajax({
+              type: "GET",
+              url: $("#BASE_URL").val()+"/pagestudent/studentgentest"+"/token/"+fnGenToken(),
+              data: $("#student-generatetest-form").serialize(),
+              dataType: "json",
+              success: function(data){
+                  if(data['success']==true){
+                      $(".result_gen_test").html("");
+                      // list id question  		    					
+                      var listQuestion  = data["result"]["list_question"];
+                      var totalQuestion = data["result"]["total_question"];
+                      var amountQuestion = data["result"]["amount_question"];
+                      var duration_test  =  data["result"]["duration_test"];
+                      var question_perpage =  data["result"]["question_perpage"];
+                      listQuestionSubmit =[];
+                      listScoreSubmit    =[];
+		    					
+                      for(i=0;i<listQuestion.length;i++){
+                          for(j=0;j<listQuestion[i].length;j++){
+                              listQuestionSubmit.push(listQuestion[i][j]);
+                              /* listScoreSubmit.push(1); */
+                          }
+                          var numSelectQuestion  ;	
+                          if(listQuestion[i]==0) 							
+                              numSelectQuestion = 0;
+                          else
+                              numSelectQuestion = listQuestion[i].length;
+                          var TotalQuestionItem  = totalQuestion[i];
+                          //                                                var html = '<ul class="result_expression">';
+                          //                                                html+='<li>Tổng số câu hỏi thỏa mãn điều kiện '+ (i+1) +' là: <span class="focus_result">'+ TotalQuestionItem +'</span></li>'; 
+                          //                                                html+='<li>Số câu hỏi được chọn '+':<span class="focus_result">'+ numSelectQuestion +'</span></li>';
+                          //                                                html+='<li>Số câu hỏi yêu cầu '+':<span class="focus_result">'+ amountQuestion[i] +'</span></li>';
+                          //                                                if(TotalQuestionItem >= amountQuestion[i] && numSelectQuestion!=0)
+                          //                                                    html+='<li>Trạng thái '+':<span class="focus_result">Phát sinh đủ</span></li>';
+                          //                                                else
+                          //                                                    html+='<li>Trạng thái '+':<span class="focus_result" style="color:blue">Phát sinh thiếu</span></li>';
+                          //                                                html+= '</ul><hr/>';
+                          //$(".result_gen_test").append(html);
+                      }
+                      //                                            var html ='<p>';
+                      if(numSelectQuestion==0)
+                      {
+                          //html+='<input type="button" value="Làm bài" onclick="alert(\'Không có câu hỏi thỏa mãn\');">';
+                          alert("Không có câu hỏi thỏa mãn");
+                      }else
+                      {
+                          /*duration_test = $(".student-duration_test").val();*/
+                          var url = $("#BASE_URL").val()+"/pagestudent/studentpractice?listQuestionSubmit="+listQuestionSubmit+"&duration_test="+duration_test+"&question_perpage="+question_perpage ;
+                          //html+='<input type="button" value="Làm bài" onclick="openPopupPractice(\''+ url +'\'); return false;" >';
+                          openPopupPractice(url);
+                      }
+                      //                                            html+='</p>';
+                      //$(".result_gen_test").append(html);
+                                            
+                  }else
+                      alert("Có lỗi "+data['error']); 
+              }
+          });		
+      }
+			
+      function addNewExpression(){
+          var html = $(".expression_gen_test:first").html();
+          $(".expression_gen_test:last").after('<fieldset class="expression_gen_test ui-corner-all">'+html+'</fieldset>');
+          $(".expression_gen_test:last").find("select").val("");
+          $(".expression_gen_test:last").find("input").val("");
+          indexFieldsetExpression();
+      }
+			
+      function openPopupPractice(href){
+          newwindow=window.open(href,'PopupPractice','scrollbars=yes,resizable=yes,height=540,width=700', 0);
+          if (window.focus) {newwindow.focus()}
+      }
+			
+      function confirmDoTest(href){
+          if(confirm("Bạn có chắc chắn muốn vào thi không?")==true){
+              window.location =href;
+          }				
+      }
+						
+      function confirmDoTestAgain(href){			
+          if(confirm("Bạn có chắc chắn muốn làm lại bài thi không?")==true){
+              window.location =href;
+          }
+      }				
+						
+      function deleteExpression(this_){
+          if($(".expression_gen_test").size()==1)
+              alert("Không thể xóa được nữa.");
+          else
+              if(confirm("Bạn có chắc chắn muốn xóa không?")){
+                  $(this_).parent("dl").parent("fieldset").remove();
+                  indexFieldsetExpression();
+              }
+      }
+      function indexFieldsetExpression(){
+          var index = 1;
+          $(".expression_gen_test").each(function(){
+              $(this).find("legend").html("Miền điều kiện "+index);
+              index++;
+          });
+      }
+			
+      function fnUpdateSumQuestionLabel(){
+          var sum = 0;
+          var html="";
+          $(".gen-amount-question").each(function(){
+              sum += ($(this).val()*1);
+          });
+          html +='<label class="update-sum-question">'+ sum +'</label>'; 
+          $(".update-sum-question").html(html);
+      }
+			
+			
+      // Kiểm tra giá trị điểm nhập vào phải là kiểu số 
+      function validateNum(this_)
+      {
+          var value = $(this_).val();
+          if(isNaN(value))
+              $(this_).val("0");
+      }
+                            
+      function ViewPDF(path){
+          var pdflink="<?php echo BASE_URL ?>/pdf/"+path;
+          var myPDF = new PDFObject({ 
+		
+              url: pdflink,
+              pdfOpenParams: {
+                  navpanes: 0,
+                  toolbar: 0,
+                  statusbar: 0,
+                  view: "FitV"
+              }
+		
+          }).embed("pdf");
+          $( "#dialog" ).dialog({
+              title: "Nội dung bài học",
+              modal: true,
+              width: $(window).width()-100,
+              height: $(window).height()-100,
+              overlay: { opacity: 0.5, background: "black" },
+              buttons: [{
+                      text: "Đóng",
+                      click: function () {
+                          $( this ).dialog( "close" );
+                      }
+                  }]
+          });
+          $('#pdf a').attr("href",pdflink);
+      }
+      
+      function Practice(chapterid,title){
+        $('#time').val(60);
+        $('#paging').val(10);
+        $('#level2').val(0);
+        $('#num').val(1);
+          $( "#dialog-luyentap" ).dialog({
+              title: "Luyện tập - chủ đề: "+title,
+              modal: true,
+              width: 500,
+              height: 350,
+              overlay: { opacity: 0.5, background: "black" },
+              buttons: [{
+                      text: "Làm bài",
+                      click: function () {
+                          $( this ).dialog( "close" );
+                          var url = $("#BASE_URL").val()+"/pagestudent/systemrandomtest/sys_random_amount/"+$("#num").val()+"/sys_random_duration/"+$("#time").val()+"/sys-random-itemperpage/"+$("#paging").val()+"/token/"+fnGenToken()+"/level/"+$("#level2").val()+"/chapterid/"+chapterid;
+                          newwindow=window.open(url,'name','scrollbars=yes,resizable=yes,height=700,width=968', 0);
+                          if (window.focus) {newwindow.focus()}
+                          return false; 
+                      }
+                  }]
+          });
+      }
+		
+			
+</script>	

@@ -1,0 +1,382 @@
+<?php
+			$list_questionID 	= $this->data['question_id'];// danh sách id của câu hỏi
+			$list_score    		= $this->data['question_score'];// điểm làm bài của user
+			$questionPerPage	= $this->data["question_perpage"];
+			$answer_of_user 	= $this->data['question']; // các câu trả lời của user
+			$list_score_in_test_table	= $this->data["list_score_in_test_table"];// Điểm của câu hỏi được set trong bài test
+			$questionPerPage 	= $questionPerPage==0? 1:$questionPerPage;
+			$totalQuestion		= count($list_questionID);
+			$totalPage			= (int)($totalQuestion/$questionPerPage);
+			$totalPage			= $totalQuestion%$questionPerPage==0?$totalPage:($totalPage+1) ;
+                        $obj_test = $this->data['obj_test']?$this->data['obj_test']:null;
+
+?>
+<form action="<?php echo BASE_URL;?>/" method="post" >
+<table class="table-student-reviewtest-statistic">
+	<tr>
+                <th colspan="2">
+                    Xem lại bài thi: <?php if($obj_test){ echo $obj_test->getTitle();}?>
+		</th>
+	</tr>
+	<tr>
+		<td class="left">Sinh viên:
+		</td>
+		<td class="right"><?php echo $this->UserObj['firstname']." ".$this->UserObj['lastname']; ?> 
+		</td>
+	</tr>
+	<tr>
+		<td class="left">Mã số:
+		</td>
+		<td class="right"><?php echo $this->UserObj['user_code']; ?> 
+		</td>
+	</tr>
+
+	<tr>
+		<td class="left">Bài thi có:
+		</td>
+		<td class="right"><?php echo$totalPage." trang"; ?> 
+		</td>
+	</tr>
+	<tr>
+		<td class="left">Thời gian bắt đầu làm bài:
+		</td>
+		<td class="right"><?php echo Zend_View_Helper_FormatDate::convertSecondToDateTimeHasHour($this->data['time_start']) ; ?>
+		</td>
+	</tr>
+	<tr>
+		<td class="left"> Thời gian nộp bài:
+		</td>
+		<td class="right"><?php echo Zend_View_Helper_FormatDate::convertSecondToDateTimeHasHour($this->data['time_finished']) ; ?>
+		</td>
+	</tr>
+	<tr>
+		<td class="left"> Tổng thời gian làm bài:
+		</td>
+		<td class="right"> <?php echo Zend_View_Helper_FormatDate::timeBetween($this->data['time_start'], $this->data['time_finished']) ; ?>
+		</td>
+	</tr>
+	<tr>
+		<td class="left"> Điểm đạt được: 
+		</td>
+		<td class="right"> <?php echo $this->data['total_score']; ?>
+		</td>
+	</tr>	
+	<tr>
+		<td class="left" colspan="2">
+			Câu hỏi dạng tự luận sẽ được giảng viên chấm điểm sau khi bạn nộp bài.
+		</td>
+	</tr>
+	
+</table>
+
+    <div id="tabs">
+                <ul style="height: 30px;">
+                    <li><a href="#tabs-2" onclick="ViewAnswerEatScore(); return false;">Câu hỏi làm đúng</a></li>
+                    <li><a href="#tabs-3" onclick="ViewAnswerNoEatScore(); return false;">Câu hỏi làm sai</a></li>
+                    <li><a href="#tabs-4" onclick="ViewQuestionNotDone(); return false;">Câu hỏi chưa làm</a></li>
+                    <li><a href="#tabs-5" onclick="ViewAllAgain(); return false;">Tất cả câu hỏi</a></li>
+                    <li><a href="#tabs-6" onclick="ViewRecommendation(); return false;">Khuyến nghị</a></li>
+                </ul>
+        <div id="tabs-2">
+            
+        </div>
+        <div id="tabs-3">
+            
+        </div>
+        <div id="tabs-4">
+            
+        </div>
+        <div id="tabs-5">
+            
+        </div>
+        <div id="tabs-6">
+            <?php if (count($this->data['arrSubjects']) > 0){ ?>
+                                <div class="table-list-of-class">
+                        <table class="datatable">
+                            <tr>
+                                <th colspan="4"><h4>Bạn nên học lại những nội dung sau</h4></th>
+                            </tr>
+                            <tr>
+                                <th>Thứ tự ưu tiên</th>
+                                <th>Tên bài học</th>
+                                <th>Thao tác</th>
+                            </tr>
+                            <?php
+                            $i = 1;
+                            foreach ($this->data['arrSubjects'] as $subject) {
+                                ?>
+                                <tr>
+                                    <td><?php echo $i;
+                                $i++; ?></td>
+                                    <td><?php echo $subject['name']; ?></td>
+                                    <td>
+										<a style="color:#FF0084" href="#" onclick="ViewPDF('<?php echo $subject['path']; ?>'); return false;" class="button-in-row">Xem nội dung</a>
+                                        |
+                                        <a style="color:#1484E6" href="#" onclick="Practice('<?php echo $subject['id']; ?>','<?php echo $subject['name']; ?>'); return false;" class="button-in-row">Luyện tập</a>
+									</td>
+                                </tr>
+                                <?php
+                            }
+                            ?>
+                        </table>
+
+                    </div>
+            <?php 
+            }else{
+            echo "Chưa có dữ liệu";
+            }
+            ?>
+        </div>
+    </div>
+                
+    
+<div id="content">    
+<script type="text/javascript" language="javascript">
+<!--
+$(document).ready(function(){
+        $("#tabs").tabs();
+        $("#tabs").tabs("select",0);
+        $("#tabs").css('border-bottom',"none");
+//	firstLoadReviewTest();
+//	$(".question-container-div").hide()
+//	$(".separator-question-test").hide()
+//	var question_per_page = $(".question_per_page").val();
+//	showPage(0,question_per_page);
+//	$(".focus-page-test").eq(0).addClass("focus-page-test-active");
+        ViewAnswerEatScore();
+});
+function focusPage(up_or_down,currentPage){
+	page_obj  = $(".focus-page-test-"+up_or_down);
+	page_obj.removeClass("focus-page-test-active");
+	page_obj.eq(currentPage).addClass("focus-page-test-active");
+}
+function showPage(currentPage, questionPerpage)
+{
+	focusPage(1,currentPage);
+	focusPage(2,currentPage);
+	$(".question-container-div").hide()
+	$(".separator-question-test").hide()
+	var start  	= currentPage*questionPerpage;
+	var end		= start+questionPerpage;
+	for(i=start; i< end; i++){
+		$(".separator-question-test").eq(i).show();
+		$(".question-container-div").eq(i).show();
+	}
+}
+//-->
+</script>
+
+<?php		
+	if(count($list_questionID)>0){
+			$link = "<div class='page_review_test'><font style='font-size: 16px; font-weight: bold; '>Trang: </font> ";
+			for($i=0;$i<$totalPage;$i++)
+				$link .= "&nbsp;<a href='#' onclick='showPage($i,$questionPerPage); return false;'><span class='focus-page-test-1'> ".($i+1)."</span></a> &nbsp;&nbsp;";
+			$link .="</div>";
+			echo $link;
+			if(!empty($list_questionID[0])){
+                            
+                            foreach($list_questionID as $key=>$list_questionIDItem){
+                                $list_score_temp = isset($list_score[$key])?$list_score[$key]:1;
+                                $answer_of_user_temp = isset($answer_of_user[$list_questionIDItem])?$answer_of_user[$list_questionIDItem]:"";
+                                $list_score_in_test_table[$key] = isset($list_score_in_test_table[$key])?$list_score_in_test_table[$key]:1;
+                                // Begin Lấy đường dẫn tuyệt đối cho hình ảnh
+                                $HTML = $this->viewQuestion($this->data['test_id'],
+                                        trim($list_questionIDItem),
+                                        "Câu ".($key+1)." : ",
+                                        $answer_of_user_temp,
+                                        $this->review_test,
+                                        $this->view_corect,
+                                        $this->view_feedback,
+                                        $this->view_send_result,
+                                        $list_score_temp,  
+                                        $list_score_in_test_table[$key],
+                                        $this->data["state_question_after_dogarade"][$key]);
+                                $HTML = Zend_View_Helper_FormatDate::_tinyMce_get_absolute_path_image("../../../media/images/tinymce","http://".$_SERVER['SERVER_NAME'].BASE_URL."/media/images/tinymce" ,$HTML);
+                                // End lấy đường dẫn tuyệt đối cho hình ảnh
+                                echo  $HTML;
+                                echo "<span class='separator-question-test'><hr/></span>";
+                            }
+			
+			$link = "<div class='page_review_test'><font style='font-size: 16px; font-weight: bold; '>Trang: </font> ";
+			for($i=0;$i<$totalPage;$i++)
+				$link .= "&nbsp;<a href='#' onclick='showPage($i,$questionPerPage); return false;'><span class='focus-page-test-2'> ".($i+1)."</span></a> &nbsp;&nbsp;";			
+				$link .="</div>";
+			echo $link;
+			}
+	}
+?>
+<input type="hidden" class="question_per_page" value="<?php echo $questionPerPage; ?>">
+<hr/>
+<!--<p align="center">
+		 	<a  class="all-bt-do-test" href="#" onclick="window.close()">Đóng lại</a>
+</p>-->
+
+</form>
+</div>
+<script type="text/javascript" language="javascript">
+function ViewRecommendation(){
+	showPageStudentAfterTest();
+}
+function ViewAnswerEatScore(){
+	showPageStudentAfterTest();
+//	$(".UsecaseTitleView").html('<div class="UsecaseTitleView">Các câu hỏi được điểm</div>');
+	$(".answerEatScore").each(function(){
+		$(this).show();
+		$(this).next(".separator-question-test").show();
+	});	
+}
+function ViewAnswerNoEatScore(){
+	showPageStudentAfterTest();
+//	$(".UsecaseTitleView").html('<div class="UsecaseTitleView">Các câu hỏi làm sai</div>');
+	$(".answerNoEatScore").each(function(){
+		$(this).find(".ui-state-highlight").removeClass().addClass("ui-state-error");
+		$(this).show();
+		$(this).next(".separator-question-test").show();
+	});
+}
+function ViewQuestionNotDone(){
+	showPageStudentAfterTest();
+//	$(".UsecaseTitleView").html('<div class="UsecaseTitleView">Các câu hỏi không làm</div>');
+	$(".questionNotDone").each(function(){
+		$(this).find(".ui-state-highlight").removeClass().addClass("ui-state-active");
+		$(this).show();
+		$(this).next(".separator-question-test").show();
+	});
+}
+function ViewAllAgain(){
+//	$(".UsecaseTitleView").html('<div class="UsecaseTitleView">Toàn bộ bài làm</div>');
+	$(".WrapperQuestion").show();
+	$(".separator-question-test").show();
+}
+
+function showPageStudentAfterTest()
+{
+	$(".page_review_test").hide();
+	$(".question-container-div").show();
+	$(".separator-question-test").show();
+	/*$(".WrapperQuestion").show();*/
+	$(".WrapperQuestion").hide();
+	$(".separator-question-test").hide();
+}
+
+function firstLoadReviewTest(){
+	$(".answerNoEatScore").each(function(){
+		$(this).find(".ui-state-highlight").removeClass().addClass("ui-state-error");
+//		$(this).show();
+	//	$(this).next(".separator-question-test").show();
+	});
+	$(".questionNotDone").each(function(){
+		$(this).find(".ui-state-highlight").removeClass().addClass("ui-state-active");
+		//$(this).show();
+		//$(this).next(".separator-question-test").show();
+	});
+}
+
+      function ViewPDF(path){
+          var pdflink="<?php echo BASE_URL ?>/pdf/"+path;
+          var myPDF = new PDFObject({ 
+		
+              url: pdflink,
+              pdfOpenParams: {
+                  navpanes: 0,
+                  toolbar: 0,
+                  statusbar: 0,
+                  view: "FitV"
+              }
+		
+          }).embed("pdf");
+          $( "#dialog" ).dialog({
+              title: "Nội dung bài học",
+              modal: true,
+              width: $(window).width()-100,
+              height: $(window).height()-100,
+              overlay: { opacity: 0.5, background: "black" },
+              buttons: [{
+                      text: "Đóng",
+                      click: function () {
+                          $( this ).dialog( "close" );
+                      }
+                  }]
+          });
+          $('#pdf a').attr("href",pdflink);
+      }
+      
+      function Practice(chapterid,title){
+        $('#time').val(60);
+        $('#paging').val(10);
+        $('#level2').val(0);
+        $('#num').val(1);
+          $( "#dialog-luyentap" ).dialog({
+              title: "Luyện tập - chủ đề: "+title,
+              modal: true,
+              width: 500,
+              height: 350,
+              overlay: { opacity: 0.5, background: "black" },
+              buttons: [{
+                      text: "Làm bài",
+                      click: function () {
+                          $( this ).dialog( "close" );
+                          var url = $("#BASE_URL").val()+"/pagestudent/systemrandomtest/sys_random_amount/"+$("#num").val()+"/sys_random_duration/"+$("#time").val()+"/sys-random-itemperpage/"+$("#paging").val()+"/token/"+fnGenToken()+"/level/"+$("#level2").val()+"/chapterid/"+chapterid;
+                          newwindow=window.open(url,'name','scrollbars=yes,resizable=yes,height=700,width=968', 0);
+                          if (window.focus) {newwindow.focus()}
+                          return false; 
+                      }
+                  }]
+          });
+      }
+
+</script>
+    <div id="dialog" title="Basic dialog" style="display: none">
+  <div id="pdf">It appears you don't have Adobe Reader or PDF support in this web browser. <a href="">Click here to download the PDF</a></div>
+</div>
+
+<div id="dialog-luyentap" title="Basic dialog" style="display: none">
+            <fieldset class="fieldset-setting-info-test ui-corner-all">
+                <legend>Thời gian làm bài</legend>
+                <dl>
+                    <table>
+                        <td class="student-practice-gentest"> 
+                                                <label class="test-setting-option-label-top">Số câu hỏi:</label>
+                                            </td>
+                                            <td> 
+                                                <input id="num" class="sys-suggest-amount-question" value="1" type="text" name="sys-suggest-amount-question" onchange="validateNum(this); return false">
+                                            </td>
+                                        </tr>					
+                        <tr>
+                            <td class="student-practice-gentest">
+                                <label class="test-setting-option-label-top">Thời gian làm bài (phút):</label>							
+                            </td>
+                            <td>
+                                <input type="text" class="student-duration_test" id="time" name="duration_test" value="<?php echo $this->test["duration_test"]; ?>" onchange="validateNum(this); return false">							
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="student-practice-gentest">
+                                <label class="test-setting-option-label-top"> Số câu hỏi mỗi trang:</label>							
+                            </td>
+                            <td>
+                                <select id="paging">
+                                    <option value="10">10</option>
+                                    <option value="20">20</option>
+                                    <option value="30">30</option>
+                                    <option value="40">40</option>
+                                    <option value="50">50</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="student-practice-gentest">
+                                <label class="test-setting-option-label-top"> Mức độ:</label>                         
+                            </td>
+                            <td>
+
+                                <select id="level2" name="level2">
+                                    <option value="0">Dễ đến khó</option>
+                                    <option value="1">Khó đến dễ</option>
+                                </select>
+                            </td>
+                        </tr>
+                    </table>
+                </dl>
+            </fieldset>	
+        </div>

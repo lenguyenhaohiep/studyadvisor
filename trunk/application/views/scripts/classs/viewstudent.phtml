@@ -1,0 +1,160 @@
+<div id="globalContainer">
+	<div id="content" class="hasLeftCol">
+		<div id="contentCol" class="hasRightCol">
+			<div class="back-to-cms-class">
+				<a class="button mgt10" href="<?php echo BASE_URL; ?>/classs/" >Quản lý lớp học</a>
+				<input type="hidden" value="<?php echo $this->class_obj['id'];?>" id="class_id">
+			</div>
+		<?php
+		$auth = Zend_Auth::getInstance();
+		if ($auth->hasIdentity()){
+			$userhaslogin = $auth->getStorage()->read();
+			$roleUser = $userhaslogin->group_id;
+		}?>
+		<?php if($roleUser==5 || $roleUser==3 ){
+			// hiện chức năng của giảng viên, giáo vụ khoa không có
+			?>	
+			
+				<div class="name-page-cms">	Các kỳ thi của lớp học: <?php echo $this->class_obj['full_name'];?>
+				</div>
+			<!-- CMS -->
+			<?php if (count($this->arrError)>0) echo $this->error($this->arrError); ?>
+				<?php if(count($this->tableData)>0){ ?>
+				<div class="">
+						<table class="datatable" >
+						  <tr>
+						    <th colspan="8">Các kỳ thi của lớp học </th>
+						  </tr>
+						   <tr>
+						    <th>Kỳ thi</th>
+						    <th>Lớp thi</th>
+						    <th>Bắt đầu thi</th>
+						    <th>Kết thúc thi</th>
+						    <th>Tình trạng</th>
+						    <th>Thời gian còn</th>
+						    <th>Thao tác</th>
+						  </tr>
+				    		<?php  
+				    		foreach($this->tableData as $tableDataItem){
+				    		?>
+						  <tr>
+							    <td><?php echo $tableDataItem['exam']['full_name'];?></td>
+							    <td><?php echo $this->class_obj['full_name'];?></td> 
+							    <td><?php echo Zend_View_Helper_FormatDate::convertYmdToMdyJustDate($tableDataItem['shedule_exam']['time_start']);?></td>
+							    <td><?php echo Zend_View_Helper_FormatDate::convertYmdToMdyJustDate($tableDataItem['shedule_exam']['time_end']);?></td>
+							    <?php if($tableDataItem['shedule_exam']['hidden']=="on"){ ?>
+								    <td>Mở</td>
+								    <td></td>
+									    <?php if(($tableDataItem['flagExamHasDone']==1)) { ?>
+									    <td>
+									    	<a href="<?php echo BASE_URL; ?>/classs/viewgradestudent/shedule_exam/<?php echo $tableDataItem['shedule_exam']['id']; ?>"  class="ui-state-hover ui-corner-all">Xem điểm làm bài của sinh viên</a>
+									    </td>
+										<?php }else { ?>
+									    <td>
+									    	Chưa thi
+									    </td>
+										<?php } ?>    
+								<?php }else { ?>
+								    <td>Đóng</td>
+								    <td></td>
+								<?php } ?>
+						</tr>
+				    	<?php } ?>
+				    	</table>  
+		
+						<?php }else{ ?>
+						<table class="datatable" >
+							  <tr>
+							    <th>Chưa có lịch thi nào cho lớp này.</th>
+							  </tr>		
+						</table>
+					</div>		
+				  <?php } ?>
+						
+			<?php } //End hiện chức năng của giảng viên ?>
+			
+			<div id="rightCol" >
+				<div class="name-page-cms">	Danh sách sinh viên của lớp học: <?php echo $this->class_obj['full_name'];?>
+				</div>
+				<div class="back-to-cms-class deleteAlllTestOfClass">
+					<a onclick="fnExportExcel(); return false;" class="button mgt10" href="#" >Xuất danh sách ra Excel</a>
+					<a onclick="fnExportWord(); return false;" class="button mgt10" href="#" >Xuất danh sách ra Word</a>
+				</div>
+			</div>
+			<!-- CMS -->
+			<?php if (count($this->StudentInClass)>0)  { ?>
+				<div>
+				<table class="datatable">
+					<tr>
+						<th>STT</th>
+						<th>Thao Tác</th>						
+						<th>Mã số sinh viên</th>
+						<th>Họ tên</th>
+						<th>Khoa</th>
+					</tr>
+					<?php foreach ($this->StudentInClass as $key=>$StudentInClassItem){ ?>
+					<tr>
+						<td><?php echo ($key+1); ?></td>
+						<td>
+							<a class="remove-icon" href="#" id="student_tr_<?php echo $StudentInClassItem['user_obj']['id'] ; ?>" onclick="removeStudentFromClass(this); return false;"><img class="fugue fugue-cross"  alt="Xóa"        src="<?php echo BASE_URL;?>/img/icons/space.gif"/></a>
+						</td>
+						<td><?php echo $StudentInClassItem['user_obj']['user_code']; ?></td>
+						<td><?php echo $StudentInClassItem['user_obj']['firstname']." ".$StudentInClassItem['user_obj']['lastname']; ?></td>
+						<td><?php echo $StudentInClassItem['user_obj']['department']; ?></td>
+					</tr>
+					<?php } ?>
+				</table>
+				</div>
+			<?php } ?>
+			
+			<div id="view-container" class="ui-corner-all ui-widget-content">
+			</div>
+			
+			<!-- CMS -->
+			<!-- Dialog Add new  -->
+			<!-- Dialog Add new  -->		
+			<div class="back-to-cms-class">
+				<a class="button mgt10" href="<?php echo BASE_URL; ?>/classs/" >Quản lý lớp học</a>
+			</div>
+				
+		</div>
+	</div>
+</div>
+<script type="text/javascript">
+	function removeStudentFromClass(_this){
+		var class_id = $("#class_id").val();
+		var user_id = $(_this).attr("id").replace("student_tr_","")*1;
+		if(confirm("Bạn có chắc chắn muốn xóa sinh viên này khỏi lớp học không?")==true){
+  				$.ajax({
+    					   type: "POST",
+    					   url: $("#BASE_URL").val()+"/classhasstudent/removestudent"+"/token/"+fnGenToken(),
+    					   data: "class_id="+class_id+"&user_id="+user_id,
+    					   dataType: "json",
+    					   success: function(data){
+    						 if(data['success']==true){
+									$(_this).parent("td").parent("tr").remove();
+									alert("Xóa tên sinh viên khỏi lớp học thành công");
+							}else{
+								alert("Xóa không thành công, không tồn tại sinh viên này.");
+    						 }
+    					   }
+    					 }); 
+    	}
+	}
+	
+		function fnExportExcel(){
+			var class_id = $("#class_id").val();
+			if(confirm("Bạn có chắc chắn muốn xuất ra file excel danh sách sinh viên của lớp này không?")==true){
+    			 url =  $("#BASE_URL").val()+"/classs/exportexcelscore/class_id/"+class_id;
+    			 window.location=url;
+	    	}
+		}
+		function fnExportWord(){
+			var class_id = $("#class_id").val();
+			if(confirm("Bạn có chắc chắn muốn xuất ra file word danh sách sinh viên của lớp này không?")==true){
+    			 url =  $("#BASE_URL").val()+"/classs/exportwordscore/class_id/"+class_id;
+    			 window.location=url;
+	    	}
+		}		
+	
+</script>

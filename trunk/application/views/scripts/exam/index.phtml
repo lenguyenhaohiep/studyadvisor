@@ -1,0 +1,31 @@
+<div id="blueBar"></div>
+<div id="globalContainer">
+	<div id="content" class="hasLeftCol">
+		<div id="leftCol">			
+		</div>
+		<div id="contentCol" class="hasRightCol">
+			<div id="rightCol" >
+				<div class="name-page-cms">	Quản lý kỳ thi
+				</div>
+			</div>
+			<div id="contentArea">
+			<!-- CMS -->
+			<input type="hidden" id="CMS_SERVERSIDE" value="<?php echo BASE_URL;?>/exam/serverside">
+			<?php if (count($this->arrError)>0) echo $this->error($this->arrError); ?>
+			<?php echo $this->table("table_exam",$this->cols_view_title,"exam");?>
+			<script language="javascript">
+				$(document).ready(function(){
+					InitJqueryDataTable("#table_exam","");
+				});				
+			</script>
+			
+			<div id="view-container" class="ui-corner-all ui-widget-content">
+			</div>
+			
+			<!-- CMS -->
+			<!-- Dialog Add new  -->
+			<!-- Dialog Add new  -->			
+			</div>
+		</div>
+	</div>
+</div>

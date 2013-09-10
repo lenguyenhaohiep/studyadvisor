@@ -1,0 +1,215 @@
+<form action="<?php echo BASE_URL;?>/pagestudent/systemrandomtest" method="post" id="sysrandom-test-form">
+<input type="hidden" class="timeStartCalculate" name="timeStartCalculate" value="<?php echo $this->data['timeStartCalculate']; ?>">
+<?php if($this->result_practice=="on"){ ?>
+<table class="table-student-reviewtest-statistic">
+	<tr>
+		<th>
+			Xem lại bài thực hành
+		</th>
+	</tr>
+	<tr>
+		<td class="left">Thời gian bắt đầu làm bài:
+		</td>
+		<td class="right"><?php echo Zend_View_Helper_FormatDate::convertSecondToDateTimeHasHour($this->data['timeStartCalculate']); ?>
+		</td>
+	</tr>
+	<tr>
+		<td class="left"> Thời gian nộp bài:
+		</td>
+		<td class="right"><?php echo Zend_View_Helper_FormatDate::convertSecondToDateTimeHasHour($this->data['timeEndCalculate']); ?>
+		</td>
+	</tr>
+	<tr>
+		<td class="left"> Tổng thời gian làm bài:
+		</td>
+		<td class="right"> <?php echo $this->data['totalTimeDoPractice']; ?>
+		</td>
+	</tr>
+	<tr>
+		<td class="left"> Điểm đạt được: 
+		</td>
+		<td class="right"> <?php echo $this->data['total_score']; ?>
+		</td>
+	</tr>	
+	<tr>
+		<td> Những đáp án được điểm:
+		</td>
+		<td class="right"><a href="#" onclick="ViewAnswerEatScore(); return false;" >Xem </a> 
+		</td>
+	</tr>
+	<tr>
+		<td class="left"> Những đáp án làm sai:
+		</td>
+		<td class="right"><a href="#" onclick="ViewAnswerNoEatScore(); return false;" >Xem </a> 
+		</td>
+	</tr>
+	<tr>
+		<td class="left"> Những câu hỏi chưa làm:
+		</td>
+		<td class="right"><a href="#" onclick="ViewQuestionNotDone(); return false;" >Xem </a> 
+		</td>
+	</tr>
+	<tr>
+		<td class="left"> Xem lại toàn bộ:
+		</td>
+		<td class="right"><a href="#" onclick="ViewAllAgain(); return false;" >Xem </a> 
+		</td>
+	</tr>
+</table>
+<div class="UsecaseTitleView"></div>
+
+
+<?php } ?>
+<?php
+if (count($this->arrError)>0) echo $this->error($this->arrError); 
+else {
+// Lấy các thông số cần thiết để view được bài test
+			$list_questionID 	= $this->data['question_id'];// danh sách id của câu hỏi
+			$list_score    		= $this->data['question_score'];// điểm làm bài của user
+			$questionPerPage	= $this->data["question_perpage"];
+                        $answer_of_user 	= isset($this->data['question'])?$this->data['question']:array(); // các câu trả lời của user
+			$list_score_in_test_table	= isset($this->data["list_score_in_test_table"])?$this->data["list_score_in_test_table"]:array();// Điểm của câu hỏi được set trong bài test
+			$questionPerPage 	= $questionPerPage==0? 1:$questionPerPage;
+			$totalQuestion		= count($list_questionID);
+			$totalPage			= (int)($totalQuestion/$questionPerPage);
+			$totalPage			= $totalQuestion%$questionPerPage==0?$totalPage:($totalPage+1) ;
+                        $test_id_temp = isset($this->data["test_id"])?$this->data["test_id"]:0;
+?>
+<div class="title_test_theme-1">
+	<p class="title_test_theme">
+		Bài thực hành hệ thống phát sinh ngẫu nhiên.
+	</p>
+</div>
+<div class="student_star_todo_practice">
+<?php					
+			$link = "<div class='page_review_test'><font style='font-size: 16px; font-weight: bold; '>Trang: </font> ";
+			for($i=0;$i<$totalPage;$i++)
+				$link .= "&nbsp;<a href='#' onclick='showPage($i,$questionPerPage); return false;'><span class='focus-page-test-1'> ".($i+1)."</span></a> &nbsp;&nbsp;";
+			$link .="</div><hr/>";
+			echo $link;
+			if(!empty($list_questionID[0])){		
+					foreach($list_questionID as $key=>$list_questionIDItem){ 
+                                                $answer_of_user_temp = isset($answer_of_user[$list_questionIDItem])?$answer_of_user[$list_questionIDItem]:"";
+                                                $list_score_temp = isset($list_score[$key])?$list_score[$key]:1;
+                                                $state_question_after_dogarade = isset($this->data["state_question_after_dogarade"][$key])?$this->data["state_question_after_dogarade"][$key]:0;
+                                            // Begin Lấy đường dẫn tuyệt đối cho hình ảnh
+                                            $HTML = $this->viewQuestion(
+                                                    $test_id_temp,
+                                                    trim($list_questionIDItem),
+                                                    "Câu ".($key+1)." : ",
+                                                    $answer_of_user_temp,
+                                                    $this->review_test,
+                                                    $this->view_corect,
+                                                    $this->view_feedback,
+                                                    $this->view_send_result,
+                                                    $list_score_temp,
+                                                    null,
+                                                    $state_question_after_dogarade
+                                                    );
+                                            $HTML = Zend_View_Helper_FormatDate::_tinyMce_get_absolute_path_image("../../../media/images/tinymce","http://".$_SERVER['SERVER_NAME'].BASE_URL."/media/images/tinymce" ,$HTML);
+                                            // End lấy đường dẫn tuyệt đối cho hình ảnh
+                                            echo  $HTML;
+
+                                            echo "<span class='separator-question-test'><hr/></span>";
+					}
+			
+			$link = "<div class='page_review_test'><font style='font-size: 16px; font-weight: bold; '>Trang: </font> ";
+				for($i=0;$i<$totalPage;$i++)
+					$link .= "&nbsp;<a href='#' onclick='showPage($i,$questionPerPage); return false;'><span class='focus-page-test-2'> ".($i+1)."</span></a> &nbsp;&nbsp;";			
+			$link .="</div>";
+			echo $link;
+			}
+?>
+<p align="center">
+	<input name="question_perpage" type="hidden" class="question_per_page" value="<?php echo $questionPerPage; ?>">
+	<?php if($this->result_practice=="on"){ ?>
+		<a  class="all-bt-do-test" href="#" onclick="window.close()">Đóng lại</a>
+	<?php }else{ ?>			
+		<a  class="all-bt-do-test" href="#" onclick="endTest(); return false;">Nộp bài </a>&nbsp;&nbsp;&nbsp;&nbsp;
+	 	<a  class="all-bt-do-test" href="#" onclick="window.close()">Hủy bài </a>
+	<?php }?>
+</p>
+</form>
+<hr/>
+</div>
+<?php } ?>
+<script type="text/javascript" language="javascript">
+<!--
+$(document).ready(function(){
+	$("#time-countdown").countdown('resume');
+	$(".question-container-div").hide();
+	$(".separator-question-test").hide();
+	var question_per_page = $(".question_per_page").val();
+	showPage(0,question_per_page);
+	$(".focus-page-test").eq(0).addClass("focus-page-test-active");
+});
+
+function endTest() {
+ 	$("#sysrandom-test-form").submit();
+}
+
+function focusPage(up_or_down,currentPage){
+	page_obj  = $(".focus-page-test-"+up_or_down);
+	page_obj.removeClass("focus-page-test-active");
+	page_obj.eq(currentPage).addClass("focus-page-test-active");
+}
+
+function showPage(currentPage, questionPerpage)
+{
+	focusPage(1,currentPage);
+	focusPage(2,currentPage);
+	$(".question-container-div").hide()
+	$(".separator-question-test").hide()
+	var start  	= currentPage*questionPerpage;
+	var end		= start+questionPerpage;
+	for(i=start; i< end; i++){
+		$(".separator-question-test").eq(i).show();
+		$(".question-container-div").eq(i).show();
+	}
+}
+
+function showPageStudentAfterTest()
+{
+	$(".page_review_test").hide();
+	$(".question-container-div").show();
+	$(".separator-question-test").show();
+	/*$(".WrapperQuestion").show();*/
+	$(".WrapperQuestion").hide();
+	$(".separator-question-test").hide();
+}
+
+function ViewAnswerEatScore(){
+	showPageStudentAfterTest();
+	$(".UsecaseTitleView").html('<div class="UsecaseTitleView">Các câu hỏi được điểm</div>');
+	$(".answerEatScore").each(function(){
+		$(this).show();
+		$(this).next(".separator-question-test").show();
+	});	
+}
+function ViewAnswerNoEatScore(){
+	showPageStudentAfterTest();
+	$(".UsecaseTitleView").html('<div class="UsecaseTitleView">Các câu hỏi làm sai</div>');
+	$(".answerNoEatScore").each(function(){
+		$(this).find(".ui-state-highlight").removeClass().addClass("ui-state-error");
+		$(this).show();
+		$(this).next(".separator-question-test").show();
+	});
+}
+function ViewQuestionNotDone(){
+	showPageStudentAfterTest();
+	$(".UsecaseTitleView").html('<div class="UsecaseTitleView">Các câu hỏi không làm</div>');
+	$(".questionNotDone").each(function(){
+		$(this).find(".ui-state-highlight").removeClass().addClass("ui-state-active");
+		$(this).show();
+		$(this).next(".separator-question-test").show();
+	});
+}
+function ViewAllAgain(){
+	$(".UsecaseTitleView").html('<div class="UsecaseTitleView">Toàn bộ bài làm</div>');
+	$(".WrapperQuestion").show();
+	$(".separator-question-test").show();
+}
+
+
+//-->
+</script>

@@ -1,0 +1,434 @@
+<div class="content last ui-widget-content">
+	<div class="content-full">
+		<div style="width: 98%;padding-left: 5px;">
+			<?php if (count($this->arrError)>0) echo $this->error($this->arrError); ?>
+			<div id="create-question">
+			<div class="cms_table">
+					<h2>Loại câu hỏi : <?php echo $this->nameTypeQuestion; ?></h2>
+					<form action="<?php echo BASE_URL; ?>/question/<?php echo $this->action;?>"	method="POST" name="question-form" id="question-form">
+						<input type="hidden" name="type" id="type" value="<?php echo $this->ObjQuestion['type'];?>">
+						<input type="hidden" name="id" value="<?php echo $this->ObjQuestion['id'] ;?>">		
+						<input type="hidden" name="isupdate" value="<?php echo $this->ObjQuestion['isupdate'];?>"/>
+						<input type="hidden" name="created_user" value="<?php echo $this->ObjQuestion['created_user'];?>"/>			
+						<table cellpadding="0" cellspacing="0">
+							<tr><td class="label">
+									Chọn môn học: 
+									</td><td class="field_container"><?php echo $this->SltSubject("subject_id", $this->ObjQuestion['subject_id'],$this->arrSubjectId); ?>
+							</td></tr>
+							<tr><td class="label">
+									Chọn chủ đề môn học:
+									</td><td class="field_container">
+									<span class="chapter_id">
+										<?php echo $this->SltChapterSubject("chapter_id", $this->ObjQuestion['chapter_id'], $this->ObjQuestion['subject_id']); ?>
+									</span><p class="chapterSubject_description"></p>
+							</td></tr>
+							<tr><td class="label">
+								Tiêu đề câu hỏi:  
+								</td><td class="field_container">
+								<textarea style="font-size: 16px;font-weight: 600; width: 440px;" name="question_title" rows="3" cols="20"><?php echo $this->ObjQuestion['question_title'];?></textarea>
+							</td></tr>
+							<tr><td colspan="3" >
+								<table style="width: 750px">
+									<tr>
+										<td>
+											 <label><b> Nội dung câu hỏi:</b> </label><br/>
+											<textarea id="question-editor" class="question-editor" name="content" rows="8" cols="20"><?php echo $this->ObjQuestion['content']; ?></textarea>
+										</td>
+									</tr>
+								</table>
+							</td></tr>
+							
+							<tr><td colspan="3">
+								<table style="width: 750px">
+									<tr>
+										<td>
+										<label><b> Giải thích cho câu trả lời:</b> </label><br/><br/>
+										<textarea  class="editor"  id="generalfeedback" name="generalfeedback" rows="3" cols="20"><?php echo $this->ObjQuestion['generalfeedback'];?></textarea>
+										</td>
+									</tr>
+								</table>
+							</td></tr>
+							<tr><td class="label">
+										Độ khó:
+										</td><td class="field_container">
+										<?php echo $this->SltLevel("level",$this->ObjQuestion['level']); ?>
+							</td></tr>
+							<tr><td class="label">
+										Điểm mặc định cho câu hỏi:
+										</td><td class="field_container"> <input  onchange="validateNum(this); return false;" type="text" name="score" value="<?php  echo $this->ObjQuestion['score']; ?>" >
+							</td></tr>
+							<?php if( $this->ObjQuestion['isupdate'] == 1){ ?>
+							<tr><td class="label">
+										Ngày tạo:
+										</td><td class="field_container"> <input type="text" name="timecreated" size="40" readonly="readonly" value="<?php  echo Zend_View_Helper_FormatDate::convertYmdToMdy($this->ObjQuestion['timecreated']); ?>" >
+							</td></tr>
+							<tr><td class="label">
+										Ngày chỉnh sửa gần nhất:
+										</td><td class="field_container"> <input type="text" name="timemodified" size="40" readonly="readonly" value="<?php  echo Zend_View_Helper_FormatDate::convertYmdToMdy($this->ObjQuestion['timemodified']); ?>" >
+							</td></tr>
+							<?php } ?>						
+							<tr><td class="label">
+										Không cho sinh viên thực hành câu này: 
+										</td><td class="field_container"> <input type="checkbox" name="hidden" <?php if($this->ObjQuestion['hidden']=='on') echo "checked"; ?> >
+							</td></tr>
+							
+							<tr><td colspan="5"  style="background-color: #4E8EDF; font-size: 15px; color: white; font-family: tahoma;"  >
+									<p align="center">
+										<label class="title-info-ans-question">ĐIỀN THÔNG TIN CHO CÁC CÂU TRẢ LỜI&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+										</label>  
+									</p>
+							</td></tr>
+							
+							</table>		
+						<?php if(isset($this->ObjQuestion['ans']) && count($this->ObjQuestion['ans'])> 0){
+                                                    
+							   $ans    = $this->ObjQuestion['ans'];
+							   $part   = $this->ObjQuestion['part'];
+							   $order  = isset($this->ObjQuestion['order'])?$this->ObjQuestion['order']:array();
+							   $ansID  = $this->ObjQuestion['ansID'];
+							   
+							   $ansA   = array();
+							   $ansB   = array();
+							   $orderA = array();
+							   $orderB = array();
+							   $ansIDA = array();
+							   $ansIDB = array();
+							   
+							   foreach($part as $key=>$partItem){
+							   	  if ($partItem =="A"){
+							   	  	$ansA[]    =  $ans[$key];
+							   	  	$orderA[]  = isset($order[$key])?$order[$key]:1;
+							   	  	$ansIDA[]  =  $ansID[$key];
+							   	  }else{
+							   	  	$ansB[]    =  $ans[$key];
+							   	  	$orderB[]  =  isset($order[$key])?$order[$key]:1;
+							   	  	$ansIDB[]  =  $ansID[$key];						   	  	
+							   	  }
+							   }
+							   $result1 =   Lib_Arr::my_array_sort($orderA,$ansA,$ansIDA);
+							   $result2 =   Lib_Arr::my_array_sort($orderB,$ansB,$ansIDB);
+							   
+							   $orderA  = $result1[0];
+							   $ansA	= $result1[1];
+							   $ansIDA  = $result1[2];
+							   
+							   $orderB  = $result2[0];
+							   $ansB	= $result2[1];
+							   $ansIDB  = $result2[2];
+							  	?>		
+							<table style="width: 350px">
+								<tr>
+									<td id="part1-matching" style="border-right: 1px solid red;">
+										<h2 align="right">Cột A</h2>
+										<?php foreach ($ansA as $key=>$ansAItem){ ?>
+											<div class="answer-box ui-state-default">
+												<table>
+													<tr>
+														<td style="text-align: center;">
+															<label><?php echo $key+1;?></label>
+														</td>
+													</tr>
+													<tr>
+														<td>
+															<input type="hidden" name="ansID[]" value="<?php echo $ansIDA[$key];?>">
+															<input type="hidden" name="part[]"  value="A">
+															<textarea class="editor" id="part1_ans_<?php echo ($key==0)?999:$key; ?>" name="ans[]" cols="20" rows="2"><?php echo $ansA[$key];?></textarea>												
+														</td>
+													</tr>
+												</table>
+											</div>
+										<?php } ?>
+									</td>								
+									<td id="part2-matching" style="border-left: 1px solid red;">
+										<h2 align="left">Cột B</h2>
+										<?php foreach ($ansB as $key=>$ansBItem){ ?>
+										<div class="answer-box ui-state-default">
+											<table>
+												<tr>
+													<td style="text-align: center;">
+														<label><?php echo $key+1;?></label>
+													</td>
+												</tr>										
+												<tr>
+													<td>
+														<input type="hidden" name="ansID[]" value="<?php echo $ansIDB[$key];?>">
+														<input type="hidden" name="part[]"  value="B">
+														<textarea class="editor" id="part2_ans_<?php echo $key; ?>" name="ans[]" cols="20" rows="2"><?php echo $ansB[$key];?></textarea>												
+													</td>
+												</tr>
+											</table>
+										</div>
+										<?php } ?>
+									</td>
+								</tr>
+								<tr>
+									<td style="border-right: 1px solid red;border-bottom: 1px solid red;">
+										<p align="center">
+											<br/>
+											<span class="part1-add-answer-icon ui-state-default ui-corner-top" style="padding: 5px; cursor: pointer;"> <b><font color="green" size="1">Thêm câu trả lời</font></b> 
+												<img class="fugue fugue-plus-circle" alt=""	src="<?php echo BASE_URL; ?>/img/icons/space.gif" /> 
+											</span>
+										</p>									
+									</td>
+									<td style="border-left: 1px solid red;border-bottom: 1px solid red;">
+										<p align="center">
+											<br/>
+											<span class="part2-add-answer-icon ui-state-default ui-corner-top" style="padding: 5px; cursor: pointer;"> <b><font color="green" size="1">Thêm câu trả lời</font></b> 
+												<img class="fugue fugue-plus-circle" alt=""	src="<?php echo BASE_URL; ?>/img/icons/space.gif" /> 
+											</span>
+										</p>									
+									</td>
+								</tr>
+	
+								<tr><td colspan="2"  style="background-color: green; font-size: 15px; color: white; font-family: tahoma;"  >
+										<p align="center">
+											<label>CHỌN CÁC CẶP TRẢ LỜI ĐÚNG&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+											</label>  
+										</p>
+								</td></tr>
+								
+								<tr>
+									<td colspan="2" style="border: 1px solid red;" >
+										<table>
+											<tr>
+												<td width="50%">
+													<table>
+														<tr>
+															<td>
+																<label>A</label>
+																<select id="sltMatchingA">
+																	<option value="A1">1</option>
+																	<option value="A2">2</option>
+																</select>
+															</td>
+															<td>
+																<label>B</label>
+																<select id="sltMatchingB">
+																	<option value="B1">1</option>
+																	<option value="B2">2</option>
+																</select>
+															</td>
+														</tr>
+														<tr>
+															<td colspan="2">
+																<span class="add-matching-icon ui-state-default ui-corner-top" style="padding: 5px; cursor: pointer;"> <b><font color="green" size="1">Thêm cặp đúng</font></b> 
+																	<img class="fugue fugue-plus-circle" alt=""	src="<?php echo BASE_URL; ?>/img/icons/space.gif" /> 
+																</span>														
+															</td>
+														</tr>
+													</table>
+												</td>
+												<td id="couple-matching-correct" style="border-left: 1px solid red; text-align: center;" width="50%" >
+													<label>Danh sách các cặp đúng</label>
+													<?php
+														$couple_matching = $this->ObjQuestion['couple-matching'];
+														if(count($couple_matching)>0){
+															foreach ($couple_matching as $coupleItem){
+																
+													 ?>
+																<div>
+																	<span onclick="remove_couple_question(this)"> 
+																		<img class="fugue fugue-minus-circle" alt=""	src="<?php echo BASE_URL; ?>/img/icons/space.gif" /> 
+																	</span>														
+																	<input class="couple-matching" name="couple-matching[]" type="text" value="<?php echo $coupleItem;?>" readonly="readonly">
+																</div>
+													<?php
+															}
+														} 												
+													 ?>
+												</td>
+											</tr>
+										</table>
+									</td>
+								</tr>
+							</table>	
+						<?php }else{ ?>
+							<table style="width: 350px">
+								<tr>
+									<td id="part1-matching" style="border-right: 1px solid red;">
+										<h2 align="right">Cột A</h2>
+										<div class="answer-box ui-state-default">
+											<table>
+												<tr>
+													<td style="text-align: center;">
+														<label>1</label>
+													</td>
+												</tr>
+												<tr>
+													<td>
+														<input type="hidden" name="ansID[]" value="">
+														<input type="hidden" name="part[]"  value="A">
+														<textarea class="editor" id="part1_ans_550" name="ans[]" cols="20" rows="2"></textarea>												
+													</td>
+												</tr>
+											</table>
+										</div>
+										<div class="answer-box ui-state-default">
+											<table>
+												<tr>
+													<td style="text-align: center;">
+														<label>2</label>
+													</td>
+												</tr>
+												<tr>
+													<td>
+														<input type="hidden" name="ansID[]" value="">
+														<input type="hidden" name="part[]"  value="A">
+														<textarea class="editor" id="part1_ans_1" name="ans[]" cols="20" rows="2"></textarea>												
+													</td>
+												</tr>
+											</table>  
+										</div>
+									</td>								
+									<td id="part2-matching" style="border-left: 1px solid red;">
+										<h2 align="left">Cột B</h2>
+										<div class="answer-box ui-state-default">
+											<table>
+												<tr>
+													<td style="text-align: center;">
+														<label>1</label>
+													</td>
+												</tr>										
+												<tr>
+													<td>
+														<input type="hidden" name="ansID[]" value="">
+														<input type="hidden" name="part[]"  value="B">
+														<textarea class="editor" id="part2_ans_0" name="ans[]" cols="20" rows="2"></textarea>												
+													</td>
+												</tr>
+											</table>
+										</div>
+										<div class="answer-box ui-state-default">
+											<table>
+												<tr>
+													<td style="text-align: center;">
+														<label>2</label>
+													</td>
+												</tr>										
+												<tr>
+													<td>
+														<input type="hidden" name="ansID[]" value="">
+														<input type="hidden" name="part[]"  value="B">
+														<textarea class="editor" id="part2_ans_1" name="ans[]" cols="20" rows="2"></textarea>												
+													</td>
+												</tr>
+											</table>  
+										</div>
+									</td>
+								</tr>
+								<tr>
+									<td style="border-right: 1px solid red;border-bottom: 1px solid red;">
+										<p align="center">
+											<br/>
+											<span class="part1-add-answer-icon ui-state-default ui-corner-top" style="padding: 5px;"> <b><font color="green" size="1">Thêm câu trả lời</font></b> 
+												<img class="fugue fugue-plus-circle" alt=""	src="<?php echo BASE_URL; ?>/img/icons/space.gif" /> 
+											</span>
+										</p>									
+									</td>
+									<td style="border-left: 1px solid red;border-bottom: 1px solid red;">
+										<p align="center">
+											<br/>
+											<span class="part2-add-answer-icon ui-state-default ui-corner-top" style="padding: 5px;"> <b><font color="green" size="1">Thêm câu trả lời</font></b> 
+												<img class="fugue fugue-plus-circle" alt=""	src="<?php echo BASE_URL; ?>/img/icons/space.gif" /> 
+											</span>
+										</p>									
+									</td>
+								</tr>
+								<tr>
+									<td colspan="2">
+										<table>
+											<tr>
+												<td style="border: 1px solid red;" width="50%">
+													<table>
+														<tr>
+															<td>
+																<label>A</label>
+																<select id="sltMatchingA">
+																	<option value="A1">1</option>
+																	<option value="A2">2</option>
+																</select>
+															</td>
+															<td>
+																<label>B</label>
+																<select id="sltMatchingB">
+																	<option value="B1">1</option>
+																	<option value="B2">2</option>
+																</select>
+															</td>
+														</tr>
+														<tr>
+															<td colspan="2" align="center">
+																<span class="add-matching-icon ui-state-default ui-corner-top" style="padding: 5px;"> <b><font color="green" size="1">Thêm cặp đúng</font></b> 
+																	<img class="fugue fugue-plus-circle" alt=""	src="<?php echo BASE_URL; ?>/img/icons/space.gif" /> 
+																</span>														
+															</td>
+														</tr>
+													</table>
+												</td>
+												<td id="couple-matching-correct" style="border: 1px solid red;" width="50%">
+													<label>Danh sách các cặp đúng</label>
+												</td>
+											</tr>
+										</table>
+									</td>
+								</tr>
+							</table>						
+						<?php } ?>
+						<p>
+							<table style="width: 200px;margin: auto;">
+								<tr>
+									<td style="vertical-align: top;text-align: left;">
+										<input type="submit" class="button add-answer-icon ui-corner-all ui-state-default"  value="Đồng ý">
+									</td>
+									<?php if($this->ObjQuestion['isupdate']==1){ ?>
+									<td style="vertical-align: top;text-align: left;">
+										<input type="button" onclick="window.close()" value="Hủy bỏ" class="button add-answer-icon ui-corner-all ui-state-default"> 
+									</td>
+									<?php } else { ?>
+									<td style="vertical-align: top;text-align: left;">
+										<input  type="button" value="Hủy bỏ" onclick="window.location='<?php echo  BASE_URL.'/question';  ?>'" style="font-size: 15px;" class="add-answer-icon ui-state-default ui-corner-all"> 
+									</td>
+									<?php }  ?>
+								</tr>
+							</table>
+						</p>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+<script type="text/javascript">
+$(document).ready(function(){			
+			$("#subject_id").change(function(){			
+			var subject_id = $("#subject_id").val();
+                        $(".cms_table").block({
+                                message: '<span><b>Đang xử lý...</b></span>',                 
+                        overlayCSS:  {  
+                            '-webkit-border-radius': '3px', 
+                            '-moz-border-radius':    '3px',	
+                            'padding-bottom': '3px',
+                            backgroundColor: '#fff'
+                        }
+                        });                          
+			 $.ajax({
+			   type: "POST",
+			   url: $("#BASE_URL").val()+"/chaptersubject/ajaxgetchaptersubject"+"/token/"+fnGenToken(),
+			   data: "subject_id="+subject_id,
+			   dataType: "json",
+			   success: function(data){
+					if(data['success']==true){
+								$(".chapter_id").html(data['sltChapterSubject']);
+    						 }
+    						 else
+    							 alert("Có lỗi: "+data['error']); 
+                                                     $(".cms_table").unblock();	
+    				}			      
+			 });
+			 
+		});
+});			
+</script>
+

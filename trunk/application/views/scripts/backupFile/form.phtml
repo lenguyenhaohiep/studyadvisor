@@ -1,0 +1,113 @@
+<form name="form" action="<?php echo $this->baseUrl ?>/news/<?php 
+    echo $this->action; ?>" method="post">
+    <input name="id" type="hidden" id="id" value="<?php echo $this->escape($this->form->id); ?>" />
+    <input name="created" type="hidden" id="" value="<?php echo $this->escape($this->form->created); ?>" />
+<table width="100%" border="0" >
+  <tr>
+    <td><div align="left">Chuyên mục</div></td>
+    <td colspan="3"><div align="left">
+    <?php echo $this->SltCategory("category_id",$this->form->category_id);?>
+      <font color="red">*</font></div></td>
+  </tr>
+  
+  <tr><td colspan="2">&nbsp;</td></tr>
+  <tr>
+    <td><div align="left">Link hình đại diện của bài viết</div></td>
+    <td colspan="3">
+		<input name="path_image" type="text" id="path_image" value="<?php echo $this->escape($this->form->path_image); ?>" size="100" maxlength="500"/>		</td>
+  </tr>
+
+
+  <tr><td colspan="2">&nbsp;</td></tr>
+  <tr>
+    <td><div align="left">Hình đại diện</div></td>
+    <td colspan="3"><div align="left">
+    <table>
+    	<tr>
+    		<td>
+    			<div id="imageShow"><img src="<?php echo BASE_URL; ?>/media/images/upload/<?php echo $this->escape($this->form->path_image); ?>" width="50" height="50" > </div>
+    		</td>
+    		<td align="right" width="300">
+    			<input id="uploadImageStudent" name="txtProducts_image1" type="file">
+    			<a href="javascript:$('#uploadImageStudent').uploadifyUpload();">Tải hình ảnh</a>
+    			<input name="path_image1" type="hidden" id="path_image" value="<?php //echo $this->escape($this->form->path_image); ?>" size="60" maxlength="64"/>
+    		</td>
+    	</tr>
+     </table>
+    
+      </div></td>
+  </tr>
+  <tr><td colspan="2">&nbsp;</td></tr>  
+  <tr>
+    <td><div align="left">Tiêu đề</div></td>
+    <td colspan="3">
+			<textarea cols="80" id="title" name="title" rows="3">
+				<?php echo $this->form->title;?>
+			</textarea>
+		</td>          
+  </tr>
+  <tr><td colspan="2">&nbsp;</td></tr>
+  <tr>
+    <td><div align="left">Mô tả</div></td>
+    <td colspan="3">
+			<textarea cols="80" id="description" name="description" rows="3">
+				<?php echo $this->form->description;?>
+			</textarea>
+			<script type="text/javascript">
+			//<![CDATA[
+
+				// This call can be placed at any point after the
+				// <textarea>, or inside a <head><script> in a
+				// window.onload event handler.
+
+				// Replace the <textarea id="editor"> with an CKEditor
+				// instance, using default configurations.
+				CKEDITOR.replace( 'description',{language : "vi"} );
+
+			//]]>
+			</script>
+	</td>
+  </tr>
+  <tr><td colspan="2">&nbsp;</td></tr>
+  <tr>
+    <td><div align="left">Nội Dung</div></td>
+    <td colspan="3">
+			<textarea cols="80" id="content" name="content" rows="10">
+				<?php echo $this->form->content;?>
+			</textarea>
+			<script type="text/javascript">
+			//<![CDATA[
+
+				// This call can be placed at any point after the
+				// <textarea>, or inside a <head><script> in a
+				// window.onload event handler.
+
+				// Replace the <textarea id="editor"> with an CKEditor
+				// instance, using default configurations.
+				CKEDITOR.replace( 'content',{language : "vi"}  );
+
+			//]]>
+			</script>
+    
+	</td>
+  </tr>
+  <tr><td colspan="2">&nbsp;</td></tr>
+  <tr>
+    <td><div align="left">Hiển thị</div></td>
+    <td colspan="3"><div align="left">
+	    <select name='publish'>
+	    	<option value="1" <?php if($this->form->publish==1) echo "selected selected ";?>>Hiển thị</option>
+	    	<option value="0" <?php if(empty($this->form->publish)) echo "selected selected ";?>>Không hiển thị</option>
+	    </select>
+      </div></td>
+  </tr>
+
+  <tr>
+  	<td>&nbsp;</td>
+	<td><input type="submit" id='Ok' name='Ok' value='      OK        ' />
+	<input type="button" id='Cancel' name='Cancel' value='    Cancel    ' onclick="window.location='<?php echo  $this->baseUrl . '/news';  ?>'"/></td>
+  </tr>
+
+</table>
+</form>
+

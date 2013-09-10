@@ -1,0 +1,75 @@
+<form action="<?php echo BASE_URL;?>/register" method="post" id="register-form">
+<input type="hidden" name="subject_id" value="6">
+<div class="register_box">
+<div class="success">
+	<ul><li>
+	<label style="color: #00AEEF; font-size: 15px; font-weight: 1110;"> Đăng ký thành công </label> 
+	</li></ul>
+ </div>
+ 
+ <h3>Thông tin về tài khoản của bạn</h3>
+<table cellpadding="0" cellspacing="0">
+	<tr>
+		<td class="label_left">Tên tài khoản:
+		</td>
+		<td class="label_right">
+			<?php echo $this->Obj['username']; ?>
+		</td>		
+	</tr>
+	<tr>
+		<td class="label_left">Khóa học tham gia:
+		</td>
+		<td class="label_right">
+			<?php if( empty($this->Obj['list_course_join'])) echo "Bạn chưa tham gia khóa học nào."; 
+			
+			else{
+				$modelsCourse = new Default_Models_Course();
+				$modelsCourse->find("id",$this->Obj['list_course_join']);
+				if($modelsCourse->getId())
+					echo $modelsCourse->getFull_name();
+				
+			} ?>
+		</td>		
+	</tr>
+	<tr>
+		<td class="label_left">Mã số sinh viên:
+		</td>
+		<td class="label_right">
+			<?php echo $this->Obj['user_code']; ?>
+		</td>		
+	</tr>
+	<tr>
+		<td class="label_left">Họ và tên:
+		</td>
+		<td class="label_right">
+			<?php echo $this->Obj['firstname']." ".$this->Obj['lastname'];  ?>
+		</td>		
+	</tr>
+	<tr>
+		<td class="label_left">Email:
+		</td>
+		<td class="label_right">
+			<?php echo $this->Obj['email']; ?>
+		</td>		
+	</tr>
+	<tr>
+		<td class="label_left">Học khoa:
+		</td>
+		<td class="label_right">
+			<?php echo $this->Obj['department']; ?>
+		</td>		
+	</tr>
+</table>
+<table class="submit_reg" cellpadding="0" cellspacing="0">
+<tr>	
+	<td  style="">
+		<a href='<?php echo BASE_URL ;?>/pagestudent/'  class="button mgt10"> 
+			<span>Vào trang cá nhân</span>
+		</a>
+	</td>
+</tr>
+</table>
+
+</div>
+</form>
+

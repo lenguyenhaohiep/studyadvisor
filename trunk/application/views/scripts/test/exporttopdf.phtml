@@ -1,0 +1,142 @@
+<?php
+$html = '';
+$html .='<div class="header-test-print">';
+$html .='	<table style="text-align: center;">';
+$html .='		<tr>';
+$html .='			<td style="text-align: center; font-weight: 700;"><b>TRƯỜNG ĐẠI HỌC CÔNG NGHỆ THÔNG TIN <br/> KHOA HỆ THỐNG THÔNG TIN</b></td>';
+$html .='		</tr>';
+$html .='		<tr>';
+$html .='			<td><p align="center"><hr style="width: 180px;"></p></td>';
+$html .='		</tr>';
+$html .='		<tr>';
+$html .='			<td style="font-weight: 600;" ><b>'. $this->data['obj_test']['title'] .'</b></td>';
+$html .='		</tr>';
+$html .='		<tr>';
+$html .='			<td style="font-weight: 600;"><b>MÔN: '.$this->data['obj_subject']['full_name'].'</b></td>';
+$html .='		</tr>';
+$html .='		<tr>';
+$html .='			<td style="font-weight: 400;">Lớp: </td>';
+$html .='		</tr>';
+$html .='		<tr>';
+$html .='			<td style="font-weight: 400;">Thời gian làm bài: '.$this->data['obj_test']['duration_test'].' phút. </td>';
+$html .='		</tr>';
+$html .='	</table>';
+$html .='</div>';
+
+	if(!empty($this->data["testID"])){
+			$list_questionID 	= $this->data['question_id'];// danh sách id của câu hỏi
+			$list_score    		= $this->data['question_score'];// điểm làm bài của user
+			$questionPerPage	= $this->data["question_perpage"];
+			$answer_of_user 	= $this->data['question']; // các câu trả lời của user
+			$list_score_in_test_table	= $this->data["list_score_in_test_table"];// Điểm của câu hỏi được set trong bài test
+			$questionPerPage 	= $questionPerPage==0? 1:$questionPerPage;
+			$totalQuestion		= count($list_questionID);
+			$totalPage			= (int)($totalQuestion/$questionPerPage);
+			$totalPage			= $totalQuestion%$questionPerPage==0?$totalPage:($totalPage+1) ;
+			//$html .= "<hr/>";
+			//$htmlContentQuestion = '';
+			if(!empty($list_questionID[0])){		
+					foreach($list_questionID as $key=>$list_questionIDItem){ 
+							//echo  $this->viewQuestion($this->data["testID"],$list_questionIDItem,"Câu ".($key+1)." : ",$answer_of_user[$list_questionIDItem],0,0,0,1,-1,$list_score[$key], $list_score_in_test_table[$key] );
+							 $html .= $this->viewQuestionExport($this->data["testID"],trim($list_questionIDItem),"Câu ".($key+1)." : ",$answer_of_user[$list_questionIDItem],$this->review_test,$this->view_corect,$this->view_feedback,$this->view_send_result,$list_score[$key], $list_score_in_test_table[$key]);
+	  						 //$html.= Zend_View_Helper_FormatDate::_tinyMce_get_absolute_path_image("../../..","http://".$_SERVER['SERVER_NAME'].BASE_URL,$htmlQues);
+					}
+			}
+			$html .= '<p align="center">============= HẾT =============</p>';
+//echo $html; die();
+			
+//============================================================+
+// File name   : example_021.php
+// Begin       : 2008-03-04
+// Last Update : 2010-08-08
+//
+// Description : Example 021 for TCPDF class
+//               WriteHTML text flow
+//
+// Author: Nicola Asuni
+//
+// (c) Copyright:
+//               Nicola Asuni
+//               Tecnick.com s.r.l.
+//               Via Della Pace, 11
+//               09044 Quartucciu (CA)
+//               ITALY
+//               www.tecnick.com
+//               info@tecnick.com
+//============================================================+
+
+/**
+ * Creates an example PDF TEST document using TCPDF
+ * @package com.tecnick.tcpdf
+ * @abstract TCPDF - Example: WriteHTML text flow.
+ * @author Nicola Asuni
+ * @since 2008-03-04
+ */
+
+// create new PDF document
+$pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+
+// set document information
+//$pdf->SetCreator(PDF_CREATOR);
+//$pdf->SetAuthor('Nicola Asuni');
+//$pdf->SetTitle('TCPDF Example 021');
+//$pdf->SetSubject('TCPDF Tutorial');
+//$pdf->SetKeywords('TCPDF, PDF, example, test, guide');
+
+// set default header data
+//$pdf->SetHeaderData(PDF_HEADER_LOGO, PDF_HEADER_LOGO_WIDTH, PDF_HEADER_TITLE.' 021', PDF_HEADER_STRING);
+
+// set header and footer fonts
+//$pdf->setHeaderFont(Array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
+//$pdf->setFooterFont(Array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA));
+
+// set default monospaced font
+$pdf->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
+
+//set margins
+$pdf->SetMargins(PDF_MARGIN_LEFT, 10, PDF_MARGIN_RIGHT);
+//$pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
+//$pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
+$pdf->SetHeaderMargin(10);
+$pdf->SetFooterMargin(10);
+
+$pdf->setPrintHeader(false);
+//$pdf->setPrintFooter(false);
+
+$pdf->getNumPages();
+
+//set auto page breaks
+//$pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
+
+//set image scale factor
+$pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
+
+//set some language-dependent strings
+$pdf->setLanguageArray($l);
+
+// ---------------------------------------------------------
+
+// set font
+$pdf->SetFont('dejavusans', '', 10);
+
+// add a page
+$pdf->AddPage();
+
+// create some HTML content
+//$html = '';
+
+// output the HTML content
+$pdf->writeHTML($html, true, 0, true, 0);
+
+// reset pointer to the last page
+$pdf->lastPage();
+
+// ---------------------------------------------------------
+
+//Close and output PDF document
+$pdf->Output('test-uit-is01.pdf', 'I');
+die();
+//============================================================+
+// END OF FILE                                                
+//============================================================+
+} ?>

@@ -1,0 +1,52 @@
+<form action="<?php echo BASE_URL; ?>/<?php echo $this->controller;?>/<?php echo $this->actionName;?>"	method="POST" name="quiz-form" id="">
+	<input type="hidden" name="id" value="<?php echo $this->Obj['id'] ;?>">		
+	<input type="hidden" name="isupdate" value="<?php echo $this->Obj['isupdate'];?>"/>			
+	<table cellpadding="0" cellspacing="0">
+		<tr><td class="label">
+				Tên chuyên mục:
+				</td><td class="field_container"> 
+				<input type="text"  name="name" style="width: 300px "   value="<?php  echo $this->Obj['name']; ?>" >
+		</td></tr>
+		<tr style="display: none;"><td class="label">
+				Chuyên mục cha: 
+				</td><td class="field_container"> 
+				<?php  echo $this->sltCategory("parent_id",$this->Obj['parent_id'],2);?>
+		</td></tr>
+		<tr><td class="label">
+				Thứ tự: 
+				</td><td class="field_container"> 
+				<?php echo $this->sltNum("order",$this->Obj['order'],1,10,1);?>
+		</td></tr>
+		<tr style="display: none;"><td class="label">
+				Hiển thị trang chủ: 
+				</td><td class="field_container">
+			    	<select name="is_main_page">
+			    		<option value="0" <?php if($this->Obj['is_main_page']==0) echo "selected selected";?>>Không hiển thị</option>
+			    		<option value="1" <?php if($this->Obj['is_main_page']==1) echo "selected selected";?>>Hiển thị</option>
+			    	</select>
+		</td></tr>
+		<tr style="display: none;"><td class="label">
+				Là mục tin tức tiêu điểm:
+				</td><td class="field_container"> 
+			    	<select name="is_focus">
+			    		<option value="0" <?php if($this->Obj['is_focus']==0) echo "selected selected";?>>Không</option>
+			    		<option value="1" <?php if($this->Obj['is_focus']==1) echo "selected selected";?>>Có</option>
+			    	</select>
+		</td></tr>
+		<tr><td class="label">
+				Hiển thị chuyên mục:
+				</td><td class="field_container">  
+		    	<select name="hidden">
+		    		<option value="0" <?php if($this->Obj['hidden']==0) echo "selected selected";?>>Không hiển thị</option>
+		    		<option value="1" <?php if($this->Obj['hidden']==1) echo "selected selected";?>>Hiển thị</option>
+		    	</select>
+		</td></tr>
+		<tr><td colspan="5"  style="font-size: 12px; color: white; font-family: tahoma;"  >
+				<p align="center">
+					<input  type="submit" value="Đồng ý" style="font-size: 15px;" class="add-answer-icon ui-state-default ui-corner-all">&nbsp;&nbsp;&nbsp;&nbsp;
+					<input  type="button" value="Hủy bỏ" onclick="window.location='<?php echo  BASE_URL.'/category';  ?>'" style="font-size: 15px;" class="add-answer-icon ui-state-default ui-corner-all">
+				</p>
+		</td></tr>
+		
+	</table>		
+</form>

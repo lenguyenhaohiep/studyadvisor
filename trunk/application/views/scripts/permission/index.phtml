@@ -1,0 +1,24 @@
+<center>
+	<div style="text-align:left;width:800px;">
+	<form action="<?php echo $this->url();?>" method="POST">
+		<label for="group_name">Tên nhóm người dùng</label>
+		<input type="text" name="group_name" id="group_name" value="<?php echo $this->data["group_name"];?>">
+		<br/><br/>
+		<?php echo $this->MapPermission("permission",array("user"=>array("add"=>1,"delete"=>-1),
+														   "test"=>array("add"=>-1,"edit"=>1,"delete"=>1)
+														  ));?>
+		<input type="submit">
+	</form>
+	</div>	
+</center>
+	<script type="text/javascript">
+		$(document).ready(function(){
+			$(".table_permission").find("input[type='radio']").click(function(){
+				$(this).parent("td").parent("tr").children("td").each(function(){
+					$(this).css("background-color","white");
+				});
+				$(this).parent("td").css("background-color","red");
+			});
+		});
+	</script>
+		
