@@ -1,0 +1,12 @@
+
+Warning: require_once(/studyadvisor/application/models/MatrixFactorization.php): failed to open stream: No such file or directory in C:\xampp\htdocs\studyadvisor\application\controllers\RunInBackground.php on line 8
+
+Call Stack:
+    0.0010     122056   1. {main}() C:\xampp\htdocs\studyadvisor\application\controllers\RunInBackground.php:0
+
+
+Fatal error: require_once(): Failed opening required '/studyadvisor/application/models/MatrixFactorization.php' (include_path='.;C:\xampp\php\PEAR') in C:\xampp\htdocs\studyadvisor\application\controllers\RunInBackground.php on line 8
+
+Call Stack:
+    0.0010     122056   1. {main}() C:\xampp\htdocs\studyadvisor\application\controllers\RunInBackground.php:0
+

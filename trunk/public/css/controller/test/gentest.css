@@ -1,0 +1,44 @@
+
+.container_expression {
+    margin: 0 auto;
+    width: 800px;
+}
+.expression_gen_test {
+    border: 1px solid #CCCCCC;
+    margin: 10px 0 0;
+    padding: 0;
+    width: 800px;
+}
+.expression_gen_test dl {
+    margin: 0;
+}
+.expression_gen_test dl table td {
+    padding: 5px;
+    position: relative;
+}
+.expression_gen_test dl .delete-expression {
+    border: 1px solid #CCCCCC;
+    cursor: pointer;
+    float: right;
+    margin-right: 2px;
+    padding: 3px;
+}
+.expression_gen_test dl .delete-expression:hover {
+    background-color: gainsboro;
+}
+.result_gen_test {
+}
+.result_gen_test .result_expression {
+    list-style: none outside none;
+}
+.result_gen_test .result_expression li {
+    color: #008000;
+    font-size: 13px;
+    font-weight: bold;
+    width: 500px;
+}
+.result_gen_test .result_expression li .focus_result {
+    color: #FF0000;
+    font-size: 13px;
+    font-weight: bolder;
+}

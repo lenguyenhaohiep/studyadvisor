@@ -1,0 +1,51 @@
+@CHARSET "ISO-8859-1";
+#view-container{
+	width: 500px;
+	height: 200px;
+	border: 1px solid #BBBBBB;
+	display: none;
+}
+#view-container H3{
+	text-align: left;
+	padding: 5px;
+	margin: 0px;
+	font-weight: bold;
+}
+#footer-view-container{
+	float: right;
+	margin-right: 5px;
+}
+#footer-view-container input{
+}
+.view-detail-iframe{
+	width: 500px;
+	height: 140px;
+}
+.action-table{
+	width: 98%;
+	height: 20px;
+}
+.action-table .btn_add{
+	float: left;
+	margin-left: 5px;
+	text-decoration: none;
+	font-weight: bold;
+}
+.action-table .btn_delete_select{
+	float: right;
+	margin-right: 5px;
+	text-decoration: none;
+	font-weight: bold;
+}
+.progress-action{
+	width: 300px;
+	display: none;
+}
+.progress-action h3{
+	text-align: center;
+	font-weight: bold;
+}
+.progress-action-processBar{
+	margin-left: 7px;
+	margin-bottom: 5px;
+}
