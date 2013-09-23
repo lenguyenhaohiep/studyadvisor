@@ -1,6 +1,6 @@
 <?php
 
-require_once APPLICATION_PATH . "/models/DbTable/Rating.php";
+require_once APPLICATION_PATH . "/models/DbTable/StudyResult.php";
 
 /*
  * To change this template, choose Tools | Templates
@@ -8,7 +8,7 @@ require_once APPLICATION_PATH . "/models/DbTable/Rating.php";
  * 
  */
 
-class Default_Models_Mapper_Rating {
+class Default_Models_Mapper_StudyResult {
 
     protected $_dbTable;
 
@@ -25,23 +25,23 @@ class Default_Models_Mapper_Rating {
 
     public function getDbTable() {
         if (null === $this->_dbTable) {
-            $this->setDbTable('Default_Models_DbTable_Rating');
+            $this->setDbTable('Default_Models_DbTable_StudyResult');
         }
         return $this->_dbTable;
     }
 
-    public function save(Default_Models_Rating $model) {
+    public function save(Default_Models_StudyResult $model) {
         $data = array(
             'user_id' => $model->getUserID(),
             'question_id' => $model->getQuestionID(),
-            'level' => $model->getLevel(),
+            'is_labelled' => $model->getIsLabelled(),
             'result' => $model->getResult(),
             'date' => $model->getDate(),
         );
         if (null === ($id = $model->getId())) {
             unset($data['id']);
             $this->getDbTable()->insert($data);
-            $last_id = $this->getDbTable()->getDefaultAdapter()->lastInsertId("quizuit_rating", "id");
+            $last_id = $this->getDbTable()->getDefaultAdapter()->lastInsertId("quizuit_study_result", "id");
             return $last_id;
         } else {
             $this->getDbTable()->update($data, array('id = ?' => $id));
@@ -58,20 +58,20 @@ class Default_Models_Mapper_Rating {
         $entries = array();
 
         foreach ($resultSet as $row) {
-            $model = new Default_Models_Rating();
+            $model = new Default_Models_StudyResult();
 
             $model->setId($row->id);
             $model->setDate($row->date);
             $model->setUserID($row->user_id);
             $model->setQuestionID($row->question_id);
-            $model->setLevel($row->level);
+            $model->setIsLabelled($row->is_labelled);
             $model->setResult($row->result);
             $entries[] = $model;
         }
         return $entries;
     }
 
-    public function find($key, $value, Default_Models_Rating $model) {
+    public function find($key, $value, Default_Models_StudyResult $model) {
         $table = $this->getDbTable();
         $row = $table->fetchRow(
                 $table->select()
@@ -85,7 +85,7 @@ class Default_Models_Mapper_Rating {
         $model->setDate($row->date);
         $model->setUserID($row->user_id);
         $model->setQuestionID($row->question_id);
-        $model->setLevel($row->level);
+        $model->setIsLabelled($row->is_labelled);
         $model->setResult($row->result);
     }
 

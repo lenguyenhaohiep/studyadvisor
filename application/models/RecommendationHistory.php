@@ -1,12 +1,12 @@
 <?php
 
-require_once 'mapper/Recommendation.php';
+require_once 'mapper/RecommendationHistory.php';
 /*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
 
-class Default_Models_Recommendation {
+class Default_Models_RecommendationHistory {
 protected $_id;
     protected $_userid;
     protected $_testid;
@@ -88,7 +88,7 @@ protected $_id;
 
     public function getMapper() {
         if (null === $this->_mapper) {
-            $this->_mapper = new Default_Models_Mapper_Recommendation();
+            $this->_mapper = new Default_Models_Mapper_RecommendationHistory();
         }
         return $this->_mapper;
     }

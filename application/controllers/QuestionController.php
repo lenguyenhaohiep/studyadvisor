@@ -715,6 +715,7 @@ class QuestionController extends Zend_Controller_Action
 		try{
 		$request = $this->getRequest();
 		if ($request->isPost()) {
+		 
 			// get all atrribute and validate
 				$data = $request->getParams();
 				$data = $this->_filter($data);

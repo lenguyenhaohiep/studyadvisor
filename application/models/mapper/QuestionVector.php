@@ -28,16 +28,20 @@ class Default_Models_Mapper_QuestionVector {
         $data = array(
             'question_id' => $model->getQuestionID(),
             'vector' => $model->getVector(),
-            'level'=> $model->getLevel(),
-            'bias'=>$model->getBias()
+            'context_id' => $model->getContextID(),
+            'bias' => $model->getBias()
         );
-        if (null === ($id = $model->getId())) {
+        $question_id = $model->getQuestionID();
+        $context_id = $model->getContextID();
+        $check = $this->fetchAll("question_id = $question_id and context_id = $context_id");
+        print_r($check);
+        if (count($check) == 0) {
             unset($data['id']);
             $this->getDbTable()->insert($data);
-            $last_id = $this->getDbTable()->getDefaultAdapter()->lastInsertId("quizuit_question_vector", "id");
+            $last_id = $this->getDbTable()->getDefaultAdapter()->lastInsertId("model_question_vector", "id");
             return $last_id;
         } else {
-            $this->getDbTable()->update($data, array('id = ?' => $id));
+            $this->getDbTable()->update($data, array('question_id = ?' => $question_id, 'context_id = ?' => $context_id));
         }
     }
 
@@ -55,7 +59,7 @@ class Default_Models_Mapper_QuestionVector {
             $entry->setID($row->id);
             $entry->setQuestionID($row->question_id);
             $entry->setVector($row->vector);
-            $entry->setLevel($row->level);
+            $entry->setContextID($row->context_id);
             $entry->setBias($row->bias);
             $entries[] = $entry;
         }
@@ -72,12 +76,11 @@ class Default_Models_Mapper_QuestionVector {
             return 0;
         }
 
-            $model->setID($row->id);
-            $model->setQuestionID($row->question_id);
-            $model->setVector($row->vector);
-            $model->setLevel($row->level);
-            $model->setBias($row->bias);
-       
+        $model->setID($row->id);
+        $model->setQuestionID($row->question_id);
+        $model->setVector($row->vector);
+        $model->setContextID($row->context_id);
+        $model->setBias($row->bias);
     }
 
     public function delete($key, $value) {
@@ -89,6 +92,7 @@ class Default_Models_Mapper_QuestionVector {
         }
         $this->getDbTable()->delete($where);
     }
+
 }
 
 ?>

@@ -10,7 +10,7 @@ class Default_Models_QuestionVector {
     protected $_id;
     protected $_vector;
     protected $_question_id;
-    protected $_level;
+    protected $_context_id;
     protected $_bias;
     protected $_mapper;
 
@@ -84,12 +84,12 @@ class Default_Models_QuestionVector {
         return $this;
     }
     
-    public function getLevel() {
-        return $this->_level;
+    public function getContextID() {
+        return $this->_context_id;
     }
 
-    public function setLevel($value) {
-        $this->_level = $value;
+    public function setContextID($value) {
+        $this->_context_id = $value;
         return $this;
     }
 
@@ -127,7 +127,7 @@ class Default_Models_QuestionVector {
         $data['id']=$this->getID();
         $data['question_id']=$this->getQuestionID();
         $data['vector']=$this->getVector();
-        $data['level']=$this->getLevel();
+        $data['context_id']=$this->getContextID();
         $data['bias'] = $this->getBias();
         return $data;
     }

@@ -30,14 +30,19 @@ class Default_Models_Mapper_UserVector {
             'vector' => $model->getVector(),
             'bias'=>$model->getBias()
         );
-        if (null === ($id = $model->getId())) {
-            unset($data['id']);
-            $this->getDbTable()->insert($data);
-            $last_id = $this->getDbTable()->getDefaultAdapter()->lastInsertId("quizuit_user_vector", "id");
+        
+        $test = new Default_Models_UserVector();
+        $check = $this->find("user_id",$model->getUserID(),$test);
+        $last_id = $test->getID();
+        if (!isset($last_id)){
+            $this->getDbTable()->insert($data);    
+            $last_id = $this->getDbTable()->getDefaultAdapter()->lastInsertId("model_user_vector", "user_id");
             return $last_id;
-        } else {
-            $this->getDbTable()->update($data, array('id = ?' => $id));
         }
+        else{
+            $this->getDbTable()->update($data, array('user_id = ?' => $model->getUserID()));
+        }
+        
     }
 
     public function fetchAll($where = null, $order = null, $count = null, $offset = null) {
@@ -56,6 +61,8 @@ class Default_Models_Mapper_UserVector {
             $entry->setVector($row->vector);
             $entry->setUserID($row->user_id);
             $entry->setBias($row->bias);
+            $entry->setLastContextID($row->last_context_id);
+            $entry->setLastImpVector($row->last_imp_vector);
             
             $entries[] = $entry;
         }
@@ -76,6 +83,8 @@ class Default_Models_Mapper_UserVector {
         $model->setUserID($row->user_id);
         $model->setVector($row->vector);
         $model->setBias($row->bias);
+        $model->setLastContextID($row->last_context_id);
+        $model->setLastImpVector($row->last_imp_vector);
        
     }
 
