@@ -12,6 +12,8 @@ protected $_id;
     protected $_vector;
     protected $_bias;
     protected $_mapper;
+    protected $_last_context_id;
+    protected $_last_imp_vector;
 
     public function __construct(array $option = null) {
         if (is_array($option)) {
@@ -80,7 +82,26 @@ protected $_id;
         $this->_vector = $value;
         return $this;
     }
+    
+    public function getLastContextID(){
+        return $this->_last_context_id;
+    }
+    
+    public function setLastContextID($value){
+        $this->_last_context_id = $value;
+        return $this;
+    }
+    
+    public function getLastImpVector(){
+        return $this->_last_imp_vector;
+    }
+    
+    public function setLastImpVector($value){
+        $this->_last_imp_vector=$value;
+        return $this;
+    }
 
+    
     public function setMapper($mapper) {
         $this->_mapper = $mapper;
         return $this;
@@ -116,6 +137,8 @@ protected $_id;
         $data['user_id'] = $this->getUserID();
         $data['vector'] = $this->getVector();
         $data['bias'] = $this->getBias();
+        $data['last_context_id']=$this->getLastContextID();
+        $data['last_imp_vector']=$this->getLastImpVector();
         return $data;
     }
 

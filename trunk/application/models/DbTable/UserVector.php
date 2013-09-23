@@ -7,6 +7,6 @@
 class Default_Models_DbTable_UserVector extends Zend_Db_Table_Abstract
 {
 	/** Table name */
-	protected $_name    = 'quizuit_user_vector';
+	protected $_name    = 'model_user_vector';
 }
 ?>

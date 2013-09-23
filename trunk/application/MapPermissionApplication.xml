@@ -64,7 +64,7 @@
 				<Action name="create" detail="Thêm mới bộ đề thi" dependence="add"></Action>
 			</Action>
 			<Action name="delete" detail="Xóa bộ đề thi"></Action>
-			<Action name="edit"   detail="Sửa bộ �ề thi"></Action>
+			<Action name="edit"   detail="Sửa bộ ��ề thi"></Action>
 			<Action name="autogeneratetest"   detail="Phát sinh đề"></Action>
 	</Controller>
 	<Controller name="user" detail="Người dùng">
@@ -112,7 +112,8 @@
 			<Action name="edit"   detail="Sửa"></Action>
 	</Controller>
 		<Controller name="recommend" detail="Khuyến nghị">
-			<Action name="buildmodel"    detail="Xây dựng mô hình"></Action>	
+                        <Action name="obtaindata"   detail="Gửi Rating Data đến Server"></Action>
+                        <Action name="sendparameters"  detail="Cập nhật dữ liệu từ Server"></Action>
 	</Controller>
 </MapApplication>
 

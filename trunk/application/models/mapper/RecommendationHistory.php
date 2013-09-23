@@ -1,8 +1,8 @@
 <?php
 
-require_once APPLICATION_PATH . '/models/DbTable/Recommendation.php';
+require_once APPLICATION_PATH . '/models/DbTable/RecommendationHistory.php';
 
-class Default_Models_Mapper_Recommendation {
+class Default_Models_Mapper_RecommendationHistory {
 
     protected $_dbTable;
 
@@ -19,12 +19,12 @@ class Default_Models_Mapper_Recommendation {
 
     public function getDbTable() {
         if (null === $this->_dbTable) {
-            $this->setDbTable('Default_Models_DbTable_Recommendation');
+            $this->setDbTable('Default_Models_DbTable_RecommendationHistory');
         }
         return $this->_dbTable;
     }
 
-    public function save(Default_Models_Recommendation $model) {
+    public function save(Default_Models_RecommendationHistory $model) {
         $data = array(
             'user_id' => $model->getUserID(),
             'test_id' => $model->getTestID(),
@@ -33,7 +33,7 @@ class Default_Models_Mapper_Recommendation {
         if (null === ($id = $model->getId())) {
             unset($data['id']);
             $this->getDbTable()->insert($data);
-            $last_id = $this->getDbTable()->getDefaultAdapter()->lastInsertId("quizuit_recommendation", "id");
+            $last_id = $this->getDbTable()->getDefaultAdapter()->lastInsertId("quizuit_recommendation_history", "id");
             return $last_id;
         } else {
             $this->getDbTable()->update($data, array('id = ?' => $id));
@@ -50,7 +50,7 @@ class Default_Models_Mapper_Recommendation {
         $entries = array();
 
         foreach ($resultSet as $row) {
-            $entry = new Default_Models_Recommendation();
+            $entry = new Default_Models_RecommendationHistory();
             
             $entry->setID($row->id);
             $entry->setUserID($row->user_id);
@@ -62,7 +62,7 @@ class Default_Models_Mapper_Recommendation {
         return $entries;
     }
 
-    public function find($key, $value, Default_Models_Recommendation $model) {
+    public function find($key, $value, Default_Models_RecommendationHistory $model) {
         $table = $this->getDbTable();
         $row = $table->fetchRow(
                 $table->select()

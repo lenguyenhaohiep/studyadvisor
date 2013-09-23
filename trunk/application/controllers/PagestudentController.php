@@ -1,9 +1,9 @@
 <?php
 
 require_once APPLICATION_PATH . '/models/Classhasstudent.php';
-require_once APPLICATION_PATH . '/models/Recommendation.php';
+require_once APPLICATION_PATH . '/models/RecommendationHistory.php';
 require_once APPLICATION_PATH . '/models/Recommend.php';
-require_once APPLICATION_PATH . '/models/Rating.php';
+require_once APPLICATION_PATH . '/models/StudyResult.php';
 require_once APPLICATION_PATH . '/models/Classs.php';
 require_once APPLICATION_PATH . '/models/User.php';
 require_once APPLICATION_PATH . '/models/Test.php';
@@ -25,7 +25,7 @@ require_once APPLICATION_PATH . '/models/Statisticquestion.php';
 require_once APPLICATION_PATH . '/models/Chaptersubject.php';
 require_once APPLICATION_PATH . '/models/UserVector.php';
 require_once APPLICATION_PATH . '/models/QuestionVector.php';
-require_once APPLICATION_PATH . '/models/Rating.php';
+
 
 class PagestudentController extends Zend_Controller_Action {
 
@@ -535,7 +535,7 @@ class PagestudentController extends Zend_Controller_Action {
 
 
                 for ($i = 0; $i < count($question); $i++) {
-                    $rating = new Default_Models_Rating();
+                    $rating = new Default_Models_StudyResult();
                     $rating->setUserID($user_id);
                     $rating->setDate($date);
                     $rating->setQuestionID($question[$i]);
@@ -1303,7 +1303,7 @@ class PagestudentController extends Zend_Controller_Action {
 
 
                 for ($i = 0; $i < count($question); $i++) {
-                    $rating = new Default_Models_Rating();
+                    $rating = new Default_Models_StudyResult();
                     $rating->setUserID($user_id);
                     $rating->setDate($date);
                     $rating->setQuestionID($question[$i]);
@@ -1318,7 +1318,7 @@ class PagestudentController extends Zend_Controller_Action {
 
                 $recommend = new Recommend();
 
-                $recommendation = new Default_Models_Recommendation();
+                $recommendation = new Default_Models_RecommendationHistory();
                 $recommendation->setUserID($user_id);
                 $recommendation->setTestID($data['test_id']);
                 $recommendation->setRecommendations(Zend_Json::encode($recommend->getRecommendationLesson($user_id, $data['test_id'])));
@@ -1629,7 +1629,7 @@ class PagestudentController extends Zend_Controller_Action {
                     }
                     // End lấy thông tin user làm bài
 
-                    $recommendationModels = new Default_Models_Recommendation();
+                    $recommendationModels = new Default_Models_RecommendationHistory();
 
                     $where = 'test_id = ' . $data['id'] . ' and user_id=' . $userhaslogin->id;
                     $listLessonID = $recommendationModels->fetchAll($where);
@@ -1739,7 +1739,7 @@ class PagestudentController extends Zend_Controller_Action {
 
 
                 for ($i = 0; $i < count($question); $i++) {
-                    $rating = new Default_Models_Rating();
+                    $rating = new Default_Models_StudyResult();
                     $rating->setUserID($user_id);
                     $rating->setDate($date);
                     $rating->setQuestionID($question[$i]);
@@ -1881,7 +1881,7 @@ class PagestudentController extends Zend_Controller_Action {
 
 
                 for ($i = 0; $i < count($question); $i++) {
-                    $rating = new Default_Models_Rating();
+                    $rating = new Default_Models_StudyResult();
                     $rating->setUserID($user_id);
                     $rating->setDate($date);
                     $rating->setQuestionID($question[$i]);

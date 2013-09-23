@@ -1,18 +1,18 @@
 <?php
 
-require_once 'mapper/Rating.php';
+require_once 'mapper/StudyResult.php';
 /*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
 
-class Default_Models_Rating {
+class Default_Models_StudyResult {
 
     protected $_id;
     protected $_date;
     protected $_user_id;
     protected $_question_id;
-    protected $_level;
+    protected $_is_labelled;
     protected $_result;
     protected $_mapper;
 
@@ -87,12 +87,12 @@ class Default_Models_Rating {
         return $this;
     }
 
-    public function getLevel() {
-        return $this->_level;
+    public function getIsLabelled() {
+        return $this->_is_labelled;
     }
 
-    public function setLevel($value) {
-        $this->_level = $value;
+    public function setIsLabelled($value) {
+        $this->_is_labelled = $value;
         return $this;
     }
 
@@ -112,7 +112,7 @@ class Default_Models_Rating {
 
     public function getMapper() {
         if (null === $this->_mapper) {
-            $this->_mapper = new Default_Models_Mapper_Rating();
+            $this->_mapper = new Default_Models_Mapper_StudyResult();
         }
         return $this->_mapper;
     }
@@ -141,7 +141,7 @@ class Default_Models_Rating {
             'user_id' => $this->getUserID(),
             'question_id' => $this->getQuestionID(),
             'result' => $this->getResult(),
-            'level' => $this->getLevel()
+            'is_labelled' => $this->getIsLabelled()
         );
 
         return $data;
