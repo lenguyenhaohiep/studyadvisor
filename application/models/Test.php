@@ -27,6 +27,11 @@ class Default_Models_Test {
 
 	protected $_mapper;
 
+        
+        public function customSql($sql){
+		return $this->getMapper()->customSql($sql);
+	}
+        
 	public function __construct(array $option = null) {
 		if(is_array($option)) {
 			$this->setOptions($option);

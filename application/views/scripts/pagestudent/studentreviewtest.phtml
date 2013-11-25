@@ -94,7 +94,7 @@
                                 <div class="table-list-of-class">
                         <table class="datatable">
                             <tr>
-                                <th colspan="4"><h4>Bạn nên học lại những nội dung sau</h4></th>
+                                <th colspan="4">Bạn có thể học lại những nội dung sau</th>
                             </tr>
                             <tr>
                                 <th>Thứ tự ưu tiên</th>
@@ -110,9 +110,8 @@
                                 $i++; ?></td>
                                     <td><?php echo $subject['name']; ?></td>
                                     <td>
-										<a style="color:#FF0084" href="#" onclick="ViewPDF('<?php echo $subject['path']; ?>'); return false;" class="button-in-row">Xem nội dung</a>
-                                        |
-                                        <a style="color:#1484E6" href="#" onclick="Practice('<?php echo $subject['id']; ?>','<?php echo $subject['name']; ?>'); return false;" class="button-in-row">Luyện tập</a>
+										<a style="color:#FF0084" href="#" onclick="ViewPDF('<?php echo $subject['path']; ?>'); return false;" class="button-in-row"><img src="/studyadvisor/public/img/Preview.png" alt="Xem nội dung"></a>
+                                        <a style="color:#1484E6" href="#" onclick="Practice('<?php echo $subject['id']; ?>','<?php echo $subject['name']; ?>'); return false;" class="button-in-row"><img src="/studyadvisor/public/img/Test-paper-32.png"></a>
 									</td>
                                 </tr>
                                 <?php

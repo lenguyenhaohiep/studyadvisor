@@ -617,8 +617,8 @@ detail_user_tooltip TD {
 }
 .datatable td {
     border: 1px solid #D6DDE6;
-    padding: 0.3em;
-    text-align: center;
+    padding: 0.3em 10px;
+    text-align: justify;
     vertical-align: middle;
 }
 .datatable th {

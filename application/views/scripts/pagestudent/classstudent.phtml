@@ -110,9 +110,8 @@
                         ?></td>
                                     <td><?php echo $subject['name']; ?></td>
                                     <td>
-                                        <a style="color:#FF0084" href="#" onclick="ViewPDF('<?php echo $subject['path']; ?>'); return false;" class="button-in-row">Xem nội dung</a>
-                                        |
-                                        <a style="color:#1484E6" href="#" onclick="Practice('<?php echo $subject['id']; ?>','<?php echo $subject['name']; ?>'); return false;" class="button-in-row">Luyện tập</a>
+                                        <a style="color:#FF0084" href="#" onclick="ViewPDF('<?php echo $subject['path']; ?>'); return false;" class="button-in-row"><img src="/studyadvisor/public/img/Preview.png" alt="Xem nội dung"></a>
+                                        <a style="color:#1484E6" href="#" onclick="Practice('<?php echo $subject['id']; ?>','<?php echo $subject['name']; ?>'); return false;" class="button-in-row"><img src="/studyadvisor/public/img/Test-paper-32.png"></a>
                                     </td>
                                 </tr>
                                 <?php
@@ -188,7 +187,7 @@
                                                 </td>
                 <?php } else { ?>
                                                 <td>
-                                                    <a href="<?php echo BASE_URL; ?>/pagestudent/studentbeforedotest/test_id/<?php echo $tableDataItem['testId']; ?>/exam_id/<?php echo $tableDataItem['exam']['id']; ?>/class_id/<?php echo $this->class_obj['id']; ?>/shedule_exam/<?php echo $tableDataItem['shedule_exam']['id']; ?>" onclick="confirmDoTest(this.href); return false;" class="button-in-row" style="color:#1484E6">Vào thi</a>
+                                                    <a href="<?php echo BASE_URL; ?>/pagestudent/studentbeforedotest/test_id/<?php echo $tableDataItem['testId']; ?>/exam_id/<?php echo $tableDataItem['exam']['id']; ?>/class_id/<?php echo $this->class_obj['id']; ?>/shedule_exam/<?php echo $tableDataItem['shedule_exam']['id']; ?>" onclick="confirmDoTest(this.href); return false;" class="button-in-row" style="color:#1484E6"><img src="/studyadvisor/public/img/1383385547_stock_task.png" alt="Vào Thi"></a>
                                                 </td>
                                             <?php } ?>    
                                         <?php } else { ?>
@@ -319,12 +318,12 @@
     <?php echo $this->SltChapterSubject("chapter_subject_id[]", "", 6); ?>
                                                 </td>
                                             </tr>
-                                            <tr>
+<!--                                            <tr>
                                                 <td class="student-practice-gentest"> Loại câu hỏi:</td>
                                                 <td class="student-practice-gentest"> 
-    <?php echo $this->SltTypeQuestion("SltTypeQuestion", $this->SltTypeQuestion); ?>
+    <?php //echo $this->SltTypeQuestion("SltTypeQuestion", $this->SltTypeQuestion); ?>
                                                 </td>
-                                            </tr>					
+                                            </tr>					-->
 
 
                                             <tr>
@@ -381,7 +380,7 @@
                                         <td><?php echo Zend_View_Helper_FormatDate::convertSecondToDateTimeHasHour($arrHisTestObjItem['hisTestObj']['time_start']); ?></td>
                                         <td><?php echo Zend_View_Helper_FormatDate::convertSecondToDateTimeHasHour($arrHisTestObjItem['hisTestObj']['time_finished']); ?></td>
                                         <td>
-                                            <a href="<?php echo BASE_URL; ?>/pagestudent/studentreviewtest/his_test_id/<?php echo $arrHisTestObjItem['hisTestObj']['id']; ?>" class="button-in-row" style="color:#1484E6">Xem lại</a>
+                                            <a alt="Xem lại" href="<?php echo BASE_URL; ?>/pagestudent/studentreviewtest/his_test_id/<?php echo $arrHisTestObjItem['hisTestObj']['id']; ?>" class="button-in-row" style="color:#1484E6"><img src="/studyadvisor/public/img/Preview.png" alt="Xem lại"></a>
                                         </td>					    
                                     </tr>					 		
                             <?php } ?>
