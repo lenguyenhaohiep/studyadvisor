@@ -6,6 +6,21 @@ class Default_Models_Mapper_Test
 {
 	protected $_dbTable;
 
+        public function customSql($sql){
+		try{
+			$db = $this->getDbTable()->getDefaultAdapter()->query($sql);
+			$result	= $db->fetchAll();
+			if (0 == count($result)) {
+				return;
+			}			
+			return $result;	
+			
+		}catch (Exception $ex){
+			echo $ex->getMessage();
+			die();
+		}
+	}
+        
 	public function setDbTable($dbTable)
 	{
 		if (is_string($dbTable)) {

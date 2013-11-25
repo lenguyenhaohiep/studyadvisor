@@ -6,8 +6,19 @@
  */
 require_once APPLICATION_PATH . '/models/UserVector.php';
 require_once APPLICATION_PATH . '/models/QuestionVector.php';
+require_once APPLICATION_PATH . '/models/Recommend.php';
 class RecommendController extends Zend_Controller_Action{
-    private function DBConnect() {
+    
+    public function testAction(){
+
+        $userid=263;
+        $testid=138;
+        $modelRecommend = new Recommend();
+        $modelRecommend->getRecommendationLesson($userid, $testid, 1);
+        die;
+    }
+
+        private function DBConnect() {
         $link = mysql_connect('localhost', 'root', '');
         if (!$link) {
             die('Could not connect: ' . mysql_error());
@@ -15,7 +26,7 @@ class RecommendController extends Zend_Controller_Action{
             mysql_select_db("quizuitis01");
         }
     }
-     private function RetrieveData() {
+    private function RetrieveData() {
         //Lay danh sach User
         $sql = "select * from quizuit_user where group_id = 2";
         $result = mysql_query($sql);

@@ -1631,8 +1631,11 @@ class PagestudentController extends Zend_Controller_Action {
 
                     $recommendationModels = new Default_Models_RecommendationHistory();
 
-                    $where = 'test_id = ' . $data['id'] . ' and user_id=' . $userhaslogin->id;
+                    $where = 'test_id = ' . $data['test_id'] . ' and user_id=' . $userhaslogin->id;
+                    
+                    
                     $listLessonID = $recommendationModels->fetchAll($where);
+                    
                     if (count($listLessonID) > 0) {
                         foreach ($listLessonID as $topLessons) {
                             $listID = Zend_Json::decode($topLessons->toArray()['list_recommendations']);

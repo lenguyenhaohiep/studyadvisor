@@ -405,10 +405,15 @@ class Zend_View_Helper_ViewQuestionHasShuffle {
 											 $html.='<option value="">--chọn--</option>';											 
 											 for($j=0;$j<count($ansB);$j++){											 	 
 											 	 $valueOfOption = $ansIDA[$i].'-'.$ansIDB[$j];
+                                                                                                 if (count($answer_of_user) > 0){
 											 	 if($answer_of_user[$i]==$valueOfOption)
 											 	 	$selected = ' selected="selected" ';
 											 	 else 		
-											 	 	$selected = "";										 	
+											 	 	$selected = "";		
+                                                                                                 }
+                                                                                                 else{
+                                                                                                     $selected = "";		
+                                                                                                 }
 											     $html.='<option value="'.$valueOfOption.'" '.$selected.'>A'.($i+1).'-'.'B'.($j+1).'</option>';
 											 }												 
 											 $html.='</select>';
