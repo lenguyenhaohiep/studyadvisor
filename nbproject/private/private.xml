@@ -1,4 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
+    <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/1">
+        <file>file:/C:/xampp/htdocs/studyadvisor/application/models/Recommend.php</file>
+        <file>file:/C:/xampp/htdocs/studyadvisor/application/views/helpers/ViewQuestion.php</file>
+        <file>file:/C:/xampp/htdocs/studyadvisor/application/views/helpers/ViewQuestionHasShuffle.php</file>
+        <file>file:/C:/xampp/htdocs/studyadvisor/application/views/helpers/SltTypeQuestion.php</file>
+        <file>file:/C:/xampp/htdocs/studyadvisor/application/views/helpers/SltTrueFalse.php</file>
+        <file>file:/C:/xampp/htdocs/studyadvisor/application/views/helpers/SltTestPagination.php</file>
+        <file>file:/C:/xampp/htdocs/studyadvisor/application/views/helpers/SltSubject.php</file>
+        <file>file:/C:/xampp/htdocs/studyadvisor/application/views/helpers/SltPerScore.php</file>
+        <file>file:/C:/xampp/htdocs/studyadvisor/application/views/helpers/SltOneOrMoreTrue.php</file>
+        <file>file:/C:/xampp/htdocs/studyadvisor/application/views/helpers/SltNum.php</file>
+        <file>file:/C:/xampp/htdocs/studyadvisor/application/views/helpers/SltLevel.php</file>
+    </open-files>
 </project-private>

@@ -4,7 +4,7 @@ class Zend_View_Helper_SltLevel
 	public function SltLevel($name,$value)
 	{
 		$str="<select name='$name' id='$name' style='color:#666600; width:120px; height:23px; font-weight: bold;' >";
-		$array = array("0"=>1,"1"=>0.9,"2"=>0.8,"3"=>0.7,"4"=>0.6,"5"=>0.5,"6"=>0.4,"7"=>0.3,"8"=>0.2,"9"=>0.1);
+                $array = array("0"=>1,"1"=>0.9,"2"=>0.8,"3"=>0.7,"4"=>0.6,"5"=>0.5,"6"=>0.4,"7"=>0.3,"8"=>0.2,"9"=>0.1);
 			if(empty($value))
                             $value=-1;
 //                        $tem=0;
