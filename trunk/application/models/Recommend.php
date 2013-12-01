@@ -30,13 +30,32 @@ class Recommend {
         $sql = "select * from model_user_vector where user_id=$userID";
         $result = mysql_query($sql);
         $res = mysql_fetch_array($result);
-        $this->para['biasUser'] = $res['bias'];
-        $this->para['Context'] = $res['last_context_id'];
-        $this->para['userVector'] = $res['vector'];
-        $this->para['contextAffect'] = 0;
+        if (mysql_num_rows($result) > 0) {
+            $this->para['biasUser'] = $res['bias'];
+            $this->para['Context'] = $res['last_context_id'];
+            $this->para['userVector'] = $res['vector'];
+        } else {
+            $this->para['biasUser'] = 0;
+            $this->para['Context'] = 0;
+            $this->para['userVector'] = "[0.01,0.019,0.028,0.037,0.046,0.055,0.064,0.073,0.082,0.091]";
+        }
+
+        $sql = "select (s/c) as avgrating from ( SELECT count(*) as c,sum(result) as s FROM `quizuit_study_result` where user_id=$userID) t";
+        $result = mysql_query($sql);
+        $res = mysql_fetch_array($result);
+        $avg = $res["avgrating"];
+
+        $sql = "select (s/c) as avgrating from ( SELECT count(*) as c,sum(result) as s FROM `quizuit_study_result` where user_id=$userID and is_labelled=" . $this->para['Context'] . ") t";
+        $result = mysql_query($sql);
+        $res = mysql_fetch_array($result);
+        $avgu = $res["avgrating"];
+
+        $this->para['contextAffect'] = $avgu - $avg;
     }
 
-    public function dot($a, $b) {
+    public function dot($_a, $_b) {
+        $a = Zend_Json::decode($_a);
+        $b = Zend_Json::decode($_b);
         $length = count($a);
         $result = 0;
         for ($i = 0; $i < $length; $i++) {
@@ -51,8 +70,13 @@ class Recommend {
         $sql = "select * from model_question_vector where question_id=$questionID and context_id='$context'";
         $result = mysql_query($sql);
         $res = mysql_fetch_array($result);
-        $biasItem = $res['bias'];
-        $itemVector = $res['vector'];
+        if (mysql_num_rows($result) > 0) {
+            $biasItem = $res['bias'];
+            $itemVector = $res['vector'];
+        } else {
+            $biasItem = 0;
+            $itemVector = "[0.01,0.019,0.028,0.037,0.046,0.055,0.064,0.073,0.082,0.091]";
+        }
 
         $predictiveRating = $biasItem + $this->para['biasUser'] + $this->dot($this->para['userVector'], $itemVector) + $this->para['avg'] + $this->para['contextAffect'];
         if ($predictiveRating > 1)
@@ -148,7 +172,7 @@ class Recommend {
             }
         }
 
-        return $this->sortBasedThresold($rec, 5);
+        return $this->sortBasedThresold($rec, 0.75);
     }
 
     //Sort list of lessons - fixed
