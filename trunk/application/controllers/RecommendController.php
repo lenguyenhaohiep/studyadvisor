@@ -7,18 +7,19 @@
 require_once APPLICATION_PATH . '/models/UserVector.php';
 require_once APPLICATION_PATH . '/models/QuestionVector.php';
 require_once APPLICATION_PATH . '/models/Recommend.php';
-class RecommendController extends Zend_Controller_Action{
-    
-    public function testAction(){
 
-        $userid=263;
-        $testid=138;
+class RecommendController extends Zend_Controller_Action {
+
+    public function testAction() {
+
+        $userid = 263;
+        $testid = 138;
         $modelRecommend = new Recommend();
         $modelRecommend->getRecommendationLesson($userid, $testid, 1);
         die;
     }
 
-        private function DBConnect() {
+    private function DBConnect() {
         $link = mysql_connect('localhost', 'root', '');
         if (!$link) {
             die('Could not connect: ' . mysql_error());
@@ -26,6 +27,7 @@ class RecommendController extends Zend_Controller_Action{
             mysql_select_db("quizuitis01");
         }
     }
+
     private function RetrieveData() {
         //Lay danh sach User
         $sql = "select * from quizuit_user where group_id = 2";
@@ -42,7 +44,7 @@ class RecommendController extends Zend_Controller_Action{
             $items[] = intval($ii['id']);
         }
 
-        $contexts = array(0, 1, 2, 3, 4, 5 ,6);
+        $contexts = array(0, 1, 2, 3, 4, 5, 6);
 
         //LayMatran Danh gia ==> Temp;
         $sql = "SELECT * , corrects / times AS rating
@@ -69,39 +71,37 @@ class RecommendController extends Zend_Controller_Action{
                         GROUP BY User_id, question_id
                     )   TABLE1";
         $result = mysql_query($sql);
-        
+
         $ratingMatrix = array();
-        while ($rating= mysql_fetch_array($result)){
-            $r= array(
-            "userid" => intval($rating['user_id']),
-            "itemid" => intval($rating['question_id']),
-            "contextid"=> intval("0"),
-            "rating" => floatval($rating['rating'])
+        while ($rating = mysql_fetch_array($result)) {
+            $r = array(
+                "userid" => intval($rating['user_id']),
+                "itemid" => intval($rating['question_id']),
+                "contextid" => intval("0"),
+                "rating" => floatval($rating['rating'])
             );
-            $ratingMatrix[]=$r;
-            
+            $ratingMatrix[] = $r;
         }
-        
+
         $data = array(
-            'ratings'=>$ratingMatrix,
-            'numContexts'=>count($contexts),
-            'numItems'=>count($items),
-            'numUsers'=>count($users),
-            "users"=>$users,
-            "items"=>$items,
-            "contexts"=>$contexts
+            'ratings' => $ratingMatrix,
+            'numContexts' => count($contexts),
+            'numItems' => count($items),
+            'numUsers' => count($users),
+            "users" => $users,
+            "items" => $items,
+            "contexts" => $contexts
         );
         echo Zend_Json::encode($data);
     }
-    
-    public  function obtaindataAction(){  
+
+    public function obtaindataAction() {
         $this->DBConnect();
         $this->RetrieveData();
         die;
-    
-    }      
-    
-    public  function sendparametersAction(){  
+    }
+
+    public function sendparametersAction() {
         $request = $this->getRequest();
         $data = $request->getParams();
         $parameters = Zend_Json::decode($data['parameters']);
@@ -113,7 +113,7 @@ class RecommendController extends Zend_Controller_Action{
             $modelUserVector->setVector(Zend_Json::encode($u['vector']));
             $modelUserVector->save();
         }
-        
+
         $items = $parameters['list_Items'];
         foreach ($items as $key => $i) {
             $modelQuestionVector = new Default_Models_QuestionVector();
@@ -124,7 +124,8 @@ class RecommendController extends Zend_Controller_Action{
             $modelQuestionVector->save();
         }
         die;
-    }      
+    }
 
- }
+}
+
 ?>
