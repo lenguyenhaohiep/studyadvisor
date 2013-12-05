@@ -1638,7 +1638,8 @@ class PagestudentController extends Zend_Controller_Action {
                     
                     if (count($listLessonID) > 0) {
                         foreach ($listLessonID as $topLessons) {
-                            $listID = Zend_Json::decode($topLessons->toArray()['list_recommendations']);
+                            $temp = $topLessons->toArray();
+                            $listID = Zend_Json::decode($temp['list_recommendations']);
                             break;
                         }
 

@@ -135,4 +135,3 @@ class Default_Models_QuestionVector {
 }
 
 ?>
-

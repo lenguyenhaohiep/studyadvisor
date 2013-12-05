@@ -110,8 +110,8 @@
                                 $i++; ?></td>
                                     <td><?php echo $subject['name']; ?></td>
                                     <td>
-										<a style="color:#FF0084" href="#" onclick="ViewPDF('<?php echo $subject['path']; ?>'); return false;" class="button-in-row"><img src="/studyadvisor/public/img/Preview.png" alt="Xem nội dung"></a>
-                                        <a style="color:#1484E6" href="#" onclick="Practice('<?php echo $subject['id']; ?>','<?php echo $subject['name']; ?>'); return false;" class="button-in-row"><img src="/studyadvisor/public/img/Test-paper-32.png"></a>
+										<a style="color:#FF0084" href="#" onclick="ViewPDF('<?php echo $subject['path']; ?>'); return false;" class="button-in-row"><img src="<?php echo BASE_URL?>/img/Preview.png" alt="Xem nội dung"></a>
+                                        <a style="color:#1484E6" href="#" onclick="Practice('<?php echo $subject['id']; ?>','<?php echo $subject['name']; ?>'); return false;" class="button-in-row"><img src="<?php echo BASE_URL?>/img/Test-paper-32.png"></a>
 									</td>
                                 </tr>
                                 <?php

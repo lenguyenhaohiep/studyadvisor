@@ -110,8 +110,8 @@
                         ?></td>
                                     <td><?php echo $subject['name']; ?></td>
                                     <td>
-                                        <a style="color:#FF0084" href="#" onclick="ViewPDF('<?php echo $subject['path']; ?>'); return false;" class="button-in-row"><img src="/studyadvisor/public/img/Preview.png" alt="Xem nội dung"></a>
-                                        <a style="color:#1484E6" href="#" onclick="Practice('<?php echo $subject['id']; ?>','<?php echo $subject['name']; ?>'); return false;" class="button-in-row"><img src="/studyadvisor/public/img/Test-paper-32.png"></a>
+                                        <a style="color:#FF0084" href="#" onclick="ViewPDF('<?php echo $subject['path']; ?>'); return false;" class="button-in-row"><img src="<?php echo BASE_URL?>/img/Preview.png" alt="Xem nội dung"></a>
+                                        <a style="color:#1484E6" href="#" onclick="Practice('<?php echo $subject['id']; ?>','<?php echo $subject['name']; ?>'); return false;" class="button-in-row"><img src="<?php echo BASE_URL?>/img/Test-paper-32.png"></a>
                                     </td>
                                 </tr>
                                 <?php
@@ -187,7 +187,7 @@
                                                 </td>
                 <?php } else { ?>
                                                 <td>
-                                                    <a href="<?php echo BASE_URL; ?>/pagestudent/studentbeforedotest/test_id/<?php echo $tableDataItem['testId']; ?>/exam_id/<?php echo $tableDataItem['exam']['id']; ?>/class_id/<?php echo $this->class_obj['id']; ?>/shedule_exam/<?php echo $tableDataItem['shedule_exam']['id']; ?>" onclick="confirmDoTest(this.href); return false;" class="button-in-row" style="color:#1484E6"><img src="/studyadvisor/public/img/1383385547_stock_task.png" alt="Vào Thi"></a>
+                                                    <a href="<?php echo BASE_URL; ?>/pagestudent/studentbeforedotest/test_id/<?php echo $tableDataItem['testId']; ?>/exam_id/<?php echo $tableDataItem['exam']['id']; ?>/class_id/<?php echo $this->class_obj['id']; ?>/shedule_exam/<?php echo $tableDataItem['shedule_exam']['id']; ?>" onclick="confirmDoTest(this.href); return false;" class="button-in-row" style="color:#1484E6"><img src="<?php echo BASE_URL?>/img/1383385547_stock_task.png" alt="Vào Thi"></a>
                                                 </td>
                                             <?php } ?>    
                                         <?php } else { ?>
@@ -228,7 +228,7 @@
                                                 <label class="test-setting-option-label-top">Số câu hỏi:</label>
                                             </td>
                                             <td> 
-                                                <input class="sys-suggest-amount-question" value="1" type="text" name="sys-suggest-amount-question" onchange="validateNum(this); return false">
+                                                <input id="soluong" class="sys-suggest-amount-question" value="1" type="text" name="sys-suggest-amount-question" onchange="validateNum(this); return false">
                                             </td>
                                         </tr>					
                                         <tr>
@@ -380,7 +380,7 @@
                                         <td><?php echo Zend_View_Helper_FormatDate::convertSecondToDateTimeHasHour($arrHisTestObjItem['hisTestObj']['time_start']); ?></td>
                                         <td><?php echo Zend_View_Helper_FormatDate::convertSecondToDateTimeHasHour($arrHisTestObjItem['hisTestObj']['time_finished']); ?></td>
                                         <td>
-                                            <a alt="Xem lại" href="<?php echo BASE_URL; ?>/pagestudent/studentreviewtest/his_test_id/<?php echo $arrHisTestObjItem['hisTestObj']['id']; ?>" class="button-in-row" style="color:#1484E6"><img src="/studyadvisor/public/img/Preview.png" alt="Xem lại"></a>
+                                            <a alt="Xem lại" href="<?php echo BASE_URL; ?>/pagestudent/studentreviewtest/his_test_id/<?php echo $arrHisTestObjItem['hisTestObj']['id']; ?>" class="button-in-row" style="color:#1484E6"><img src="<?php echo BASE_URL?>/img/Preview.png" alt="Xem lại"></a>
                                         </td>					    
                                     </tr>					 		
                             <?php } ?>
@@ -465,7 +465,7 @@
         });
 				
         $( "a", ".tab-practice-second" ).click(function() {
-            var url = $("#BASE_URL").val()+"/pagestudent/systemsuggesttest/class_id/"+$("#class_id").val()+"/sys_suggest_amount_question/"+$(".sys-suggest-amount-question").val()+"/sys_suggest_duration_test/"+$(".sys-suggest-duration_test").val()+"/sys_suggest_question_perpage/"+$("#sys-suggest-question_perpage").val()+"/token/"+fnGenToken()+"/level/"+$("#level1").val();
+            var url = $("#BASE_URL").val()+"/pagestudent/systemsuggesttest/class_id/"+$("#class_id").val()+"/sys_suggest_amount_question/"+$("#soluong").val()+"/sys_suggest_duration_test/"+$(".sys-suggest-duration_test").val()+"/sys_suggest_question_perpage/"+$("#sys-suggest-question_perpage").val()+"/token/"+fnGenToken()+"/level/"+$("#level1").val();
             newwindow=window.open(url,'name','scrollbars=yes,resizable=yes,height=700,width=968', 0);
             if (window.focus) {newwindow.focus()}
             return false; 
