@@ -16,13 +16,14 @@ class Recommend {
     public function getParameters($userID) {
         $link = mysql_connect('localhost', 'root', '');
         if (!$link) {
-            die('Could not connect: ' . mysql_error());
+            die("No Connect");
         } else {
             mysql_select_db("quizuitis01");
         }
 
         $sql = "select (s/c) as avgrating from ( SELECT count(*) as c,sum(result) as s FROM `quizuit_study_result`) t";
         $result = mysql_query($sql);
+        
         $res = mysql_fetch_array($result);
         $this->para['avg'] = $res["avgrating"];
 
